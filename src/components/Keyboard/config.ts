@@ -7,10 +7,10 @@ const horizontalLayoutConfig = {
 };
 
 const verticalLayoutConfig = {
-  whiteNoteWidth: 10,
-  blackNoteWidth: 6,
-  whiteNoteHeight: 50,
-  blackNoteHeight: 30
+  whiteNoteWidth: 15,
+  blackNoteWidth: 9,
+  whiteNoteHeight: 75,
+  blackNoteHeight: 45
 };
 
 

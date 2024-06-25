@@ -1,4 +1,5 @@
-import { ENote } from "./interface"
+import './Note.css';
+import { ENote } from './interface';
 
 export interface NoteProps {
   note: ENote;
@@ -10,21 +11,20 @@ export interface NoteProps {
   color: string;
 }
 
-export const Note  = ({note, x, y, width, height, label, color}:NoteProps) => (
-<g>
-  <rect x={x} y={y} width={width} height={height} fill={color} stroke="black"/>
-  {label ? 
-    <text
-    x={x + width / 2}
-    y={y + height / 2}
-    alignmentBaseline="middle"
-    textAnchor="middle"
-    fontSize="9"
-    color="gray"
-    className="note-label"
-    >
-      {label}
-    </text>
-    : ''
-  }
-</g>);
+export const Note = ({ note, x, y, width, height, label, color }: NoteProps) => (
+  <g>
+    <rect x={x} y={y} width={width} height={height} fill={color} stroke="black" />
+    {label ? (
+      <text
+        x={x + width / 2}
+        y={y + height / 1.2}
+        alignmentBaseline="middle"
+        textAnchor="middle"
+        fontSize="9"
+        className="note-label"
+      >
+        {label}
+      </text>
+    ) : null}
+  </g>
+);

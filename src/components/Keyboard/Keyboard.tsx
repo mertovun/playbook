@@ -1,16 +1,17 @@
-import { ENote, NoteWithOctave } from "./interface";
-import { Octave, OctaveProps } from "./Octave";
+import { Octave, OctaveProps } from './Octave';
+import { ENote, NoteWithOctave } from './interface';
+import './Keyboard.css';
 
-type KeyboardRange = [NoteWithOctave,NoteWithOctave]
+type KeyboardRange = [NoteWithOctave, NoteWithOctave];
 
 interface KeyboardProps {
-  keyboardRange: KeyboardRange
+  keyboardRange: KeyboardRange;
 }
 
 const whiteNoteWidth = 20;
 
-const mapRangeToOctaves = (keyboardRange:KeyboardRange):OctaveProps[] => {
-  const [[startNote,startLevel],[endNote,endLevel]] = keyboardRange
+const mapRangeToOctaves = (keyboardRange: KeyboardRange): OctaveProps[] => {
+  const [[startNote, startLevel], [endNote, endLevel]] = keyboardRange;
   const octaves = [];
   let currentXOffset = 0;
 
@@ -29,18 +30,18 @@ const mapRangeToOctaves = (keyboardRange:KeyboardRange):OctaveProps[] => {
       octaves.push({ range: octaveRange, level, xOffset: currentXOffset });
       currentXOffset += 7 * whiteNoteWidth;
     }
-
-    // octaves.push({ range: octaveRange, level, xOffset: currentXOffset });
-    // currentXOffset += (startNote - endNote + 1) * noteWidth;
   }
 
   return octaves;
-}
+};
 
-export const Keyboard = ({keyboardRange}:KeyboardProps) => {
-  const octaves = mapRangeToOctaves(keyboardRange).map((octaveProps, index) => (<Octave key={index} {...octaveProps} />));
-  console.log(keyboardRange);
-  return (<svg className="keyboard-svg" width="100%" height="400">
-    {octaves}
-  </svg>);
-}
+export const Keyboard = ({ keyboardRange }: KeyboardProps) => {
+  const octaves = mapRangeToOctaves(keyboardRange);
+  return (
+    <svg className="keyboard-svg" width="100%" height="400">
+      {octaves.map((octaveProps, index) => (
+        <Octave key={index} {...octaveProps} />
+      ))}
+    </svg>
+  );
+};

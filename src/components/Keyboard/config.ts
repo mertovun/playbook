@@ -14,6 +14,6 @@ const verticalLayoutConfig = {
 };
 
 
-export const orientation: 'HORIZONTAL' | 'VERTICAL' = 'VERTICALS';
+export let orientation: 'HORIZONTAL' | 'VERTICAL' = 'VERTICAL';
 
-export const layoutConfig = orientation === 'HORIZONTAL' ? horizontalLayoutConfig : verticalLayoutConfig;
+export let layoutConfig = orientation === 'HORIZONTAL' ? horizontalLayoutConfig : verticalLayoutConfig;

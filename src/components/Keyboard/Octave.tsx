@@ -21,7 +21,7 @@ const mapRangeToNotes = (range: [ENote, ENote], level: EOctave, xOffset: number)
   for (let note = range[0]; note <= range[1]; note++) {
     const isWhiteNote = whiteNotes.includes(note);
     const x = orientation === 'HORIZONTAL' ? (isWhiteNote ? currentX : currentX - blackNoteWidth / 2) : 0;
-    const y = orientation === 'HORIZONTAL' ? 0 : (isWhiteNote ? currentX : currentX - blackNoteWidth / 2);
+    const y = orientation === 'HORIZONTAL' ? 0 : 51*whiteNoteWidth - (isWhiteNote ? currentX : currentX - (whiteNoteWidth-blackNoteWidth/2));
     const width = orientation === 'HORIZONTAL' ? (isWhiteNote ? whiteNoteWidth : blackNoteWidth) : (isWhiteNote ? whiteNoteHeight : blackNoteHeight);
     const height = orientation === 'HORIZONTAL' ? (isWhiteNote ? whiteNoteHeight : blackNoteHeight) : (isWhiteNote ? whiteNoteWidth : blackNoteWidth);
     const label = note === ENote.C ? noteToString([note, level], true).toUpperCase() : '';

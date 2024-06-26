@@ -8,7 +8,11 @@ export type LayoutConfig = {
   blackNoteWidth: number;
   whiteNoteHeight: number;
   blackNoteHeight: number;
+  timelineOffset: number;
+  timelineLength: number;
 }
+
+export type KeyboardRange = [NoteWithOctave, NoteWithOctave];
 
 export enum ENote {
   C,

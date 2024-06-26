@@ -1,7 +1,5 @@
 import { KeyboardOctave } from './KeyboardOctave';
-import { EOrientation, NoteWithOctave } from '../interface';
-
-type KeyboardRange = [NoteWithOctave, NoteWithOctave];
+import { EOrientation, KeyboardRange } from '../interface';
 
 interface KeyboardProps {
   keyboardRange: KeyboardRange;

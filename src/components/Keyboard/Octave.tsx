@@ -1,19 +1,16 @@
 import React from 'react';
 import { Note } from './Note';
-import { ENote, EOctave, EOrientation } from './interface';
-import { LayoutConfig, useKeyboardPanelLayout } from './useKeyboardPanelLayout';
+import { ENote, EOctave } from './interface';
 
 export interface OctaveProps {
   range: [ENote, ENote];
   level: EOctave;
   xOffset: number;
-  orientation: EOrientation;
-  layoutConfig: LayoutConfig;
+  mapRangeToNotes: any;
 }
 
-export const Octave: React.FC<OctaveProps> = React.memo(({ range, level, xOffset, orientation, layoutConfig }) => {
-  const { mapRangeToNotes } = useKeyboardPanelLayout([[ENote.C, EOctave._0], [ENote.B, EOctave._8]]); // Provide a dummy range
-  const { whiteNotesArray, blackNotesArray } = mapRangeToNotes(range, level, xOffset, orientation, layoutConfig);
+export const Octave: React.FC<OctaveProps> = React.memo(({ range, level, xOffset, mapRangeToNotes }) => {
+  const { whiteNotesArray, blackNotesArray } = mapRangeToNotes(range, level, xOffset);
   return (
     <g>
       {whiteNotesArray.map((noteProps, i) => (

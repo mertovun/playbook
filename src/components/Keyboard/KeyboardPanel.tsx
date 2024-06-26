@@ -14,7 +14,13 @@ export const KeyboardPanel = () => {
       <button onClick={toggleOrientation}>
         Toggle Orientation
       </button>
-      <Keyboard keyboardRange={[[ENote.A, EOctave._0], [ENote.C, EOctave._8]]} orientation={orientation} layoutConfig={layoutConfig} />
+      <Keyboard 
+        keyboardRange={[[ENote.A, EOctave._0], [ENote.C, EOctave._8]]} 
+        orientation={orientation} 
+        layoutConfig={layoutConfig} 
+        mapRangeToOctaves={mapRangeToOctaves}
+        mapRangeToNotes={mapRangeToNotes}
+      />
     </>
   );
 };

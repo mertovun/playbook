@@ -45,7 +45,8 @@ export const useKeyboardPanelLayout = (keyboardRange: [NoteWithOctave, NoteWithO
     });
   };
 
-  const mapRangeToNotes = useCallback((range: [ENote, ENote], level: EOctave, xOffset: number, orientation:EOrientation, layoutConfig: LayoutConfig) => {
+  const mapRangeToNotes = useCallback((range: [ENote, ENote], level: EOctave, xOffset: number) => {
+    const { orientation, layoutConfig } = state;
     const { whiteNoteWidth, blackNoteWidth, whiteNoteHeight, blackNoteHeight } = layoutConfig;
     const whiteNotesArray: NoteProps[] = [];
     const blackNotesArray: NoteProps[] = [];
@@ -79,9 +80,11 @@ export const useKeyboardPanelLayout = (keyboardRange: [NoteWithOctave, NoteWithO
     }
 
     return { whiteNotesArray, blackNotesArray };
-  }, []);
+  }, [state]);
 
-  const mapRangeToOctaves = useCallback((keyboardRange: [NoteWithOctave, NoteWithOctave], layoutConfig: LayoutConfig) => {
+  const mapRangeToOctaves = useCallback((keyboardRange: [NoteWithOctave, NoteWithOctave]) => {
+    const { layoutConfig } = state;
+    const { whiteNoteWidth } = layoutConfig;
     const [[startNote, startLevel], [endNote, endLevel]] = keyboardRange;
     const octaves = [];
     let currentXOffset = 0;
@@ -91,23 +94,24 @@ export const useKeyboardPanelLayout = (keyboardRange: [NoteWithOctave, NoteWithO
       if (level === startLevel) {
         octaveRange = [startNote, ENote.B];
         octaves.push({ range: octaveRange, level, xOffset: currentXOffset });
-        currentXOffset += (ENote.B - startNote) * layoutConfig.whiteNoteWidth;
+        currentXOffset += (ENote.B - startNote) * whiteNoteWidth;
       } else if (level === endLevel) {
         octaveRange = [ENote.C, endNote];
         octaves.push({ range: octaveRange, level, xOffset: currentXOffset });
-        currentXOffset += (endNote - ENote.C) * layoutConfig.whiteNoteWidth;
+        currentXOffset += (endNote - ENote.C) * whiteNoteWidth;
       } else {
         octaveRange = [ENote.C, ENote.B];
         octaves.push({ range: octaveRange, level, xOffset: currentXOffset });
-        currentXOffset += 7 * layoutConfig.whiteNoteWidth;
+        currentXOffset += 7 * whiteNoteWidth;
       }
     }
 
     return octaves;
-  }, []);
+  }, [state]);
 
   return {
     ...state,
+    keyboardRange,
     setOrientation,
     mapRangeToNotes,
     mapRangeToOctaves,

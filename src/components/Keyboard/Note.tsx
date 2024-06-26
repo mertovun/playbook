@@ -1,3 +1,4 @@
+import React from 'react';
 import './Note.css';
 import { ENote } from './interface';
 
@@ -11,10 +12,10 @@ export interface NoteProps {
   color: string;
 }
 
-export const Note = ({ note, x, y, width, height, label, color }: NoteProps) => (
+export const Note: React.FC<NoteProps> = React.memo(({ note, x, y, width, height, label, color }) => (
   <g>
     <rect x={x} y={y} width={width} height={height} fill={color} stroke="black" />
-    {label ? (
+    {label && (
       <text
         x={x + width / 2}
         y={y + height / 1.2}
@@ -25,6 +26,7 @@ export const Note = ({ note, x, y, width, height, label, color }: NoteProps) => 
       >
         {label}
       </text>
-    ) : null}
+    )}
   </g>
-);
+));
+

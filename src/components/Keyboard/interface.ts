@@ -27,3 +27,8 @@ export enum EOctave {
 }
 
 export type NoteWithOctave = [ENote,EOctave]
+
+export enum EOrientation {
+  HORIZONTAL,
+  VERTICAL
+}

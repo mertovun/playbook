@@ -1,5 +1,5 @@
 import React from 'react';
-import { Note } from './Note';
+import { NoteKey } from './NoteKey';
 import { ENote, EOctave } from './interface';
 
 export interface OctaveProps {
@@ -13,11 +13,11 @@ export const Octave: React.FC<OctaveProps> = React.memo(({ range, level, xOffset
   const { whiteNotesArray, blackNotesArray } = mapRangeToNotes(range, level, xOffset);
   return (
     <g>
-      {whiteNotesArray.map((noteProps, i) => (
-        <Note key={i} {...noteProps} />
+      {whiteNotesArray.map((noteProps:any, i:number) => (
+        <NoteKey key={i} {...noteProps} />
       ))}
-      {blackNotesArray.map((noteProps, i) => (
-        <Note key={i + whiteNotesArray.length} {...noteProps} />
+      {blackNotesArray.map((noteProps:any, i:number) => (
+        <NoteKey key={i + whiteNotesArray.length} {...noteProps} />
       ))}
     </g>
   );

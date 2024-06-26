@@ -3,7 +3,7 @@ import { Keyboard } from './Keyboard';
 import { useKeyboardPanelLayout } from './useKeyboardPanelLayout';
 
 export const KeyboardPanel = () => {
-  const { orientation, layoutConfig, setOrientation, mapRangeToNotes, mapRangeToOctaves } = useKeyboardPanelLayout([[ENote.A, EOctave._0], [ENote.C, EOctave._8]]);
+  const { orientation, setOrientation, mapRangeToNotes, mapRangeToOctaves } = useKeyboardPanelLayout([[ENote.A, EOctave._0], [ENote.C, EOctave._8]]);
 
   const toggleOrientation = () => {
     setOrientation(orientation === EOrientation.HORIZONTAL ? EOrientation.VERTICAL : EOrientation.HORIZONTAL);
@@ -17,7 +17,6 @@ export const KeyboardPanel = () => {
       <Keyboard 
         keyboardRange={[[ENote.A, EOctave._0], [ENote.C, EOctave._8]]} 
         orientation={orientation} 
-        layoutConfig={layoutConfig} 
         mapRangeToOctaves={mapRangeToOctaves}
         mapRangeToNotes={mapRangeToNotes}
       />

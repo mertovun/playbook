@@ -1,3 +1,15 @@
+export enum EOrientation {
+  HORIZONTAL,
+  VERTICAL
+}
+
+export type LayoutConfig = {
+  whiteNoteWidth: number;
+  blackNoteWidth: number;
+  whiteNoteHeight: number;
+  blackNoteHeight: number;
+}
+
 export enum ENote {
   C,
   C_SHARP,
@@ -27,8 +39,3 @@ export enum EOctave {
 }
 
 export type NoteWithOctave = [ENote,EOctave]
-
-export enum EOrientation {
-  HORIZONTAL,
-  VERTICAL
-}

@@ -1,5 +1,5 @@
 import React from 'react';
-import './Note.css';
+import './NoteKey.css';
 import { ENote } from './interface';
 
 export interface NoteProps {
@@ -12,13 +12,13 @@ export interface NoteProps {
   color: string;
 }
 
-export const Note: React.FC<NoteProps> = React.memo(({ note, x, y, width, height, label, color }) => (
+export const NoteKey: React.FC<NoteProps> = React.memo(({ note, x, y, width, height, label, color }) => (
   <g>
     <rect x={x} y={y} width={width} height={height} fill={color} stroke="black" />
     {label && (
       <text
         x={x + width / 2}
-        y={y + height / 1.2}
+        y={y + height / 1.25}
         alignmentBaseline="middle"
         textAnchor="middle"
         fontSize="9"

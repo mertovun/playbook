@@ -1,14 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import { ENote, EOctave, EOrientation, NoteWithOctave } from './interface';
+import { useState, useCallback } from 'react';
+import { ENote, EOctave, EOrientation, LayoutConfig, NoteWithOctave } from './interface';
 import { noteToString } from '../../utils/note';
-import { NoteProps } from './Note';
-
-export type LayoutConfig = {
-  whiteNoteWidth: number;
-  blackNoteWidth: number;
-  whiteNoteHeight: number;
-  blackNoteHeight: number;
-}
+import { NoteProps } from './NoteKey';
 
 const horizontalLayout: LayoutConfig = {
   whiteNoteWidth: 20,

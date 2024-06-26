@@ -6,13 +6,13 @@ import { Timeline } from './Timeline/Timeline';
 
 export const KeyboardPanel = () => {
 
-  const { orientation, setOrientation, mapRangeToKeyboardNotes, mapRangeToKeyboardOctaves } = useKeyboardPanelLayout();
+  const keyboardRange: KeyboardRange = [[ENote.A, EOctave._0], [ENote.C, EOctave._8]];
+
+  const { orientation, setOrientation, mapRangeToKeyboardNotes, mapRangeToKeyboardOctaves } = useKeyboardPanelLayout(keyboardRange);
 
   const toggleOrientation = () => {
     setOrientation(orientation === EOrientation.HORIZONTAL ? EOrientation.VERTICAL : EOrientation.HORIZONTAL);
   };
-
-  const keyboardRange: KeyboardRange = [[ENote.A, EOctave._0], [ENote.C, EOctave._8]];
 
   return (
     <>
@@ -21,13 +21,11 @@ export const KeyboardPanel = () => {
       </button>
       <svg className={`keyboard-svg ${orientation}`} width="100%" height="800">
         <Keyboard 
-          keyboardRange={keyboardRange} 
           orientation={orientation} 
           mapRangeToKeyboardOctaves={mapRangeToKeyboardOctaves}
           mapRangeToKeyboardNotes={mapRangeToKeyboardNotes}
         />
-        {/* <Timeline 
-          keyboardRange={keyboardRange} 
+        {/* <Timeline  
           orientation={orientation} 
           mapRangeToTimelineOctaves={mapRangeToKeyboardOctaves}
           mapRangeToTimelineNotes={mapRangeToKeyboardNotes}

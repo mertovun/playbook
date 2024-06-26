@@ -1,15 +1,14 @@
 import { KeyboardOctave } from './KeyboardOctave';
-import { EOrientation, KeyboardRange } from '../interface';
+import { EOrientation } from '../interface';
 
 interface KeyboardProps {
-  keyboardRange: KeyboardRange;
   orientation: EOrientation;
   mapRangeToKeyboardOctaves: any;
   mapRangeToKeyboardNotes: any;
 }
 
-export const Keyboard = ({ keyboardRange, orientation, mapRangeToKeyboardOctaves, mapRangeToKeyboardNotes }: KeyboardProps) => {
-  const octaves = mapRangeToKeyboardOctaves(keyboardRange);
+export const Keyboard = ({ orientation, mapRangeToKeyboardOctaves, mapRangeToKeyboardNotes }: KeyboardProps) => {
+  const octaves = mapRangeToKeyboardOctaves();
   return (
     <>
       {octaves.map((octaveProps:any, i:number) => (

@@ -29,7 +29,7 @@ interface KeyboardPanelLayoutState {
   layoutConfig: LayoutConfig;
 }
 
-export const useKeyboardPanelLayout = () => {
+export const useKeyboardPanelLayout = (keyboardRange: [NoteWithOctave, NoteWithOctave]) => {
   const [state, setState] = useState<KeyboardPanelLayoutState>({
     orientation: EOrientation.HORIZONTAL,
     layoutConfig: horizontalLayout
@@ -80,7 +80,7 @@ export const useKeyboardPanelLayout = () => {
     return { whiteNotesArray, blackNotesArray };
   }, [state]);
 
-  const mapRangeToKeyboardOctaves = useCallback((keyboardRange: [NoteWithOctave, NoteWithOctave]) => {
+  const mapRangeToKeyboardOctaves = useCallback(() => {
     const { layoutConfig } = state;
     const { whiteNoteWidth } = layoutConfig;
     const [[startNote, startLevel], [endNote, endLevel]] = keyboardRange;

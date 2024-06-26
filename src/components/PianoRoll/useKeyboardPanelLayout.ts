@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { ENote, EOctave, EOrientation, LayoutConfig, NoteWithOctave } from './interface';
 import { noteToString } from '../../utils/note';
-import { NoteProps } from './NoteKey';
+import { NoteProps } from './Keyboard/KeyboardNote';
 
 const horizontalLayout: LayoutConfig = {
   whiteNoteWidth: 20,
@@ -38,9 +38,10 @@ export const useKeyboardPanelLayout = (keyboardRange: [NoteWithOctave, NoteWithO
     });
   };
 
-  const mapRangeToNotes = useCallback((range: [ENote, ENote], level: EOctave, xOffset: number) => {
+  const mapRangeToKeyboardNotes = useCallback((range: [ENote, ENote], level: EOctave, xOffset: number) => {
     const { orientation, layoutConfig } = state;
     const { whiteNoteWidth, blackNoteWidth, whiteNoteHeight, blackNoteHeight } = layoutConfig;
+    const keyboardWidth = 51 * whiteNoteWidth;
     const whiteNotesArray: NoteProps[] = [];
     const blackNotesArray: NoteProps[] = [];
     let currentX = xOffset;
@@ -48,7 +49,7 @@ export const useKeyboardPanelLayout = (keyboardRange: [NoteWithOctave, NoteWithO
     for (let note = range[0]; note <= range[1]; note++) {
       const isWhiteNote = whiteNotes.includes(note);
       const x = orientation === EOrientation.HORIZONTAL ? (isWhiteNote ? currentX : currentX - blackNoteWidth / 2) : 0;
-      const y = orientation === EOrientation.HORIZONTAL ? 0 : 51 * whiteNoteWidth - (isWhiteNote ? currentX : currentX - (whiteNoteWidth - blackNoteWidth / 2));
+      const y = orientation === EOrientation.HORIZONTAL ? 0 : keyboardWidth - (isWhiteNote ? currentX : currentX - (whiteNoteWidth - blackNoteWidth / 2));
       const width = orientation === EOrientation.HORIZONTAL ? (isWhiteNote ? whiteNoteWidth : blackNoteWidth) : (isWhiteNote ? whiteNoteHeight : blackNoteHeight);
       const height = orientation === EOrientation.HORIZONTAL ? (isWhiteNote ? whiteNoteHeight : blackNoteHeight) : (isWhiteNote ? whiteNoteWidth : blackNoteWidth);
       const label = note === ENote.C ? noteToString([note, level], true).toUpperCase() : '';
@@ -75,7 +76,7 @@ export const useKeyboardPanelLayout = (keyboardRange: [NoteWithOctave, NoteWithO
     return { whiteNotesArray, blackNotesArray };
   }, [state]);
 
-  const mapRangeToOctaves = useCallback((keyboardRange: [NoteWithOctave, NoteWithOctave]) => {
+  const mapRangeToKeyboardOctaves = useCallback((keyboardRange: [NoteWithOctave, NoteWithOctave]) => {
     const { layoutConfig } = state;
     const { whiteNoteWidth } = layoutConfig;
     const [[startNote, startLevel], [endNote, endLevel]] = keyboardRange;
@@ -106,7 +107,7 @@ export const useKeyboardPanelLayout = (keyboardRange: [NoteWithOctave, NoteWithO
     ...state,
     keyboardRange,
     setOrientation,
-    mapRangeToNotes,
-    mapRangeToOctaves,
+    mapRangeToKeyboardNotes,
+    mapRangeToKeyboardOctaves,
   };
 };

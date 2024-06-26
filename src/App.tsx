@@ -1,5 +1,5 @@
 import './App.css';
-import { KeyboardPanel } from './components/Keyboard/KeyboardPanel';
+import { KeyboardPanel } from './components/PianoRoll/KeyboardPanel';
 
 
 function App() {

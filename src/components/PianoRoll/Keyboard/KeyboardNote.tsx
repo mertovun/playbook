@@ -1,6 +1,6 @@
 import React from 'react';
-import './NoteKey.css';
-import { ENote } from './interface';
+import './KeyboardNote.css';
+import { ENote } from '../interface';
 
 export interface NoteProps {
   note: ENote;
@@ -12,7 +12,7 @@ export interface NoteProps {
   color: string;
 }
 
-export const NoteKey: React.FC<NoteProps> = React.memo(({ note, x, y, width, height, label, color }) => (
+export const KeyboardNote: React.FC<NoteProps> = React.memo(({ note, x, y, width, height, label, color }) => (
   <g>
     <rect x={x} y={y} width={width} height={height} fill={color} stroke="black" />
     {label && (

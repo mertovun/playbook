@@ -1,4 +1,4 @@
-import { NoteWithOctave } from "../components/Keyboard/interface";
+import { NoteWithOctave } from "../components/PianoRoll/interface";
 
 export function noteToMidiNum(note:NoteWithOctave){
   return 12 + 12 * note[1] + note[0];

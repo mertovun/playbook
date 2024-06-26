@@ -22,7 +22,7 @@ const verticalLayout: LayoutConfig = {
 };
 
 const whiteNotes = [ENote.C, ENote.D, ENote.E, ENote.F, ENote.G, ENote.A, ENote.B];
-const blackNotes = [ENote.C_SHARP, ENote.D_SHARP, ENote.F_SHARP, ENote.G_SHARP, ENote.A_SHARP];
+// const blackNotes = [ENote.C_SHARP, ENote.D_SHARP, ENote.F_SHARP, ENote.G_SHARP, ENote.A_SHARP];
 
 interface KeyboardPanelLayoutState {
   orientation: EOrientation;

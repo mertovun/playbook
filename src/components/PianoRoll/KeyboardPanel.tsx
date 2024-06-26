@@ -2,7 +2,6 @@ import { ENote, EOctave, EOrientation, KeyboardRange } from './interface';
 import { Keyboard } from './Keyboard/Keyboard';
 import { useKeyboardPanelLayout } from './useKeyboardPanelLayout';
 import './KeyboardPanel.css';
-import { Timeline } from './Timeline/Timeline';
 
 export const KeyboardPanel = () => {
 

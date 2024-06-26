@@ -32,6 +32,7 @@ export const useKeyboardPanelLayout = (keyboardRange: [NoteWithOctave, NoteWithO
   const [layoutConfig, setLayoutConfig] = useState(horizontalLayout);
 
   useEffect(() => {
+    setLayoutConfig(orientation === EOrientation.HORIZONTAL ? horizontalLayout : verticalLayout);
   }, [orientation,setLayoutConfig]);
 
   const mapRangeToNotes = useCallback((range: [ENote, ENote], level: EOctave, xOffset: number, orientation:EOrientation, layoutConfig: LayoutConfig) => {

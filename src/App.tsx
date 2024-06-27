@@ -1,12 +1,12 @@
 import './App.css';
-import { KeyboardPanel } from './components/PianoRoll/KeyboardPanel';
+import { PianoRoll } from './components/PianoRoll/PianoRoll';
 
 
 function App() {
 
   return (
     <>
-      <KeyboardPanel/>
+      <PianoRoll/>
     </>
   );
 }

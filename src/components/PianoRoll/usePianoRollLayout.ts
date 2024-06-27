@@ -30,35 +30,47 @@ const verticalLayout: LayoutConfig = {
 const whiteNotes = [ENote.C, ENote.D, ENote.E, ENote.F, ENote.G, ENote.A, ENote.B];
 // const blackNotes = [ENote.C_SHARP, ENote.D_SHARP, ENote.F_SHARP, ENote.G_SHARP, ENote.A_SHARP];
 
-interface KeyboardPanelLayoutState {
+interface PianoRollLayoutState {
   orientation: EOrientation;
   layoutConfig: LayoutConfig;
-  keyboardWidth: number;
+  pianoRollWidth: number;
+  pianoRollLength: number;
   timelineLength: number;
+  timelineX: number;
+  timelineY: number;
 }
 
-export const useKeyboardPanelLayout = (keyboardRange: [NoteWithOctave, NoteWithOctave]) => {
-  const [state, setState] = useState<KeyboardPanelLayoutState>({
+export const usePianoRollLayout = (keyboardRange: [NoteWithOctave, NoteWithOctave]) => {
+  const [state, setState] = useState<PianoRollLayoutState>({
     orientation: EOrientation.HORIZONTAL,
     layoutConfig: horizontalLayout,
-    keyboardWidth: 52 * horizontalLayout.whiteNoteWidth,
-    timelineLength: 52 * horizontalLayout.whiteNoteWidth /ASPECT_RATIO
+    pianoRollWidth: 52 * horizontalLayout.whiteNoteWidth,
+    pianoRollLength: 52 * horizontalLayout.whiteNoteWidth /ASPECT_RATIO,
+    timelineLength: 52 * horizontalLayout.whiteNoteWidth /ASPECT_RATIO - horizontalLayout.timelineOffset - horizontalLayout.whiteNoteHeight,
+    timelineX: 0,
+    timelineY: 0
   });
 
   const setOrientation = (orientation: EOrientation) => {
     const layoutConfig = orientation === EOrientation.HORIZONTAL ? horizontalLayout : verticalLayout;
-    const keyboardWidth = 52 * layoutConfig.whiteNoteWidth;
-    const timelineLength = orientation === EOrientation.HORIZONTAL ? keyboardWidth/ASPECT_RATIO : keyboardWidth*ASPECT_RATIO;
-
+    const pianoRollWidth = 52 * layoutConfig.whiteNoteWidth;
+    const pianoRollLength = orientation === EOrientation.HORIZONTAL ? pianoRollWidth/ASPECT_RATIO : pianoRollWidth*ASPECT_RATIO;
+    const timelineLength = pianoRollLength - layoutConfig.timelineOffset - layoutConfig.whiteNoteHeight;
+    const timelineX = orientation === EOrientation.HORIZONTAL ? 0 : whiteNoteHeight + timelineOffset;
+    const timelineY = orientation === EOrientation.HORIZONTAL ? 0 : 0;
+    
     setState({
       orientation,
       layoutConfig,
-      keyboardWidth,
+      pianoRollWidth,
+      pianoRollLength,
       timelineLength,
+      timelineX,
+      timelineY,
     });
   };
 
-  const { orientation, layoutConfig, keyboardWidth, timelineLength } = state;
+  const { orientation, layoutConfig, pianoRollWidth, pianoRollLength, timelineLength } = state;
   const { whiteNoteWidth, blackNoteWidth, whiteNoteHeight, blackNoteHeight, timelineOffset } = layoutConfig;
 
   const mapRangeToKeyboardNotes = useCallback((range: [ENote, ENote], level: EOctave, xOffset: number) => {
@@ -69,7 +81,7 @@ export const useKeyboardPanelLayout = (keyboardRange: [NoteWithOctave, NoteWithO
     for (let note = range[0]; note <= range[1]; note++) {
       const isWhiteNote = whiteNotes.includes(note);
       const x = orientation === EOrientation.HORIZONTAL ? (isWhiteNote ? currentX : currentX - blackNoteWidth / 2) : 0;
-      const y = orientation === EOrientation.HORIZONTAL ? timelineLength - whiteNoteHeight : keyboardWidth - whiteNoteWidth - (isWhiteNote ? currentX : currentX - (whiteNoteWidth - blackNoteWidth / 2));
+      const y = orientation === EOrientation.HORIZONTAL ? pianoRollLength - whiteNoteHeight : pianoRollWidth - whiteNoteWidth - (isWhiteNote ? currentX : currentX - (whiteNoteWidth - blackNoteWidth / 2));
       const width = orientation === EOrientation.HORIZONTAL ? (isWhiteNote ? whiteNoteWidth : blackNoteWidth) : (isWhiteNote ? whiteNoteHeight : blackNoteHeight);
       const height = orientation === EOrientation.HORIZONTAL ? (isWhiteNote ? whiteNoteHeight : blackNoteHeight) : (isWhiteNote ? whiteNoteWidth : blackNoteWidth);
       const label = note === ENote.C ? noteToString([note, level], true).toUpperCase() : '';
@@ -103,10 +115,10 @@ export const useKeyboardPanelLayout = (keyboardRange: [NoteWithOctave, NoteWithO
 
     for (let note = range[0]; note <= range[1]; note++) {
       const isWhiteNote = whiteNotes.includes(note);
-      const x = orientation === EOrientation.HORIZONTAL ? (isWhiteNote ? currentX : currentX - blackNoteWidth / 2) : whiteNoteHeight + timelineOffset;
-      const y = orientation === EOrientation.HORIZONTAL ? 0 : keyboardWidth - whiteNoteWidth - (isWhiteNote ? currentX : currentX - (whiteNoteWidth - blackNoteWidth / 2));
-      const width = orientation === EOrientation.HORIZONTAL ? (isWhiteNote ? whiteNoteWidth : blackNoteWidth) : timelineLength;
-      const height = orientation === EOrientation.HORIZONTAL ? timelineLength - timelineOffset - whiteNoteHeight  : (isWhiteNote ? whiteNoteWidth : blackNoteWidth);
+      const x = orientation === EOrientation.HORIZONTAL ? (isWhiteNote ? currentX : currentX - blackNoteWidth / 2) : 0;
+      const y = orientation === EOrientation.HORIZONTAL ? 0 : pianoRollWidth - whiteNoteWidth - (isWhiteNote ? currentX : currentX - (whiteNoteWidth - blackNoteWidth / 2));
+      const width = orientation === EOrientation.HORIZONTAL ? (isWhiteNote ? whiteNoteWidth : blackNoteWidth) : pianoRollLength;
+      const height = orientation === EOrientation.HORIZONTAL ? timelineLength  : (isWhiteNote ? whiteNoteWidth : blackNoteWidth);
       const color = isWhiteNote ? colorScheme.timelineWhiteNote : colorScheme.timelineBlackNote;
 
       const noteProps = {

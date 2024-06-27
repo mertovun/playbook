@@ -9,7 +9,6 @@ export type LayoutConfig = {
   whiteNoteHeight: number;
   blackNoteHeight: number;
   timelineOffset: number;
-  timelineLength: number;
 }
 
 export type KeyboardRange = [NoteWithOctave, NoteWithOctave];

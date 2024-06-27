@@ -10,7 +10,7 @@ export interface TimelineOctaveProps {
 }
 
 export const TimelineOctave: React.FC<TimelineOctaveProps> = React.memo(({ range, level, xOffset, mapRangeToTimelineNotes }) => {
-  const { whiteNotesArray, blackNotesArray } = mapRangeToTimelineNotes(range, level, xOffset);
+  const { whiteNotesArray, blackNotesArray } = mapRangeToTimelineNotes(range, xOffset);
   return (
     <g>
       {whiteNotesArray.map((noteProps:any, i:number) => (

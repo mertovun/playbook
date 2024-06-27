@@ -8,7 +8,7 @@ export interface NoteProps {
   y: number;
   width: number;
   height: number;
-  label: string;
+  label?: string;
   color: string;
 }
 

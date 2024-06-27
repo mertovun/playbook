@@ -8,7 +8,6 @@ export interface NoteProps {
   y: number;
   width: number;
   height: number;
-  label: string;
   color: string;
 }
 

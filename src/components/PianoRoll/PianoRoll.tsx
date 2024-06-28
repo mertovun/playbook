@@ -1,17 +1,34 @@
-import React, { useEffect, useRef } from 'react';
-import { ENote, EOctave, EOrientation, KeyboardRange } from './interface';
+import { useEffect } from 'react';
+import { EOrientation, KeyboardRange } from './interface';
 import { Keyboard } from './Keyboard/Keyboard';
-import { usePianoRollLayout } from './usePianoRollLayout';
 import './PianoRoll.css';
 import { TimelineGrid } from './TimelineGrid/TimelineGrid';
 import { useTimelineStore } from './store';
 import { TimelineBackground } from './TimelineBackground/TimelineBackground';
 import { currentMeasureBeatQuarter, formatMeasureBeatQuarter } from '../../utils/time';
+import usePianoRollLayoutStore from './usePianoRollLayoutStore';
 
 export const PianoRoll = () => {
-  const keyboardRange: KeyboardRange = [[ENote.A, EOctave._0], [ENote.C, EOctave._8]];
-  const { orientation, pianoRollWidth, pianoRollLength, timelineLength, timelineX, timelineY, setOrientation, mapRangeToKeyboardNotes, mapRangeToTimelineNotes, mapRangeToKeyboardOctaves } = usePianoRollLayout(keyboardRange);
-  const { isPlaying, currentTime, tempo, timeSignature, setCurrentTime } = useTimelineStore();
+  const { 
+    orientation, 
+    pianoRollWidth, 
+    pianoRollLength, 
+    timelineLength, 
+    timelineX, 
+    timelineY, 
+    setOrientation, 
+    mapRangeToKeyboardNotes, 
+    mapRangeToTimelineNotes, 
+    mapRangeToKeyboardOctaves 
+  } = usePianoRollLayoutStore();
+  
+  const { 
+    isPlaying, 
+    currentTime, 
+    tempo, 
+    timeSignature, 
+    setCurrentTime 
+  } = useTimelineStore();
 
   const toggleOrientation = () => {
     setOrientation(orientation === EOrientation.HORIZONTAL ? EOrientation.VERTICAL : EOrientation.HORIZONTAL);

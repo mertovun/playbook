@@ -13,8 +13,8 @@ export function currentMeasureBeatQuarter(currentTimeInSeconds:number, tempo:num
 }
 
 export function formatMeasureBeatQuarter(currentMeasure:number, currentBeat:number, currentQuarter:number) {
-  const formattedMeasure = currentMeasure.toString().padStart(2, '0');
-  const formattedBeat = currentBeat.toString().padStart(2, '0');
+  const formattedMeasure = currentMeasure.toString().padStart(1, '0');
+  const formattedBeat = currentBeat.toString().padStart(1, '0');
   const formattedQuarter = currentQuarter.toFixed(3).padStart(5, '0');
-  return `${formattedMeasure}:${formattedBeat}:${formattedQuarter}`;
+  return ` ${formattedMeasure} : ${formattedBeat} : ${formattedQuarter}`;
 }

@@ -1,6 +1,8 @@
-import { useState, useCallback } from 'react';
-import { ENote, EOctave, EOrientation, LayoutConfig, NoteWithOctave } from './interface';
+import create from 'zustand';
+import { ENote, EOctave, EOrientation, KeyboardRange, LayoutConfig } from './interface';
 import { noteToString } from '../../utils/note';
+
+const keyboardRange: KeyboardRange = [[ENote.A, EOctave._0], [ENote.C, EOctave._8]];
 
 const colorScheme = {
   keyboardWhiteNote: '#e9e9e9',
@@ -12,10 +14,10 @@ const colorScheme = {
 const ASPECT_RATIO = 1.4;
 
 const horizontalLayout: LayoutConfig = {
-  whiteNoteWidth: 15*ASPECT_RATIO,
-  blackNoteWidth: 9*ASPECT_RATIO,
-  whiteNoteHeight: 75*ASPECT_RATIO,
-  blackNoteHeight: 45*ASPECT_RATIO,
+  whiteNoteWidth: 15 * ASPECT_RATIO,
+  blackNoteWidth: 9 * ASPECT_RATIO,
+  whiteNoteHeight: 75 * ASPECT_RATIO,
+  blackNoteHeight: 45 * ASPECT_RATIO,
   timelineOffset: 10
 };
 
@@ -28,7 +30,6 @@ const verticalLayout: LayoutConfig = {
 };
 
 const whiteNotes = [ENote.C, ENote.D, ENote.E, ENote.F, ENote.G, ENote.A, ENote.B];
-// const blackNotes = [ENote.C_SHARP, ENote.D_SHARP, ENote.F_SHARP, ENote.G_SHARP, ENote.A_SHARP];
 
 interface PianoRollLayoutState {
   orientation: EOrientation;
@@ -38,28 +39,29 @@ interface PianoRollLayoutState {
   timelineLength: number;
   timelineX: number;
   timelineY: number;
+  setOrientation: (orientation: EOrientation) => void;
+  mapRangeToKeyboardNotes: (range: [ENote, ENote], level: EOctave, xOffset: number) => { whiteNotesArray: any[], blackNotesArray: any[] };
+  mapRangeToTimelineNotes: (range: [ENote, ENote], xOffset: number) => { whiteNotesArray: any[], blackNotesArray: any[] };
+  mapRangeToKeyboardOctaves: () => { range: [ENote, ENote], level: EOctave, xOffset: number }[];
 }
 
-export const usePianoRollLayout = (keyboardRange: [NoteWithOctave, NoteWithOctave]) => {
-  const [state, setState] = useState<PianoRollLayoutState>({
-    orientation: EOrientation.HORIZONTAL,
-    layoutConfig: horizontalLayout,
-    pianoRollWidth: 52 * horizontalLayout.whiteNoteWidth,
-    pianoRollLength: 52 * horizontalLayout.whiteNoteWidth /ASPECT_RATIO,
-    timelineLength: 52 * horizontalLayout.whiteNoteWidth /ASPECT_RATIO - horizontalLayout.timelineOffset - horizontalLayout.whiteNoteHeight,
-    timelineX: 0,
-    timelineY: 0
-  });
-
-  const setOrientation = (orientation: EOrientation) => {
+const usePianoRollLayoutStore = create<PianoRollLayoutState>((set, get) => ({
+  orientation: EOrientation.HORIZONTAL,
+  layoutConfig: horizontalLayout,
+  pianoRollWidth: 52 * horizontalLayout.whiteNoteWidth,
+  pianoRollLength: 52 * horizontalLayout.whiteNoteWidth / ASPECT_RATIO,
+  timelineLength: 52 * horizontalLayout.whiteNoteWidth / ASPECT_RATIO - horizontalLayout.timelineOffset - horizontalLayout.whiteNoteHeight,
+  timelineX: 0,
+  timelineY: 0,
+  setOrientation: (orientation: EOrientation) => {
     const layoutConfig = orientation === EOrientation.HORIZONTAL ? horizontalLayout : verticalLayout;
     const pianoRollWidth = 52 * layoutConfig.whiteNoteWidth;
-    const pianoRollLength = orientation === EOrientation.HORIZONTAL ? pianoRollWidth/ASPECT_RATIO : pianoRollWidth*ASPECT_RATIO;
+    const pianoRollLength = orientation === EOrientation.HORIZONTAL ? pianoRollWidth / ASPECT_RATIO : pianoRollWidth * ASPECT_RATIO;
     const timelineLength = pianoRollLength - layoutConfig.timelineOffset - layoutConfig.whiteNoteHeight;
-    const timelineX = orientation === EOrientation.HORIZONTAL ? 0 : whiteNoteHeight + timelineOffset;
+    const timelineX = orientation === EOrientation.HORIZONTAL ? 0 : layoutConfig.whiteNoteHeight + layoutConfig.timelineOffset;
     const timelineY = orientation === EOrientation.HORIZONTAL ? 0 : 0;
     
-    setState({
+    set({
       orientation,
       layoutConfig,
       pianoRollWidth,
@@ -68,12 +70,11 @@ export const usePianoRollLayout = (keyboardRange: [NoteWithOctave, NoteWithOctav
       timelineX,
       timelineY,
     });
-  };
-
-  const { orientation, layoutConfig, pianoRollWidth, pianoRollLength, timelineLength } = state;
-  const { whiteNoteWidth, blackNoteWidth, whiteNoteHeight, blackNoteHeight, timelineOffset } = layoutConfig;
-
-  const mapRangeToKeyboardNotes = useCallback((range: [ENote, ENote], level: EOctave, xOffset: number) => {
+  },
+  mapRangeToKeyboardNotes: (range: [ENote, ENote], level: EOctave, xOffset: number) => {
+    const { orientation, layoutConfig, pianoRollWidth, pianoRollLength } = get();
+    const { whiteNoteWidth, blackNoteWidth, whiteNoteHeight, blackNoteHeight } = layoutConfig;
+    
     const whiteNotesArray: any[] = [];
     const blackNotesArray: any[] = [];
     let currentX = xOffset;
@@ -106,9 +107,11 @@ export const usePianoRollLayout = (keyboardRange: [NoteWithOctave, NoteWithOctav
     }
 
     return { whiteNotesArray, blackNotesArray };
-  }, [state]);
-
-  const mapRangeToTimelineNotes = useCallback((range: [ENote, ENote], xOffset: number) => {
+  },
+  mapRangeToTimelineNotes: (range: [ENote, ENote], xOffset: number) => {
+    const { orientation, layoutConfig, pianoRollWidth, pianoRollLength, timelineLength } = get();
+    const { whiteNoteWidth, blackNoteWidth } = layoutConfig;
+    
     const whiteNotesArray: any[] = [];
     const blackNotesArray: any[] = [];
     let currentX = xOffset;
@@ -139,10 +142,10 @@ export const usePianoRollLayout = (keyboardRange: [NoteWithOctave, NoteWithOctav
     }
 
     return { whiteNotesArray, blackNotesArray };
-  }, [state]);
-
-  const mapRangeToKeyboardOctaves = useCallback(() => {
+  },
+  mapRangeToKeyboardOctaves: () => {
     const [[startNote, startLevel], [endNote, endLevel]] = keyboardRange;
+    const { whiteNoteWidth } = get().layoutConfig;
     const octaves = [];
     let currentXOffset = 0;
 
@@ -164,13 +167,7 @@ export const usePianoRollLayout = (keyboardRange: [NoteWithOctave, NoteWithOctav
     }
 
     return octaves;
-  }, [state]);
+  }
+}));
 
-  return {
-    ...state,
-    setOrientation,
-    mapRangeToKeyboardNotes,
-    mapRangeToTimelineNotes,
-    mapRangeToKeyboardOctaves,
-  };
-};
+export default usePianoRollLayoutStore;

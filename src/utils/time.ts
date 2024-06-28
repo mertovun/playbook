@@ -1,20 +1,20 @@
 
-export function currentMeasureBeatQuarter(currentTimeInSeconds:number, tempo:number, timeSignature:[number, number]): [number, number, number]{
+export function measureBeatQuarter(timeInSeconds:number, tempo:number, timeSignature:[number, number]): [number, number, number]{
   const [beatsPerMeasure, beatUnit] = timeSignature;
   const quarterPerBeat = 16 / beatUnit;
 
   const secondsPerQuarter = 60 / tempo / 4;
-  let currentQuarter = currentTimeInSeconds /  secondsPerQuarter;
-  let currentBeat = Math.floor(currentQuarter / quarterPerBeat);
-  currentQuarter -= currentBeat * quarterPerBeat;
-  let currentMeasure = Math.floor(currentBeat/ beatsPerMeasure);
-  currentBeat -= currentMeasure * beatsPerMeasure;
-  return [currentMeasure, currentBeat, currentQuarter]
+  let quarter = timeInSeconds /  secondsPerQuarter;
+  let beat = Math.floor(quarter / quarterPerBeat);
+  quarter -= beat * quarterPerBeat;
+  let measure = Math.floor(beat/ beatsPerMeasure);
+  beat -= measure * beatsPerMeasure;
+  return [measure, beat, quarter]
 }
 
-export function formatMeasureBeatQuarter(currentMeasure:number, currentBeat:number, currentQuarter:number) {
-  const formattedMeasure = currentMeasure.toString().padStart(1, '0');
-  const formattedBeat = currentBeat.toString().padStart(1, '0');
-  const formattedQuarter = currentQuarter.toFixed(3).padStart(5, '0');
+export function formatMeasureBeatQuarter(measure:number, beat:number, quarter:number) {
+  const formattedMeasure = measure.toString().padStart(1, '0');
+  const formattedBeat = beat.toString().padStart(1, '0');
+  const formattedQuarter = quarter.toFixed(3).padStart(5, '0');
   return ` ${formattedMeasure} : ${formattedBeat} : ${formattedQuarter}`;
 }

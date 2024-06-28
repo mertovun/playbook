@@ -1,11 +1,11 @@
 import { useCallback, useEffect } from 'react';
-import { EOrientation, KeyboardRange } from './interface';
+import { EOrientation } from './interface';
 import { Keyboard } from './Keyboard/Keyboard';
 import './PianoRoll.css';
 import { TimelineGrid } from './TimelineGrid/TimelineGrid';
 import { useTimelineStore } from './useTimelineStore';
 import { TimelineBackground } from './TimelineBackground/TimelineBackground';
-import { currentMeasureBeatQuarter, formatMeasureBeatQuarter } from '../../utils/time';
+import { measureBeatQuarter, formatMeasureBeatQuarter } from '../../utils/time';
 import usePianoRollLayoutStore from './usePianoRollLayoutStore';
 
 export const PianoRoll = () => {
@@ -45,7 +45,7 @@ export const PianoRoll = () => {
   const timelineHeight = orientation === EOrientation.HORIZONTAL ? timelineLength : pianoRollWidth;
   const timelineWidth = orientation === EOrientation.HORIZONTAL ? pianoRollWidth : timelineLength;
 
-  const formattedMeasureBeatQuarter = formatMeasureBeatQuarter(...currentMeasureBeatQuarter(currentTime, tempo, timeSignature))
+  const formattedMeasureBeatQuarter = formatMeasureBeatQuarter(...measureBeatQuarter(currentTime, tempo, timeSignature))
 
   useEffect(() => {
     let animationFrameId: number;
@@ -57,7 +57,6 @@ export const PianoRoll = () => {
         setCurrentTime(currentTime + elapsed);
         animationFrameId = requestAnimationFrame(update);
       };
-
       animationFrameId = requestAnimationFrame(update);
     }
 

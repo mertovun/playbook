@@ -1,4 +1,3 @@
-// src/components/GridLines/TimelineGrid.tsx
 import React from 'react';
 import { useTimelineGridLayout } from './useTimelineGridLayout';
 import {GridLine} from './GridLine';
@@ -11,7 +10,7 @@ interface TimelineGridProps {
 }
 
 export const TimelineGrid: React.FC<TimelineGridProps> = ({ timelineWidth, timelineHeight }) => {
-  const { startTime, currentTime } = useTimelineStore();
+  const { startTime, currentTime, setStartTime } = useTimelineStore();
   const { gridlines, startCursor, playCursor } = useTimelineGridLayout(timelineWidth, timelineHeight);
 
   return (

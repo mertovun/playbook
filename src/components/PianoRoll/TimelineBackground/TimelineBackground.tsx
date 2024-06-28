@@ -1,11 +1,11 @@
 import { TimelineOctave } from './TimelineOctave';
 
-interface TimelineProps {
+interface TimelineBackgroundProps {
   mapRangeToTimelineOctaves: any;
   mapRangeToTimelineNotes: any;
 }
 
-export const Timeline = ({ mapRangeToTimelineOctaves, mapRangeToTimelineNotes }: TimelineProps) => {
+export const TimelineBackground = ({ mapRangeToTimelineOctaves, mapRangeToTimelineNotes }: TimelineBackgroundProps) => {
   const octaves = mapRangeToTimelineOctaves();
   return (
     <>

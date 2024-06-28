@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import { ENote, EOctave, EOrientation, KeyboardRange, LayoutConfig } from './interface';
 import { noteToString } from '../../utils/note';
 

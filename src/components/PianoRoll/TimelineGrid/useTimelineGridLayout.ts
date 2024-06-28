@@ -1,11 +1,11 @@
 // src/hooks/useGridlines.ts
-import { useTimelineStore } from '../store';
+import { useTimelineStore } from '../useTimelineStore';
 import usePianoRollLayoutStore from '../usePianoRollLayoutStore';
 import { EOrientation } from '../interface';
 
 export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: number) => {
   const { orientation } = usePianoRollLayoutStore();
-  const { currentTime, tempo, timeSignature } = useTimelineStore();
+  const { startTime, currentTime, tempo, timeSignature } = useTimelineStore();
   const [beatsPerMeasure, beatUnit] = timeSignature;
   const quarterPerBeat = 16 / beatUnit;
   const secondsPerQuarter = 60 / tempo / 4;
@@ -34,7 +34,7 @@ export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: num
 
     const quarterLine = quarterLineIndex % quarterPerBeat === 0;
     const color = measureLine ? measureLineColor : (quarterLine ? beatLineColor : quarterLineColor);
-    const label: string | number = measureLine ? measureLineIndex : '';
+    const label: string  = measureLine ? measureLineIndex.toString() : '';
     gridlines.push(
       {
         x1,x2,y1,y2,label,labelX,labelY,color
@@ -42,10 +42,21 @@ export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: num
     ); 
   }
 
-  const x1 = orientation === EOrientation.HORIZONTAL ? 0 : currentTime * pixelsPerSecond;
-  const x2 = orientation === EOrientation.HORIZONTAL ? timelineWidth : currentTime * pixelsPerSecond;
-  const y1 = orientation === EOrientation.HORIZONTAL ? timelineHeight - currentTime * pixelsPerSecond : 0;
-  const y2 = orientation === EOrientation.HORIZONTAL ? timelineHeight - currentTime * pixelsPerSecond : timelineHeight;
+  const playCursor = {
+    x1: orientation === EOrientation.HORIZONTAL ? 0 : currentTime * pixelsPerSecond,
+    x2: orientation === EOrientation.HORIZONTAL ? timelineWidth : currentTime * pixelsPerSecond,
+    y1: orientation === EOrientation.HORIZONTAL ? timelineHeight - currentTime * pixelsPerSecond : 0,
+    y2: orientation === EOrientation.HORIZONTAL ? timelineHeight - currentTime * pixelsPerSecond : timelineHeight,
+    color: 'red'
+  }
 
-  return { gridlines, cursor: { x1, y1, x2, y2 } };
+  const startCursor = {
+    x1: orientation === EOrientation.HORIZONTAL ? 0 : startTime * pixelsPerSecond,
+    x2: orientation === EOrientation.HORIZONTAL ? timelineWidth : startTime * pixelsPerSecond,
+    y1: orientation === EOrientation.HORIZONTAL ? timelineHeight - startTime * pixelsPerSecond : 0,
+    y2: orientation === EOrientation.HORIZONTAL ? timelineHeight - startTime * pixelsPerSecond : timelineHeight,
+    color: 'orange'
+  }
+
+  return { gridlines, playCursor, startCursor };
 };

@@ -1,9 +1,9 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { EOrientation, KeyboardRange } from './interface';
 import { Keyboard } from './Keyboard/Keyboard';
 import './PianoRoll.css';
 import { TimelineGrid } from './TimelineGrid/TimelineGrid';
-import { useTimelineStore } from './store';
+import { useTimelineStore } from './useTimelineStore';
 import { TimelineBackground } from './TimelineBackground/TimelineBackground';
 import { currentMeasureBeatQuarter, formatMeasureBeatQuarter } from '../../utils/time';
 import usePianoRollLayoutStore from './usePianoRollLayoutStore';
@@ -21,18 +21,24 @@ export const PianoRoll = () => {
     mapRangeToTimelineNotes, 
     mapRangeToKeyboardOctaves 
   } = usePianoRollLayoutStore();
-  
+
   const { 
     isPlaying, 
+    play,
+    pause,
+    stop,
+    startTime,
     currentTime, 
     tempo, 
     timeSignature, 
     setCurrentTime 
   } = useTimelineStore();
 
-  const toggleOrientation = () => {
+  const toggleOrientation = useCallback(() => {
     setOrientation(orientation === EOrientation.HORIZONTAL ? EOrientation.VERTICAL : EOrientation.HORIZONTAL);
-  };
+  }, [orientation, setOrientation]);
+
+  const togglePlayPause =  useCallback(() => isPlaying ? pause() : play(), [isPlaying, pause, play]);
 
   const height = orientation === EOrientation.HORIZONTAL ? pianoRollLength : pianoRollWidth;
   const width = orientation === EOrientation.HORIZONTAL ? pianoRollWidth : pianoRollLength;
@@ -44,11 +50,11 @@ export const PianoRoll = () => {
   useEffect(() => {
     let animationFrameId: number;
     if (isPlaying) {
-      const startTime = performance.now();
+      const startClock = performance.now();
 
       const update = () => {
-        const elapsed = (performance.now() - startTime) / 1000;
-        setCurrentTime(elapsed);
+        const elapsed = (performance.now() - startClock) / 1000;
+        setCurrentTime(currentTime + elapsed);
         animationFrameId = requestAnimationFrame(update);
       };
 
@@ -60,13 +66,16 @@ export const PianoRoll = () => {
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [isPlaying, setCurrentTime]);
+  }, [isPlaying, setCurrentTime, currentTime]);
 
   return (
     <>
       <button onClick={toggleOrientation}>Toggle Orientation</button>
-      <button onClick={() => useTimelineStore.setState({ isPlaying: !isPlaying })}>
+      <button onClick={togglePlayPause}>
         {isPlaying ? 'Pause' : 'Play'}
+      </button>
+      <button disabled={startTime===currentTime} onClick={stop}>
+        {'Stop'}
       </button>
       {formattedMeasureBeatQuarter}
       <svg className={`pianoroll-svg ${orientation}`} width={width} height={height}>

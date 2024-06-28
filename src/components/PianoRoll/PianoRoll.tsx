@@ -6,11 +6,12 @@ import './PianoRoll.css';
 import { TimelineGrid } from './TimelineGrid/TimelineGrid';
 import { useTimelineStore } from './store';
 import { TimelineBackground } from './TimelineBackground/TimelineBackground';
+import { currentMeasureBeatQuarter, formatMeasureBeatQuarter } from '../../utils/time';
 
 export const PianoRoll = () => {
   const keyboardRange: KeyboardRange = [[ENote.A, EOctave._0], [ENote.C, EOctave._8]];
   const { orientation, pianoRollWidth, pianoRollLength, timelineLength, timelineX, timelineY, setOrientation, mapRangeToKeyboardNotes, mapRangeToTimelineNotes, mapRangeToKeyboardOctaves } = usePianoRollLayout(keyboardRange);
-  const { isPlaying, currentTime, setCurrentTime } = useTimelineStore();
+  const { isPlaying, currentTime, tempo, timeSignature, setCurrentTime } = useTimelineStore();
 
   const toggleOrientation = () => {
     setOrientation(orientation === EOrientation.HORIZONTAL ? EOrientation.VERTICAL : EOrientation.HORIZONTAL);
@@ -20,6 +21,8 @@ export const PianoRoll = () => {
   const width = orientation === EOrientation.HORIZONTAL ? pianoRollWidth : pianoRollLength;
   const timelineHeight = orientation === EOrientation.HORIZONTAL ? timelineLength : pianoRollWidth;
   const timelineWidth = orientation === EOrientation.HORIZONTAL ? pianoRollWidth : timelineLength;
+
+  const formattedMeasureBeatQuarter = formatMeasureBeatQuarter(...currentMeasureBeatQuarter(currentTime, tempo, timeSignature))
 
   useEffect(() => {
     let animationFrameId: number;
@@ -48,6 +51,7 @@ export const PianoRoll = () => {
       <button onClick={() => useTimelineStore.setState({ isPlaying: !isPlaying })}>
         {isPlaying ? 'Pause' : 'Play'}
       </button>
+      {formattedMeasureBeatQuarter}
       <svg className={`pianoroll-svg ${orientation}`} width={width} height={height}>
         <Keyboard mapRangeToKeyboardOctaves={mapRangeToKeyboardOctaves} mapRangeToKeyboardNotes={mapRangeToKeyboardNotes} />
         <svg x={timelineX} y={timelineY} width={timelineWidth} height={timelineHeight}>

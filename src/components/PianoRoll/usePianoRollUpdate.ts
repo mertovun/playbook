@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useTimelineGridStore } from './TimelineGrid/useTimelineGridStore';
 import usePianoRollLayoutStore from './usePianoRollLayoutStore';
 import { EOrientation } from './interface';
@@ -39,6 +39,4 @@ export const usePianoRollUpdate = () => {
       }
     };
   }, [isPlaying, setCurrentTime, currentTime]);
-
-  return true;
 };

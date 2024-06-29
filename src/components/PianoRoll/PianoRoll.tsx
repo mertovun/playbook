@@ -8,6 +8,7 @@ import { measureBeatQuarter, formatMeasureBeatQuarter } from '../../utils/time';
 import usePianoRollLayoutStore from './usePianoRollLayoutStore';
 import { usePianoRollHandlers } from './usePianoRollHandlers';
 import { usePianoRollUpdate } from './usePianoRollUpdate';
+import { useMidi } from './useMidi';
 
 export const PianoRoll = () => {
   const { 
@@ -38,7 +39,8 @@ export const PianoRoll = () => {
     handleTimelineClick 
   } = usePianoRollHandlers();
 
-  const update = usePianoRollUpdate();
+  usePianoRollUpdate();
+  useMidi();
 
   const height = orientation === EOrientation.HORIZONTAL ? pianoRollLength : pianoRollWidth;
   const width = orientation === EOrientation.HORIZONTAL ? pianoRollWidth : pianoRollLength;

@@ -9,6 +9,11 @@ export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: num
   const [beatsPerMeasure, beatUnit] = timeSignature;
   const quarterPerBeat = 16 / beatUnit;
   const secondsPerQuarter = 60 / tempo / 4;
+  // const quarterPerMeasure = quarterPerBeat * beatsPerMeasure;
+  const pixelsPerQuarter = secondsPerQuarter * pixelsPerSecond;
+
+  const quarterStartIndex = Math.floor(windowStartTime / secondsPerQuarter);
+  const quarterEndIndex = Math.ceil(timelineWidth / pixelsPerQuarter + quarterStartIndex);
 
   // todo: grid layout
   const labelOffset = 6;
@@ -16,13 +21,11 @@ export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: num
   const beatLineColor = "#666666";
   const measureLineColor = "#999999";
 
-  const pixelsPerQuarter = secondsPerQuarter * pixelsPerSecond;
-
   const gridlines = [];
-  for (let quarterLineIndex = 0; quarterLineIndex < timelineWidth / pixelsPerQuarter; quarterLineIndex++) {
+  for (let quarterLineIndex = quarterStartIndex; quarterLineIndex < quarterEndIndex; quarterLineIndex++) {
     const measureLine = quarterLineIndex % (beatsPerMeasure * quarterPerBeat) === 0;
     const measureLineIndex = Math.floor(quarterLineIndex / (beatsPerMeasure * quarterPerBeat) );
-    const x = quarterLineIndex * pixelsPerQuarter;
+    const x = quarterLineIndex * pixelsPerQuarter - windowStartTime * pixelsPerSecond;
     
     const x1 = orientation === EOrientation.HORIZONTAL ? 0 : x;
     const x2 = orientation === EOrientation.HORIZONTAL ? timelineWidth : x;
@@ -43,18 +46,18 @@ export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: num
   }
 
   const playCursor = {
-    x1: orientation === EOrientation.HORIZONTAL ? 0 : currentTime * pixelsPerSecond,
-    x2: orientation === EOrientation.HORIZONTAL ? timelineWidth : currentTime * pixelsPerSecond,
-    y1: orientation === EOrientation.HORIZONTAL ? timelineHeight - currentTime * pixelsPerSecond : 0,
-    y2: orientation === EOrientation.HORIZONTAL ? timelineHeight - currentTime * pixelsPerSecond : timelineHeight,
+    x1: orientation === EOrientation.HORIZONTAL ? 0 : (currentTime - windowStartTime) * pixelsPerSecond,
+    x2: orientation === EOrientation.HORIZONTAL ? timelineWidth : (currentTime - windowStartTime) * pixelsPerSecond,
+    y1: orientation === EOrientation.HORIZONTAL ? timelineHeight - (currentTime - windowStartTime) * pixelsPerSecond : 0,
+    y2: orientation === EOrientation.HORIZONTAL ? timelineHeight - (currentTime - windowStartTime) * pixelsPerSecond : timelineHeight,
     color: 'red'
   }
 
   const startCursor = {
-    x1: orientation === EOrientation.HORIZONTAL ? 0 : cursorStartTime * pixelsPerSecond,
-    x2: orientation === EOrientation.HORIZONTAL ? timelineWidth : cursorStartTime * pixelsPerSecond,
-    y1: orientation === EOrientation.HORIZONTAL ? timelineHeight - cursorStartTime * pixelsPerSecond : 0,
-    y2: orientation === EOrientation.HORIZONTAL ? timelineHeight - cursorStartTime * pixelsPerSecond : timelineHeight,
+    x1: orientation === EOrientation.HORIZONTAL ? 0 : (cursorStartTime - windowStartTime) * pixelsPerSecond,
+    x2: orientation === EOrientation.HORIZONTAL ? timelineWidth : (cursorStartTime - windowStartTime) * pixelsPerSecond,
+    y1: orientation === EOrientation.HORIZONTAL ? timelineHeight - (cursorStartTime - windowStartTime) * pixelsPerSecond : 0,
+    y2: orientation === EOrientation.HORIZONTAL ? timelineHeight - (cursorStartTime - windowStartTime) * pixelsPerSecond : timelineHeight,
     color: 'orange'
   }
 

@@ -1,4 +1,3 @@
-// usePianoRollHandlers.ts
 import { useCallback, useEffect, useRef } from 'react';
 import { useTimelineGridStore } from './TimelineGrid/useTimelineGridStore';
 import usePianoRollLayoutStore from './usePianoRollLayoutStore';
@@ -17,7 +16,6 @@ export const usePianoRollHandlers = () => {
     pause,
     pixelsPerSecond,
     windowStartTime,
-    currentTime,
     tempo,
     setCursorStartTime,
     setCurrentTime,
@@ -74,27 +72,6 @@ export const usePianoRollHandlers = () => {
       }
     };
   }, [handleTimelineScroll]);
-
-  useEffect(() => {
-    let animationFrameId: number;
-    if (isPlaying) {
-      const startClock = performance.now();
-
-      const update = () => {
-        const elapsed = (performance.now() - startClock) / 1000;
-        setCurrentTime(currentTime + elapsed);
-        if (orientation === EOrientation.HORIZONTAL) setWindowStartTime(windowStartTime+elapsed);
-        animationFrameId = requestAnimationFrame(update);
-      };
-      animationFrameId = requestAnimationFrame(update);
-    }
-
-    return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-    };
-  }, [isPlaying, setCurrentTime, currentTime]);
 
   return {
     timelineSvgRef,

@@ -8,7 +8,7 @@ export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: num
   const { isRecording, cursorStartTime, currentTime, tempo, timeSignature, windowStartTime, pixelsPerSecond } = useTimelineGridStore();
   const [beatsPerMeasure, beatUnit] = timeSignature;
   const quarterPerBeat = 16 / beatUnit;
-  const secondsPerQuarter = 60 / tempo / 4;
+  const secondsPerQuarter = (60 / tempo) / 4;
   // const quarterPerMeasure = quarterPerBeat * beatsPerMeasure;
   const pixelsPerQuarter = secondsPerQuarter * pixelsPerSecond;
   

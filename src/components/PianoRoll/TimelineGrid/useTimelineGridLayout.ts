@@ -1,11 +1,11 @@
 // src/hooks/useGridlines.ts
-import { useTimelineStore } from '../useTimelineStore';
+import { useTimelineGridStore } from './useTimelineGridStore';
 import usePianoRollLayoutStore from '../usePianoRollLayoutStore';
 import { EOrientation } from '../interface';
 
 export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: number) => {
   const { orientation } = usePianoRollLayoutStore();
-  const { cursorStartTime, currentTime, tempo, timeSignature, windowStartTime, pixelsPerSecond } = useTimelineStore();
+  const { cursorStartTime, currentTime, tempo, timeSignature, windowStartTime, pixelsPerSecond } = useTimelineGridStore();
   const [beatsPerMeasure, beatUnit] = timeSignature;
   const quarterPerBeat = 16 / beatUnit;
   const secondsPerQuarter = 60 / tempo / 4;

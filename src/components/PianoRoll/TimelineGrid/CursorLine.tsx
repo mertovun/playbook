@@ -9,5 +9,13 @@ interface CursorLineProps {
 }
 
 export const CursorLine: React.FC<CursorLineProps> = ({ x1, y1, x2, y2, color }) => (
-  <line x1={x1} y1={y1} x2={x2} y2={y2} stroke={color} strokeWidth="1" />
+  <line 
+    x1={x1} 
+    y1={y1} 
+    x2={x2} 
+    y2={y2} 
+    stroke={color} 
+    strokeWidth="1" 
+    style={{ pointerEvents: 'none' }}
+  />
 );

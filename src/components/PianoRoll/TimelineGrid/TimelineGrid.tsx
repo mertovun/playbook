@@ -2,7 +2,7 @@ import React from 'react';
 import { useTimelineGridLayout } from './useTimelineGridLayout';
 import {GridLine} from './GridLine';
 import {CursorLine} from './CursorLine';
-import { useTimelineStore } from '../useTimelineStore';
+import { useTimelineGridStore } from './useTimelineGridStore';
 
 interface TimelineGridProps {
   timelineWidth: number;
@@ -10,7 +10,7 @@ interface TimelineGridProps {
 }
 
 export const TimelineGrid: React.FC<TimelineGridProps> = ({ timelineWidth, timelineHeight }) => {
-  const { cursorStartTime, currentTime } = useTimelineStore();
+  const { cursorStartTime, currentTime } = useTimelineGridStore();
   const { gridlines, startCursor, playCursor } = useTimelineGridLayout(timelineWidth, timelineHeight);
 
   return (

@@ -1,6 +1,6 @@
 import {create} from 'zustand';
 
-interface TimelineStore {
+interface TimelineGridStore {
   isPlaying: boolean;
   cursorStartTime: number;
   currentTime: number;
@@ -23,7 +23,7 @@ interface TimelineStore {
 const MAX_ZOOM_IN = 400;
 const MAX_ZOOM_OUT = 16;
 
-export const useTimelineStore = create<TimelineStore>((set, get) => ({
+export const useTimelineGridStore = create<TimelineGridStore>((set, get) => ({
   isPlaying: false,
   cursorStartTime: 0,
   currentTime: 0,

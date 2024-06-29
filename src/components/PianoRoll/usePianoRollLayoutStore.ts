@@ -90,6 +90,7 @@ const usePianoRollLayoutStore = create<PianoRollLayoutState>((set, get) => ({
 
       const noteProps = {
         note,
+        level,
         x,
         y,
         width,

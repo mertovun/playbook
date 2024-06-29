@@ -22,6 +22,7 @@ export const GridLine: React.FC<GridLineProps> = ({ x1, y1, x2, y2, color, label
         textAnchor="middle"
         fontSize="10"
         fill={color}
+        style={{ pointerEvents: 'none' }}
       >
         {label}
       </text>

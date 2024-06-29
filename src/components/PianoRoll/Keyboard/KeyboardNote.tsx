@@ -25,10 +25,12 @@ export const KeyboardNote: React.FC<NoteProps> = ({ note, level, x, y, width, he
   const { noteOn, noteOff } = useMIDIOutput()
 
   const handleKeyboardNoteMouseDown = useCallback(() =>{
+    // @ts-ignore
     if (!isPlaying || isRecording) noteOn(midiNumber, {velocity:127, channel:1});
   }, [noteOn, midiNumber]);
 
   const handleKeyboardNoteMouseUp = useCallback(() =>{
+    // @ts-ignore
     if (!isPlaying || isRecording) noteOff(midiNumber, {channel:1})
   }, [noteOff, midiNumber]);
 

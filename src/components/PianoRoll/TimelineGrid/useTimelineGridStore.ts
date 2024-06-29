@@ -2,6 +2,7 @@ import {create} from 'zustand';
 
 interface TimelineGridStore {
   isPlaying: boolean;
+  isRecording: boolean;
   cursorStartTime: number;
   currentTime: number;
   tempo: number;
@@ -16,6 +17,7 @@ interface TimelineGridStore {
   setWindowStartTime: (time: number) => void;
   setPixelsPerSecond: (pixelsPerSecond: number) => void;
   play: () => void;
+  record: () => void;
   pause: () => void;
   stop: () => void;
 }
@@ -25,9 +27,10 @@ const MAX_ZOOM_OUT = 16;
 
 export const useTimelineGridStore = create<TimelineGridStore>((set, get) => ({
   isPlaying: false,
+  isRecording: false,
   cursorStartTime: 0,
   currentTime: 0,
-  tempo: 120,
+  tempo: 180,
   timeSignature: [4, 4],
   pixelsPerSecond: 100,
   windowStartTime: 0,
@@ -49,8 +52,9 @@ export const useTimelineGridStore = create<TimelineGridStore>((set, get) => ({
   },
   play: () => set({ isPlaying:true}),
   pause: () => set({ isPlaying:false}),
+  record: () => set({ isPlaying: true, isRecording:true }),
   stop: () => {
     const { cursorStartTime } = get();
-    set({ isPlaying: false, currentTime: cursorStartTime })
+    set({ isPlaying: false, currentTime: cursorStartTime, isRecording: false })
   }
 }));

@@ -5,12 +5,13 @@ import { EOrientation } from '../interface';
 
 export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: number) => {
   const { orientation } = usePianoRollLayoutStore();
-  const { cursorStartTime, currentTime, tempo, timeSignature, windowStartTime, pixelsPerSecond } = useTimelineGridStore();
+  const { isRecording, cursorStartTime, currentTime, tempo, timeSignature, windowStartTime, pixelsPerSecond } = useTimelineGridStore();
   const [beatsPerMeasure, beatUnit] = timeSignature;
   const quarterPerBeat = 16 / beatUnit;
   const secondsPerQuarter = 60 / tempo / 4;
   // const quarterPerMeasure = quarterPerBeat * beatsPerMeasure;
   const pixelsPerQuarter = secondsPerQuarter * pixelsPerSecond;
+  
 
   const quarterStartIndex = Math.floor(windowStartTime / secondsPerQuarter);
   const quarterEndIndex = Math.ceil(timelineWidth / pixelsPerQuarter + quarterStartIndex);
@@ -50,7 +51,7 @@ export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: num
     x2: orientation === EOrientation.HORIZONTAL ? timelineWidth : (currentTime - windowStartTime) * pixelsPerSecond,
     y1: orientation === EOrientation.HORIZONTAL ? timelineHeight - (currentTime - windowStartTime) * pixelsPerSecond : 0,
     y2: orientation === EOrientation.HORIZONTAL ? timelineHeight - (currentTime - windowStartTime) * pixelsPerSecond : timelineHeight,
-    color: 'red'
+    color: isRecording ? 'red' : 'green'
   }
 
   const startCursor = {

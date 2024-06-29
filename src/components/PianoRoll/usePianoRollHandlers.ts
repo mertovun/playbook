@@ -83,6 +83,7 @@ export const usePianoRollHandlers = () => {
       const update = () => {
         const elapsed = (performance.now() - startClock) / 1000;
         setCurrentTime(currentTime + elapsed);
+        if (orientation === EOrientation.HORIZONTAL) setWindowStartTime(windowStartTime+elapsed);
         animationFrameId = requestAnimationFrame(update);
       };
       animationFrameId = requestAnimationFrame(update);

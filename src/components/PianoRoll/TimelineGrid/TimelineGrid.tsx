@@ -10,7 +10,7 @@ interface TimelineGridProps {
 }
 
 export const TimelineGrid: React.FC<TimelineGridProps> = ({ timelineWidth, timelineHeight }) => {
-  const { startTime, currentTime, setStartTime } = useTimelineStore();
+  const { cursorStartTime, currentTime } = useTimelineStore();
   const { gridlines, startCursor, playCursor } = useTimelineGridLayout(timelineWidth, timelineHeight);
 
   return (
@@ -19,7 +19,7 @@ export const TimelineGrid: React.FC<TimelineGridProps> = ({ timelineWidth, timel
         <GridLine key={index} {...lineProps} />
       ))}
       <CursorLine {...startCursor} />
-      {startTime !== currentTime ? <CursorLine {...playCursor} /> : ''}
+      {cursorStartTime !== currentTime ? <CursorLine {...playCursor} /> : ''}
     </g>
   );
 };

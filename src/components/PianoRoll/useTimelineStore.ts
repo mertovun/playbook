@@ -2,13 +2,15 @@ import {create} from 'zustand';
 
 interface TimelineStore {
   isPlaying: boolean;
-  startTime: number;
+  cursorStartTime: number;
   currentTime: number;
   tempo: number;
   timeSignature: [number, number];
+  windowStartTime: number;
+  pixelsPerSecond: number;
   setPlaying: (playing: boolean) => void;
   setCurrentTime: (time: number) => void;
-  setStartTime: (time: number) => void;
+  setCursorStartTime: (time: number) => void;
   setTempo: (tempo: number) => void;
   setTimeSignature: (timeSignature: [number, number]) => void;
   play: () => void;
@@ -18,23 +20,25 @@ interface TimelineStore {
 
 export const useTimelineStore = create<TimelineStore>((set, get) => ({
   isPlaying: false,
-  startTime: 0,
+  cursorStartTime: 0,
   currentTime: 0,
   tempo: 120,
   timeSignature: [4, 4],
+  pixelsPerSecond: 100,
+  windowStartTime: 0,
   setPlaying: (playing: boolean) => set({ isPlaying: playing }),
   setCurrentTime: (time: number) => set({ currentTime: time }),
-  setStartTime: (time: number) => {
+  setCursorStartTime: (time: number) => {
     const { isPlaying } = get();
-    if (isPlaying) set({ startTime: time, currentTime: time });
-    else set({ startTime: time, currentTime: time });
+    if (isPlaying) set({ cursorStartTime: time, currentTime: time });
+    else set({ cursorStartTime: time, currentTime: time });
   },
   setTempo: (tempo: number) => set({ tempo }),
   setTimeSignature: (timeSignature: [number, number]) => set({ timeSignature }),
   play: () => set({ isPlaying:true}),
   pause: () => set({ isPlaying:false}),
   stop: () => {
-    const { startTime } = get();
-    set({ isPlaying: false, currentTime: startTime })
+    const { cursorStartTime } = get();
+    set({ isPlaying: false, currentTime: cursorStartTime })
   }
 }));

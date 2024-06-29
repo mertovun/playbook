@@ -27,10 +27,13 @@ export const PianoRoll = () => {
     play,
     pause,
     stop,
-    startTime,
+    cursorStartTime,
     currentTime, 
     tempo, 
     timeSignature, 
+    windowStartTime,
+    pixelsPerSecond,
+    setCursorStartTime,
     setCurrentTime 
   } = useTimelineStore();
 
@@ -46,6 +49,14 @@ export const PianoRoll = () => {
   const timelineWidth = orientation === EOrientation.HORIZONTAL ? pianoRollWidth : timelineLength;
 
   const formattedMeasureBeatQuarter = formatMeasureBeatQuarter(...measureBeatQuarter(currentTime, tempo, timeSignature))
+
+  const handleTimelineClick = useCallback((e:any ) => {
+    const rect = e.target.getBoundingClientRect();
+    const position = orientation === EOrientation.HORIZONTAL ? rect.bottom - e.clientY : e.clientX - rect.left;
+    const newStartTime = position / pixelsPerSecond + windowStartTime;
+    setCursorStartTime(newStartTime);
+    // setCurrentTime(newStartTime);
+  }, [orientation, windowStartTime, timelineWidth, timelineLength, tempo, setCursorStartTime, setCurrentTime]);
 
   useEffect(() => {
     let animationFrameId: number;
@@ -73,13 +84,20 @@ export const PianoRoll = () => {
       <button onClick={togglePlayPause}>
         {isPlaying ? 'Pause' : 'Play'}
       </button>
-      <button disabled={startTime===currentTime} onClick={stop}>
+      <button disabled={cursorStartTime===currentTime} onClick={stop}>
         {'Stop'}
       </button>
       {formattedMeasureBeatQuarter}
       <svg className={`pianoroll-svg ${orientation}`} width={width} height={height}>
         <Keyboard mapRangeToKeyboardOctaves={mapRangeToKeyboardOctaves} mapRangeToKeyboardNotes={mapRangeToKeyboardNotes} />
-        <svg x={timelineX} y={timelineY} width={timelineWidth} height={timelineHeight}>
+        <svg
+        x={timelineX}
+        y={timelineY}
+        width={timelineWidth}
+        height={timelineHeight}
+        onClick={handleTimelineClick}
+        >
+
           <TimelineBackground mapRangeToTimelineOctaves={mapRangeToKeyboardOctaves} mapRangeToTimelineNotes={mapRangeToTimelineNotes} />
           <TimelineGrid timelineWidth={timelineWidth} timelineHeight={timelineHeight} />
         </svg>

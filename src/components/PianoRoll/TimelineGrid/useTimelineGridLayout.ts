@@ -5,12 +5,12 @@ import { EOrientation } from '../interface';
 
 export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: number) => {
   const { orientation } = usePianoRollLayoutStore();
-  const { startTime, currentTime, tempo, timeSignature } = useTimelineStore();
+  const { cursorStartTime, currentTime, tempo, timeSignature, windowStartTime, pixelsPerSecond } = useTimelineStore();
   const [beatsPerMeasure, beatUnit] = timeSignature;
   const quarterPerBeat = 16 / beatUnit;
   const secondsPerQuarter = 60 / tempo / 4;
 
-  const pixelsPerSecond = 100; // todo: grid layout
+  // todo: grid layout
   const labelOffset = 6;
   const quarterLineColor = "#333333";
   const beatLineColor = "#666666";
@@ -51,10 +51,10 @@ export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: num
   }
 
   const startCursor = {
-    x1: orientation === EOrientation.HORIZONTAL ? 0 : startTime * pixelsPerSecond,
-    x2: orientation === EOrientation.HORIZONTAL ? timelineWidth : startTime * pixelsPerSecond,
-    y1: orientation === EOrientation.HORIZONTAL ? timelineHeight - startTime * pixelsPerSecond : 0,
-    y2: orientation === EOrientation.HORIZONTAL ? timelineHeight - startTime * pixelsPerSecond : timelineHeight,
+    x1: orientation === EOrientation.HORIZONTAL ? 0 : cursorStartTime * pixelsPerSecond,
+    x2: orientation === EOrientation.HORIZONTAL ? timelineWidth : cursorStartTime * pixelsPerSecond,
+    y1: orientation === EOrientation.HORIZONTAL ? timelineHeight - cursorStartTime * pixelsPerSecond : 0,
+    y2: orientation === EOrientation.HORIZONTAL ? timelineHeight - cursorStartTime * pixelsPerSecond : timelineHeight,
     color: 'orange'
   }
 

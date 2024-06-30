@@ -8,7 +8,7 @@ import { measureBeatQuarter, formatMeasureBeatQuarter } from '../../utils/time';
 import usePianoRollLayoutStore from './usePianoRollLayoutStore';
 import { usePianoRollHandlers } from './usePianoRollHandlers';
 import { usePianoRollUpdate } from './usePianoRollUpdate';
-import { useMidi } from './useMidi';
+import { useMidi, useMidiStore } from './useMidi';
 
 export const PianoRoll = () => {
   const { 
@@ -26,9 +26,9 @@ export const PianoRoll = () => {
   const { 
     isPlaying,
     stop,
+    record,
     cursorStartTime,
     currentTime, 
-    tempo, 
     timeSignature
   } = useTimelineGridStore();
 
@@ -40,6 +40,7 @@ export const PianoRoll = () => {
   } = usePianoRollHandlers();
 
   usePianoRollUpdate();
+  const { tempo } = useMidiStore();
   useMidi();
 
   const height = orientation === EOrientation.HORIZONTAL ? pianoRollLength : pianoRollWidth;
@@ -58,6 +59,9 @@ export const PianoRoll = () => {
         </button>
         <button disabled={cursorStartTime === currentTime} onClick={stop}>
           {'Stop'}
+        </button>
+        <button disabled={isPlaying} onClick={record}>
+          {'Record'}
         </button>
         {formattedMeasureBeatQuarter}
       </div>

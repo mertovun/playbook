@@ -2,10 +2,12 @@
 import { useTimelineGridStore } from './useTimelineGridStore';
 import usePianoRollLayoutStore from '../usePianoRollLayoutStore';
 import { EOrientation } from '../interface';
+import { useMidiStore } from '../useMidi';
 
 export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: number) => {
   const { orientation } = usePianoRollLayoutStore();
-  const { isRecording, cursorStartTime, currentTime, tempo, timeSignature, windowStartTime, pixelsPerSecond } = useTimelineGridStore();
+  const { isRecording, cursorStartTime, currentTime, timeSignature, windowStartTime, pixelsPerSecond } = useTimelineGridStore();
+  const { tempo } = useMidiStore();
   const [beatsPerMeasure, beatUnit] = timeSignature;
   const quarterPerBeat = 16 / beatUnit;
   const secondsPerQuarter = (60 / tempo) / 4;

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { useTimelineGridStore } from './TimelineGrid/useTimelineGridStore';
 import usePianoRollLayoutStore from './usePianoRollLayoutStore';
 import { EOrientation } from './interface';
+import { useMidiStore } from './useMidi';
 
 export const usePianoRollHandlers = () => {
   const { 
@@ -16,12 +17,13 @@ export const usePianoRollHandlers = () => {
     pause,
     pixelsPerSecond,
     windowStartTime,
-    tempo,
     setCursorStartTime,
     setCurrentTime,
     setWindowStartTime,
     setPixelsPerSecond,
   } = useTimelineGridStore();
+
+  const { tempo } = useMidiStore();
 
   const timelineSvgRef = useRef(null);
 

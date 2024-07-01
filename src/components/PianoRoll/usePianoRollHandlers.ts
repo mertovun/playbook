@@ -7,7 +7,6 @@ import { useMidiStore } from './useMidi';
 export const usePianoRollHandlers = () => {
   const { 
     orientation, 
-    timelineLength,
     setOrientation 
   } = usePianoRollLayoutStore();
 
@@ -38,7 +37,7 @@ export const usePianoRollHandlers = () => {
     const position = orientation === EOrientation.HORIZONTAL ? rect.bottom - e.clientY : e.clientX - rect.left;
     const newStartTime = position / pixelsPerSecond + windowStartTime;
     setCursorStartTime(newStartTime);
-  }, [orientation, windowStartTime, timelineLength, tempo, setCursorStartTime, setCurrentTime]);
+  }, [orientation, windowStartTime, tempo, setCursorStartTime, setCurrentTime]);
 
   const handleTimelineScroll = useCallback((e: any) => {
     e.preventDefault();

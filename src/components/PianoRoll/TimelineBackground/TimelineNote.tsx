@@ -12,7 +12,7 @@ export interface NoteProps {
   color: string;
 }
 
-export const TimelineNote: React.FC<NoteProps> = ({ note, level, x, y, width, height, color }) => {
+export const TimelineNote: React.FC<NoteProps> = ({ x, y, width, height, color }) => {
   
   return (
     <rect x={x} y={y} width={width} height={height} fill={color}  />

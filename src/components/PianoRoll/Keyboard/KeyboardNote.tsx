@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import './KeyboardNote.css';
 import { ENote } from '../interface';
 import { noteToMidiNum } from '../../../utils/note';
@@ -26,12 +26,25 @@ export const KeyboardNote: React.FC<NoteProps> = ({ note, level, x, y, width, he
   const midiNote = activeNotes[midiNumber];
 
   const velocity = 127; // Maximum velocity
-  const handleKeyboardNoteMouseDown = useCallback(() =>{
+
+  const handleMouseDown = useCallback((e:any) => {
     if (!isPlaying || isRecording) dispatchNoteOnMessage(midiNumber, velocity);
   }, [midiNumber]);
 
-  const handleKeyboardNoteMouseUp = useCallback(() =>{
+  const handleMouseUp = useCallback((e:any) => {
     if (!isPlaying || isRecording) dispatchNoteOffMessage(midiNumber, velocity);
+  }, [midiNumber]);
+
+  const handleMouseEnter = useCallback((e:any) => {
+    if (e.buttons) {
+      if (!isPlaying || isRecording) dispatchNoteOnMessage(midiNumber, velocity);
+    }
+  }, [midiNumber]);
+
+  const handleMouseLeave = useCallback((e:any) => {
+    if (e.buttons) {
+      if (!isPlaying || isRecording) dispatchNoteOffMessage(midiNumber, velocity);
+    }
   }, [midiNumber]);
 
   const keyPressed = midiNote !== undefined && midiNote.velocity > 0;
@@ -45,8 +58,10 @@ export const KeyboardNote: React.FC<NoteProps> = ({ note, level, x, y, width, he
       height={height} 
       fill={keyPressed ? 'orange' : color} 
       stroke="black" 
-      onMouseDown={handleKeyboardNoteMouseDown}
-      onMouseUp= {handleKeyboardNoteMouseUp}
+      onMouseDown={handleMouseDown}
+      onMouseUp= {handleMouseUp}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     />
     {label && (
       <text

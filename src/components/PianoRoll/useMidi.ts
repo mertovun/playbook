@@ -78,7 +78,7 @@ export const useMidi = () => {
       const [command, note, velocity] = message.data;
       const currentTime = currentTimeRef.current;
       const isRecording = isRecordingRef.current;
-      const recordedNotes = recordedNotesRef.current;
+      // const recordedNotes = recordedNotesRef.current;
       if (command === 144 && velocity > 0) {
         // Note on
         pianoRef.current?.start({ note, velocity });

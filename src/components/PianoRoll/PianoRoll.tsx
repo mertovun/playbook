@@ -15,9 +15,10 @@ export const PianoRoll = () => {
     orientation, 
     pianoRollWidth, 
     pianoRollLength, 
-    timelineLength, 
     timelineX, 
-    timelineY
+    timelineY,
+    timelineHeight,
+    timelineWidth
   } = usePianoRollLayoutStore();
 
   const { 
@@ -42,8 +43,6 @@ export const PianoRoll = () => {
 
   const height = orientation === EOrientation.HORIZONTAL ? pianoRollLength : pianoRollWidth;
   const width = orientation === EOrientation.HORIZONTAL ? pianoRollWidth : pianoRollLength;
-  const timelineHeight = orientation === EOrientation.HORIZONTAL ? timelineLength : pianoRollWidth;
-  const timelineWidth = orientation === EOrientation.HORIZONTAL ? pianoRollWidth : timelineLength;
 
   const formattedMeasureBeatQuarter = formatMeasureBeatQuarter(...measureBeatQuarter(currentTime, tempo, timeSignature));
 

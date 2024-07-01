@@ -15,9 +15,7 @@ export interface NoteProps {
 export const TimelineNote: React.FC<NoteProps> = ({ note, level, x, y, width, height, color }) => {
   
   return (
-    <svg x={x} y={y}>
-      <rect width={width} height={height} fill={color}  />
-    </svg>
+    <rect x={x} y={y} width={width} height={height} fill={color}  />
   )
 };
 

@@ -36,9 +36,10 @@ interface PianoRollLayoutState {
   layoutConfig: LayoutConfig;
   pianoRollWidth: number;
   pianoRollLength: number;
-  timelineLength: number;
   timelineX: number;
   timelineY: number;
+  timelineHeight: number;
+  timelineWidth: number;
   setOrientation: (orientation: EOrientation) => void;
   mapRangeToKeyboardNotes: (range: [ENote, ENote], level: EOctave, xOffset: number) => { whiteNotesArray: any[], blackNotesArray: any[] };
   mapRangeToTimelineNotes: (range: [ENote, ENote], xOffset: number) => { whiteNotesArray: any[], blackNotesArray: any[] };
@@ -50,25 +51,32 @@ const usePianoRollLayoutStore = create<PianoRollLayoutState>((set, get) => ({
   layoutConfig: horizontalLayout,
   pianoRollWidth: 52 * horizontalLayout.whiteNoteWidth,
   pianoRollLength: 52 * horizontalLayout.whiteNoteWidth / ASPECT_RATIO,
-  timelineLength: 52 * horizontalLayout.whiteNoteWidth / ASPECT_RATIO - horizontalLayout.timelineOffset - horizontalLayout.whiteNoteHeight,
   timelineX: 0,
   timelineY: 0,
+  timelineHeight: 52 * horizontalLayout.whiteNoteWidth / ASPECT_RATIO - horizontalLayout.timelineOffset - horizontalLayout.whiteNoteHeight,
+  timelineWidth: 52 * horizontalLayout.whiteNoteWidth,
   setOrientation: (orientation: EOrientation) => {
     const layoutConfig = orientation === EOrientation.HORIZONTAL ? horizontalLayout : verticalLayout;
+    
     const pianoRollWidth = 52 * layoutConfig.whiteNoteWidth;
     const pianoRollLength = orientation === EOrientation.HORIZONTAL ? pianoRollWidth / ASPECT_RATIO : pianoRollWidth * ASPECT_RATIO;
+
     const timelineLength = pianoRollLength - layoutConfig.timelineOffset - layoutConfig.whiteNoteHeight;
+
     const timelineX = orientation === EOrientation.HORIZONTAL ? 0 : layoutConfig.whiteNoteHeight + layoutConfig.timelineOffset;
     const timelineY = orientation === EOrientation.HORIZONTAL ? 0 : 0;
+    const timelineHeight = orientation === EOrientation.HORIZONTAL ? timelineLength : pianoRollWidth;
+    const timelineWidth = orientation === EOrientation.HORIZONTAL ? pianoRollWidth : timelineLength;
     
     set({
       orientation,
       layoutConfig,
       pianoRollWidth,
       pianoRollLength,
-      timelineLength,
       timelineX,
       timelineY,
+      timelineHeight,
+      timelineWidth,
     });
   },
   mapRangeToKeyboardNotes: (range: [ENote, ENote], level: EOctave, xOffset: number) => {
@@ -110,7 +118,7 @@ const usePianoRollLayoutStore = create<PianoRollLayoutState>((set, get) => ({
     return { whiteNotesArray, blackNotesArray };
   },
   mapRangeToTimelineNotes: (range: [ENote, ENote], xOffset: number) => {
-    const { orientation, layoutConfig, pianoRollWidth, pianoRollLength, timelineLength } = get();
+    const { orientation, layoutConfig, pianoRollWidth, pianoRollLength, timelineHeight } = get();
     const { whiteNoteWidth, blackNoteWidth } = layoutConfig;
     
     const whiteNotesArray: any[] = [];
@@ -122,7 +130,7 @@ const usePianoRollLayoutStore = create<PianoRollLayoutState>((set, get) => ({
       const x = orientation === EOrientation.HORIZONTAL ? (isWhiteNote ? currentX : currentX - blackNoteWidth / 2) : 0;
       const y = orientation === EOrientation.HORIZONTAL ? 0 : pianoRollWidth - whiteNoteWidth - (isWhiteNote ? currentX : currentX - (whiteNoteWidth - blackNoteWidth / 2));
       const width = orientation === EOrientation.HORIZONTAL ? (isWhiteNote ? whiteNoteWidth : blackNoteWidth) : pianoRollLength;
-      const height = orientation === EOrientation.HORIZONTAL ? timelineLength  : (isWhiteNote ? whiteNoteWidth : blackNoteWidth);
+      const height = orientation === EOrientation.HORIZONTAL ? timelineHeight  : (isWhiteNote ? whiteNoteWidth : blackNoteWidth);
       const color = isWhiteNote ? colorScheme.timelineWhiteNote : colorScheme.timelineBlackNote;
 
       const noteProps = {

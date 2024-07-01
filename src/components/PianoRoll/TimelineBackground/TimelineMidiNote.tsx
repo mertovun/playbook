@@ -1,10 +1,11 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import './TimelineNote.css';
 import { ENote, EOrientation } from '../interface';
 import { noteToMidiNum } from '../../../utils/note';
 import { useMidiStore } from '../useMidi';
 import { useTimelineGridStore } from '../TimelineGrid/useTimelineGridStore';
 import usePianoRollLayoutStore from '../usePianoRollLayoutStore';
+import { dispatchNoteOffMessage, dispatchNoteOnMessage } from '../../../utils/midi';
 
 export interface TimelineMidiNoteProps {
   note: ENote;
@@ -19,11 +20,29 @@ export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = ({ note, level,
   const midiNum = noteToMidiNum([note, level]);
 
   const { recordedNotes , activeNotes } = useMidiStore();
-  const { currentTime, isRecording, windowStartTime, pixelsPerSecond } = useTimelineGridStore();
+  const { currentTime, isPlaying, isRecording, windowStartTime, pixelsPerSecond } = useTimelineGridStore();
   const { orientation, timelineHeight } = usePianoRollLayoutStore();
 
   const noteDefaultColor = '#eb9';
   const noteDefaultStrokeColor = '#643';
+
+  const currentTimeRef = useRef(currentTime);
+
+  useEffect(() => {
+    if (isPlaying) {
+      for (let note of Object.values(recordedNotes[midiNum])) {
+        if (currentTimeRef.current < note.start && currentTime >= note.start) {
+          dispatchNoteOnMessage(midiNum, note.velocity);
+        }
+        if (currentTimeRef.current < note.end! && currentTime >= note.end!) {
+          dispatchNoteOffMessage(midiNum, note.velocity);
+        }
+      }
+    }
+    currentTimeRef.current = currentTime;
+  }, [currentTime, midiNum, recordedNotes, activeNotes, dispatchNoteOnMessage, dispatchNoteOffMessage, isRecording]);
+
+
 
   const renderNotes = useCallback(() =>{
     const notes = [];

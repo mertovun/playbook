@@ -7,7 +7,7 @@ export function measureBeatQuarter(timeInSeconds:number, tempo:number, timeSigna
   let quarter = timeInSeconds /  secondsPerQuarter;
   let beat = Math.floor(quarter / quarterPerBeat);
   quarter -= beat * quarterPerBeat;
-  let measure = Math.floor(beat/ beatsPerMeasure);
+  const measure = Math.floor(beat/ beatsPerMeasure);
   beat -= measure * beatsPerMeasure;
   return [measure, beat, quarter]
 }

@@ -28,9 +28,14 @@ export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = ({ note, level,
 
   const currentTimeRef = useRef(currentTime);
 
+  const recordedNotesAtNum = recordedNotes[midiNum];
+  const activeNote = activeNotes[midiNum];
+
+  // playback mode
   useEffect(() => {
-    if (isPlaying) {
-      for (let note of Object.values(recordedNotes[midiNum])) {
+    const notes = Object.values(recordedNotesAtNum);
+    if (isPlaying && !isRecording && notes.length) {
+      for (let note of Object.values(recordedNotesAtNum)) {
         if (currentTimeRef.current < note.start && currentTime >= note.start) {
           dispatchNoteOnMessage(midiNum, note.velocity);
         }
@@ -40,17 +45,17 @@ export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = ({ note, level,
       }
     }
     currentTimeRef.current = currentTime;
-  }, [currentTime, midiNum, recordedNotes, activeNotes, dispatchNoteOnMessage, dispatchNoteOffMessage, isRecording]);
-
+  }, [currentTime, midiNum, recordedNotesAtNum, isPlaying, isRecording]);
 
 
   const renderNotes = useCallback(() =>{
     const notes = [];
-    for (let note of Object.values(recordedNotes[midiNum])) {
+    for (let note of Object.values(recordedNotesAtNum)) {
       const startPx = (note.start - windowStartTime)*pixelsPerSecond;
       const durationPx = (note.end! - note.start)*pixelsPerSecond;
       notes.push([startPx, durationPx, note.start]);
     }
+    // record mode
     if (isRecording) {
       const activeNote = activeNotes[midiNum];
       if (activeNote) {
@@ -59,7 +64,6 @@ export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = ({ note, level,
         notes.push([startPx, durationPx, activeNote.start]);
       }
     }
-    // if (notes.length) console.log(notes);
     return notes.map(([startPx, durationPx, key])=>{
       const noteX = orientation === EOrientation.HORIZONTAL ? 0 : startPx;
       const noteY = orientation === EOrientation.HORIZONTAL ? timelineHeight - startPx - durationPx : 0;
@@ -81,7 +85,7 @@ export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = ({ note, level,
         />
       )
     })
-  }, [midiNum, recordedNotes, activeNotes, currentTime, windowStartTime, isRecording, orientation])
+  }, [midiNum, recordedNotesAtNum, activeNote, currentTime, windowStartTime, isRecording, orientation])
 
   return (
     <svg x={x} y={y}>
@@ -89,4 +93,3 @@ export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = ({ note, level,
     </svg>
   )
 };
-

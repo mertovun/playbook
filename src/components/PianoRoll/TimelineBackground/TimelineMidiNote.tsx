@@ -9,17 +9,23 @@ import { dispatchNoteOffMessage, dispatchNoteOnMessage } from '../../../utils/mi
 
 export interface TimelineMidiNoteProps {
   note: ENote;
-  level:number;
+  level: number;
   x: number;
   y: number;
   width: number;
   height: number;
 }
 
+const calculateNotePosition = (note: any, windowStartTime: number, pixelsPerSecond: number) => {
+  const startPx = (note.start - windowStartTime) * pixelsPerSecond;
+  const durationPx = (note.end! - note.start) * pixelsPerSecond;
+  return { startPx, durationPx, key: note.start };
+};
+
 export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = ({ note, level, x, y, width, height }) => {
   const midiNum = noteToMidiNum([note, level]);
 
-  const { recordedNotes , activeNotes } = useMidiStore();
+  const { recordedNotes, activeNotes } = useMidiStore();
   const { currentTime, isPlaying, isRecording, windowStartTime, pixelsPerSecond } = useTimelineGridStore();
   const { orientation, timelineHeight } = usePianoRollLayoutStore();
 
@@ -31,11 +37,10 @@ export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = ({ note, level,
   const recordedNotesAtNum = recordedNotes[midiNum];
   const activeNote = activeNotes[midiNum];
 
-  // playback mode
   useEffect(() => {
     const notes = Object.values(recordedNotesAtNum);
     if (isPlaying && !isRecording && notes.length) {
-      for (let note of Object.values(recordedNotesAtNum)) {
+      for (let note of notes) {
         if (currentTimeRef.current < note.start && currentTime >= note.start) {
           dispatchNoteOnMessage(midiNum, note.velocity);
         }
@@ -47,49 +52,37 @@ export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = ({ note, level,
     currentTimeRef.current = currentTime;
   }, [currentTime, midiNum, recordedNotesAtNum, isPlaying, isRecording]);
 
-
-  const renderNotes = useCallback(() =>{
-    const notes = [];
-    for (let note of Object.values(recordedNotesAtNum)) {
-      const startPx = (note.start - windowStartTime)*pixelsPerSecond;
-      const durationPx = (note.end! - note.start)*pixelsPerSecond;
-      notes.push([startPx, durationPx, note.start]);
+  const renderNotes = useCallback(() => {
+    const notes = Object.values(recordedNotesAtNum).map(note => calculateNotePosition(note, windowStartTime, pixelsPerSecond));
+    if (isRecording && activeNote) {
+      notes.push(calculateNotePosition({ ...activeNote, end: currentTime }, windowStartTime, pixelsPerSecond));
     }
-    // record mode
-    if (isRecording) {
-      const activeNote = activeNotes[midiNum];
-      if (activeNote) {
-        const startPx = (activeNote.start - windowStartTime)*pixelsPerSecond;
-        const durationPx = (currentTime - activeNote.start)*pixelsPerSecond;
-        notes.push([startPx, durationPx, activeNote.start]);
-      }
-    }
-    return notes.map(([startPx, durationPx, key])=>{
+    return notes.map(({ startPx, durationPx, key }) => {
       const noteX = orientation === EOrientation.HORIZONTAL ? 0 : startPx;
       const noteY = orientation === EOrientation.HORIZONTAL ? timelineHeight - startPx - durationPx : 0;
       const noteWidth = orientation === EOrientation.HORIZONTAL ? width : durationPx;
       const noteHeight = orientation === EOrientation.HORIZONTAL ? durationPx : height;
       return (
-        <rect 
-          key={key} 
-          x={noteX} 
-          y={noteY} 
-          width={noteWidth} 
-          height={noteHeight} 
-          fill={noteDefaultColor}  
+        <rect
+          key={key}
+          x={noteX}
+          y={noteY}
+          width={noteWidth}
+          height={noteHeight}
+          fill={noteDefaultColor}
           stroke={noteDefaultStrokeColor}
-          strokeWidth={1.6}
+          strokeWidth={1.2}
           rx={5}
           ry={5}
           style={{ pointerEvents: 'none' }}
         />
-      )
-    })
-  }, [midiNum, recordedNotesAtNum, activeNote, currentTime, windowStartTime, isRecording, orientation])
+      );
+    });
+  }, [midiNum, recordedNotesAtNum, activeNote, currentTime, windowStartTime, pixelsPerSecond, isRecording, orientation]);
 
   return (
     <svg x={x} y={y}>
       {renderNotes()}
     </svg>
-  )
+  );
 };

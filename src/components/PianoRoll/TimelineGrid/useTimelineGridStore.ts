@@ -20,8 +20,8 @@ interface TimelineGridStore {
   stop: () => void;
 }
 
-const MAX_ZOOM_IN = 400;
-const MAX_ZOOM_OUT = 16;
+export const MAX_ZOOM_IN = 400;
+export const MAX_ZOOM_OUT = 16;
 
 export const useTimelineGridStore = create<TimelineGridStore>((set, get) => ({
   isPlaying: false,

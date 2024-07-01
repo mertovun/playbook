@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef } from 'react';
-import { useTimelineGridStore } from './TimelineGrid/useTimelineGridStore';
+import { MAX_ZOOM_IN, MAX_ZOOM_OUT, useTimelineGridStore } from './TimelineGrid/useTimelineGridStore';
 import usePianoRollLayoutStore from './usePianoRollLayoutStore';
 import { EOrientation } from './interface';
 import { useMidiStore } from './useMidi';
@@ -54,7 +54,7 @@ export const usePianoRollHandlers = () => {
       const newWindowStartTime = timeAtMousePosition - (mousePosition / newPixelsPerSecond);
   
       setPixelsPerSecond(newPixelsPerSecond);
-      setWindowStartTime(newWindowStartTime);
+      if (pixelsPerSecond<MAX_ZOOM_IN && pixelsPerSecond> MAX_ZOOM_OUT)setWindowStartTime(newWindowStartTime);
     } else {
       const scrollAmount = e.deltaY / pixelsPerSecond * 0.3;
       const newWindowStartTime = windowStartTime - scrollAmount;

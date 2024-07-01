@@ -7,3 +7,11 @@
   -moz-user-select: none; /* For Firefox */
   -ms-user-select: none; /* For Internet Explorer and Edge */
 }
+
+.control-bar {
+  margin-bottom: 10px;
+}
+
+.control-bar button {
+  margin-right: 5px;
+}

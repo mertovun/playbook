@@ -15,6 +15,8 @@ type RecordedNotes = {[key: number]:MidiNote}[];
 interface MidiStore {
   tempo: number;
   setTempo: (tempo: number) => void;
+  timeSignature: [number, number];
+  setTimeSignature: (timeSignature: [number, number]) => void;
   activeNotes: (MidiNote|undefined)[];
   recordedNotes: RecordedNotes;
   clearRecordedNotes: () => void;
@@ -26,6 +28,8 @@ interface MidiStore {
 export const useMidiStore = create<MidiStore>((set,get) =>({
   tempo: 120,
   setTempo: (tempo) => set({tempo}),
+  timeSignature: [4, 4],
+  setTimeSignature: (timeSignature) => set({ timeSignature }),
   activeNotes: Array(128).fill(undefined),
   recordedNotes: Array(128).fill(null).map(()=>({})),
   clearRecordedNotes: () => set({ recordedNotes:Array(128).fill(null).map(()=>({}))}),

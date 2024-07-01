@@ -2,13 +2,12 @@ import { EOrientation } from './interface';
 import { Keyboard } from './Keyboard/Keyboard';
 import './PianoRoll.css';
 import { TimelineGrid } from './TimelineGrid/TimelineGrid';
-import { useTimelineGridStore } from './TimelineGrid/useTimelineGridStore';
 import { TimelineBackground } from './TimelineBackground/TimelineBackground';
-import { measureBeatQuarter, formatMeasureBeatQuarter } from '../../utils/time';
 import usePianoRollLayoutStore from './usePianoRollLayoutStore';
 import { usePianoRollHandlers } from './usePianoRollHandlers';
 import { usePianoRollUpdate } from './usePianoRollUpdate';
-import { useMidi, useMidiStore } from './useMidi';
+import { useMidi } from './useMidi';
+import { ControlBar } from './ControlBar/ControlBar'; // import the new ControlBar component
 
 export const PianoRoll = () => {
   const { 
@@ -22,45 +21,19 @@ export const PianoRoll = () => {
   } = usePianoRollLayoutStore();
 
   const { 
-    isPlaying,
-    stop,
-    record,
-    cursorStartTime,
-    currentTime, 
-    timeSignature
-  } = useTimelineGridStore();
-
-  const { 
     timelineSvgRef, 
-    toggleOrientation, 
-    togglePlayPause, 
     handleTimelineClick 
   } = usePianoRollHandlers();
 
   usePianoRollUpdate();
-  const { tempo } = useMidiStore();
   useMidi();
 
   const height = orientation === EOrientation.HORIZONTAL ? pianoRollLength : pianoRollWidth;
   const width = orientation === EOrientation.HORIZONTAL ? pianoRollWidth : pianoRollLength;
 
-  const formattedMeasureBeatQuarter = formatMeasureBeatQuarter(...measureBeatQuarter(currentTime, tempo, timeSignature));
-
   return (
     <>
-      <div>
-        <button onClick={toggleOrientation}>Toggle Orientation</button>
-        <button onClick={togglePlayPause}>
-          {isPlaying ? 'Pause' : 'Play'}
-        </button>
-        <button disabled={cursorStartTime === currentTime} onClick={stop}>
-          {'Stop'}
-        </button>
-        <button disabled={isPlaying} onClick={record}>
-          {'Record'}
-        </button>
-        {formattedMeasureBeatQuarter}
-      </div>
+      <ControlBar />
       <div>
         <svg className={`pianoroll-svg ${orientation}`} width={width} height={height}>
           <Keyboard />

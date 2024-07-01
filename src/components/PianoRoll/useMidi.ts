@@ -10,11 +10,13 @@ type MidiNote = {
   end?: number;
 }
 
+type RecordedNotes = {[key: number]:MidiNote}[];
+
 interface MidiStore {
   tempo: number;
   setTempo: (tempo: number) => void;
   activeNotes: (MidiNote|undefined)[];
-  recordedNotes: MidiNote[];
+  recordedNotes: RecordedNotes;
   clearRecordedNotes: () => void;
   addRecordedNote: (note:MidiNote) => void;
   noteOn: (note:number, velocity: number, startTime: number) => void;
@@ -25,11 +27,11 @@ export const useMidiStore = create<MidiStore>((set,get) =>({
   tempo: 120,
   setTempo: (tempo) => set({tempo}),
   activeNotes: Array(128).fill(undefined),
-  recordedNotes: [],
-  clearRecordedNotes: () => set({ recordedNotes:[]}),
+  recordedNotes: Array(128).fill(null).map(()=>({})),
+  clearRecordedNotes: () => set({ recordedNotes:Array(128).fill(null).map(()=>({}))}),
   addRecordedNote: (note:MidiNote) => {
     const { recordedNotes } = get();
-    recordedNotes.push(note);
+    recordedNotes[note.note][note.start] = note;
     set({recordedNotes});
   },
   noteOn: (note, velocity,startTime) => {
@@ -50,18 +52,18 @@ export const useMidi = () => {
   const contextRef = useRef<AudioContext | null>(null);
   const pianoRef = useRef<SplendidGrandPiano | null>(null);
   
-  const { noteOn, noteOff, addRecordedNote } = useMidiStore();
+  const { noteOn, noteOff, addRecordedNote, recordedNotes } = useMidiStore();
   const { currentTime, isRecording } = useTimelineGridStore();
 
   const currentTimeRef = useRef<number>(0);
   const isRecordingRef = useRef<boolean>(false);
-  // const recordedNotesRef = useRef<MidiNote[]>([]);
+  const recordedNotesRef = useRef<RecordedNotes>([]);
 
   useEffect(() => {
     currentTimeRef.current = currentTime;
     isRecordingRef.current = isRecording;
-    // recordedNotesRef.current = recordedNotes;
-  }, [currentTime, isRecording]);
+    recordedNotesRef.current = recordedNotes;
+  }, [currentTime, isRecording, recordedNotes]);
 
   useEffect(() => {
     if (!contextRef.current) {
@@ -76,7 +78,7 @@ export const useMidi = () => {
       const [command, note, velocity] = message.data;
       const currentTime = currentTimeRef.current;
       const isRecording = isRecordingRef.current;
-      // const recordedNotes = recordedNotesRef.current;
+      const recordedNotes = recordedNotesRef.current;
       if (command === 144 && velocity > 0) {
         // Note on
         pianoRef.current?.start({ note, velocity });

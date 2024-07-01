@@ -4,6 +4,7 @@ import { ENote } from '../interface';
 import { noteToMidiNum } from '../../../utils/note';
 import { useTimelineGridStore } from '../TimelineGrid/useTimelineGridStore';
 import { useMidiStore } from '../useMidi';
+import { dispatchNoteOffMessage, dispatchNoteOnMessage } from '../../../utils/midi';
 
 export interface NoteProps {
   note: ENote;
@@ -26,13 +27,11 @@ export const KeyboardNote: React.FC<NoteProps> = ({ note, level, x, y, width, he
 
   const velocity = 127; // Maximum velocity
   const handleKeyboardNoteMouseDown = useCallback(() =>{
-    const noteOnMessage = [0x90, midiNumber, velocity]; // 0x90 is the Note On message
-    if (!isPlaying || isRecording) window.dispatchEvent(new CustomEvent('midi', { detail: { data: noteOnMessage } }));
+    if (!isPlaying || isRecording) dispatchNoteOnMessage(midiNumber, velocity);
   }, [midiNumber]);
 
   const handleKeyboardNoteMouseUp = useCallback(() =>{
-    const noteOffMessage = [0x80, midiNumber, velocity]; // 0x80 is the Note Off message
-    if (!isPlaying || isRecording) window.dispatchEvent(new CustomEvent('midi', { detail: { data: noteOffMessage } }));
+    if (!isPlaying || isRecording) dispatchNoteOffMessage(midiNumber, velocity);
   }, [midiNumber]);
 
   const keyPressed = midiNote !== undefined && midiNote.velocity > 0;

@@ -50,18 +50,18 @@ export const useMidi = () => {
   const contextRef = useRef<AudioContext | null>(null);
   const pianoRef = useRef<SplendidGrandPiano | null>(null);
   
-  const { noteOn, noteOff, addRecordedNote, recordedNotes } = useMidiStore();
+  const { noteOn, noteOff, addRecordedNote } = useMidiStore();
   const { currentTime, isRecording } = useTimelineGridStore();
 
   const currentTimeRef = useRef<number>(0);
   const isRecordingRef = useRef<boolean>(false);
-  const recordedNotesRef = useRef<MidiNote[]>([]);
+  // const recordedNotesRef = useRef<MidiNote[]>([]);
 
   useEffect(() => {
     currentTimeRef.current = currentTime;
     isRecordingRef.current = isRecording;
-    recordedNotesRef.current = recordedNotes;
-  }, [currentTime, isRecording, recordedNotes]);
+    // recordedNotesRef.current = recordedNotes;
+  }, [currentTime, isRecording]);
 
   useEffect(() => {
     if (!contextRef.current) {
@@ -76,7 +76,7 @@ export const useMidi = () => {
       const [command, note, velocity] = message.data;
       const currentTime = currentTimeRef.current;
       const isRecording = isRecordingRef.current;
-      const recordedNotes = recordedNotesRef.current;
+      // const recordedNotes = recordedNotesRef.current;
       if (command === 144 && velocity > 0) {
         // Note on
         pianoRef.current?.start({ note, velocity });

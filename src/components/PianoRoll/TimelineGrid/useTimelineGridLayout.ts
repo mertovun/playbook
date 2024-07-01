@@ -20,9 +20,9 @@ export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: num
 
   // todo: grid layout
   const labelOffset = 6;
-  const quarterLineColor = "#333333";
-  const beatLineColor = "#666666";
-  const measureLineColor = "#999999";
+  const quarterLineColor = "#555";
+  const beatLineColor = "#aaa";
+  const measureLineColor = "#fff";
 
   const gridlines = [];
   for (let quarterLineIndex = quarterStartIndex; quarterLineIndex < quarterEndIndex; quarterLineIndex++) {

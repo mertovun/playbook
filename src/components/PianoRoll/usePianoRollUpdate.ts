@@ -16,7 +16,6 @@ export const usePianoRollUpdate = () => {
     setWindowStartTime,
   } = useTimelineGridStore();
 
-
   useEffect(() => {
     let animationFrameId: number;
     if (isPlaying) {

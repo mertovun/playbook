@@ -4,6 +4,7 @@ import { ENote } from '../interface';
 
 export interface NoteProps {
   note: ENote;
+  level:number;
   x: number;
   y: number;
   width: number;
@@ -11,9 +12,12 @@ export interface NoteProps {
   color: string;
 }
 
-export const TimelineNote: React.FC<NoteProps> = React.memo(({ x, y, width, height, color }) => (
-  <g>
-    <rect x={x} y={y} width={width} height={height} fill={color}  />
-  </g>
-));
+export const TimelineNote: React.FC<NoteProps> = ({ note, level, x, y, width, height, color }) => {
+  
+  return (
+    <svg x={x} y={y}>
+      <rect width={width} height={height} fill={color}  />
+    </svg>
+  )
+};
 

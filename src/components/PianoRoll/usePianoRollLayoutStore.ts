@@ -42,7 +42,7 @@ interface PianoRollLayoutState {
   setOrientation: (orientation: EOrientation) => void;
   mapRangeToKeyboardNotes: (range: [ENote, ENote], level: EOctave, xOffset: number) => { whiteNotesArray: any[], blackNotesArray: any[] };
   mapRangeToTimelineNotes: (range: [ENote, ENote], xOffset: number) => { whiteNotesArray: any[], blackNotesArray: any[] };
-  mapRangeToKeyboardOctaves: () => { range: [ENote, ENote], level: EOctave, xOffset: number }[];
+  mapRangeToOctaves: () => { range: [ENote, ENote], level: EOctave, xOffset: number }[];
 }
 
 const usePianoRollLayoutStore = create<PianoRollLayoutState>((set, get) => ({
@@ -144,7 +144,7 @@ const usePianoRollLayoutStore = create<PianoRollLayoutState>((set, get) => ({
 
     return { whiteNotesArray, blackNotesArray };
   },
-  mapRangeToKeyboardOctaves: () => {
+  mapRangeToOctaves: () => {
     const [[startNote, startLevel], [endNote, endLevel]] = keyboardRange;
     const { whiteNoteWidth } = get().layoutConfig;
     const octaves = [];

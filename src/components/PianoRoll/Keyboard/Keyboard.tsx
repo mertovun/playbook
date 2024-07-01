@@ -1,12 +1,9 @@
+import usePianoRollLayoutStore from '../usePianoRollLayoutStore';
 import { KeyboardOctave } from './KeyboardOctave';
 
-interface KeyboardProps {
-  mapRangeToKeyboardOctaves: any;
-  mapRangeToKeyboardNotes: any;
-}
-
-export const Keyboard = ({ mapRangeToKeyboardOctaves, mapRangeToKeyboardNotes }: KeyboardProps) => {
-  const octaves = mapRangeToKeyboardOctaves();
+export const Keyboard = () => {
+  const { mapRangeToOctaves, mapRangeToKeyboardNotes } = usePianoRollLayoutStore();
+  const octaves = mapRangeToOctaves();
   return (
     <>
       {octaves.map((octaveProps:any, i:number) => (

@@ -1,16 +1,14 @@
+import usePianoRollLayoutStore from '../usePianoRollLayoutStore';
 import { TimelineOctave } from './TimelineOctave';
 
-interface TimelineBackgroundProps {
-  mapRangeToTimelineOctaves: any;
-  mapRangeToTimelineNotes: any;
-}
 
-export const TimelineBackground = ({ mapRangeToTimelineOctaves, mapRangeToTimelineNotes }: TimelineBackgroundProps) => {
-  const octaves = mapRangeToTimelineOctaves();
+export const TimelineBackground = () => {
+  const { mapRangeToOctaves } = usePianoRollLayoutStore();
+  const octaves = mapRangeToOctaves();
   return (
     <>
       {octaves.map((octaveProps:any, i:number) => (
-        <TimelineOctave key={i} {...octaveProps} mapRangeToTimelineNotes={mapRangeToTimelineNotes} />
+        <TimelineOctave key={i} {...octaveProps} />
       ))}
     </>
   );

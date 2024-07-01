@@ -17,10 +17,7 @@ export const PianoRoll = () => {
     pianoRollLength, 
     timelineLength, 
     timelineX, 
-    timelineY, 
-    mapRangeToKeyboardNotes, 
-    mapRangeToTimelineNotes, 
-    mapRangeToKeyboardOctaves 
+    timelineY
   } = usePianoRollLayoutStore();
 
   const { 
@@ -67,7 +64,7 @@ export const PianoRoll = () => {
       </div>
       <div>
         <svg className={`pianoroll-svg ${orientation}`} width={width} height={height}>
-          <Keyboard mapRangeToKeyboardOctaves={mapRangeToKeyboardOctaves} mapRangeToKeyboardNotes={mapRangeToKeyboardNotes} />
+          <Keyboard />
           <svg
             x={timelineX}
             y={timelineY}
@@ -76,7 +73,7 @@ export const PianoRoll = () => {
             onClick={handleTimelineClick}
             ref={timelineSvgRef}
           >
-            <TimelineBackground mapRangeToTimelineOctaves={mapRangeToKeyboardOctaves} mapRangeToTimelineNotes={mapRangeToTimelineNotes} />
+            <TimelineBackground />
             <TimelineGrid timelineWidth={timelineWidth} timelineHeight={timelineHeight} />
           </svg>
         </svg>

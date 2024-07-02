@@ -3,6 +3,7 @@ import { SplendidGrandPiano } from 'smplr';
 import { create } from 'zustand';
 import { useTimelineGridStore } from './TimelineGrid/useTimelineGridStore';
 import { TimeSignature } from './interface';
+import { useControlBarStore } from './ControlBar/useControlBarStore';
 
 type MidiNote = {
   note: number;
@@ -57,18 +58,23 @@ export const useMidi = () => {
   const contextRef = useRef<AudioContext | null>(null);
   const pianoRef = useRef<SplendidGrandPiano | null>(null);
   
-  const { noteOn, noteOff, addRecordedNote, recordedNotes } = useMidiStore();
+  const { noteOn, noteOff, addRecordedNote } = useMidiStore();
   const { currentTime, isRecording } = useTimelineGridStore();
+  const { volume, isMuted } = useControlBarStore();
 
   const currentTimeRef = useRef<number>(0);
   const isRecordingRef = useRef<boolean>(false);
-  const recordedNotesRef = useRef<RecordedNotes>([]);
 
   useEffect(() => {
     currentTimeRef.current = currentTime;
     isRecordingRef.current = isRecording;
-    recordedNotesRef.current = recordedNotes;
-  }, [currentTime, isRecording, recordedNotes]);
+  }, [currentTime, isRecording]);
+
+  useEffect(() => {
+    if (pianoRef.current) {
+      pianoRef.current.output.setVolume(isMuted ? 0: Math.ceil(volume*127)  );
+    }
+  })
 
   useEffect(() => {
     if (!contextRef.current) {
@@ -83,7 +89,6 @@ export const useMidi = () => {
       const [command, note, velocity] = message.data;
       const currentTime = currentTimeRef.current;
       const isRecording = isRecordingRef.current;
-      // const recordedNotes = recordedNotesRef.current;
       if (command === 144 && velocity > 0) {
         // Note on
         pianoRef.current?.start({ note, velocity });
@@ -95,7 +100,6 @@ export const useMidi = () => {
         if (isRecording) addRecordedNote(recordedNote);
         
       }
-      // console.log(recordedNotes)
     };
 
     const handleCustomMidiEvent = (event: any) => {

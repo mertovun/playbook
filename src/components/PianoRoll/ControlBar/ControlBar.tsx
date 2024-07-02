@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useTimelineGridStore } from '../TimelineGrid/useTimelineGridStore';
 import { usePianoRollHandlers } from '../usePianoRollHandlers';
 import { measureBeatQuarter, formatMeasureBeatQuarter } from '../../../utils/time';
 import { useMidiStore } from '../useMidi';
 import { TimeSignature } from '../interface';
 import './ControlBar.css'; // Import the CSS for styling
+import { useControlBarStore } from './useControlBarStore';
 
 export const ControlBar = () => {
   const { isPlaying, stop, record, cursorStartTime, currentTime } = useTimelineGridStore();
@@ -18,22 +19,33 @@ export const ControlBar = () => {
   const [newBeatsPerMeasure, setNewBeatsPerMeasure] = useState(beatsPerMeasure);
   const [newBeatUnit, setNewBeatUnit] = useState(beatUnit);
 
-  const handleTempoChange = (e) => {
+  const { volume, isMuted, setVolume, setIsMuted } = useControlBarStore();
+
+  const handleTempoChange = (e:any) => {
     const newTempoValue = Number(e.target.value);
     setNewTempo(newTempoValue);
     setTempo(newTempoValue);
   };
 
-  const handleTimeSignatureChange = (index:number, value:string) => {
+  const handleTimeSignatureChange = (index: number, value: string) => {
     const newTimeSignature = [...timeSignature];
     newTimeSignature[index] = Number(value);
     setTimeSignature(newTimeSignature as TimeSignature);
   };
 
+  const handleVolumeChange = (e: any) => {
+    const newVolume = Number(e.target.value);
+    setVolume(newVolume);
+  };
+
+  const toggleMute = useCallback(() => {
+    setIsMuted(!isMuted);
+  },[isMuted, setIsMuted]);
+
   return (
     <div className="control-bar">
       <div className="control-group">
-        <button onClick={toggleOrientation}>Toggle Orientation</button>
+        <button onClick={toggleOrientation}>Orientation</button>
       </div>
       <div className="control-group">
         <button onClick={togglePlayPause}>
@@ -49,7 +61,7 @@ export const ControlBar = () => {
       </div>
       <div className="control-group">
         <label>
-          Tempo:
+          BPM:
           <input
             type="number"
             value={newTempo}
@@ -57,7 +69,7 @@ export const ControlBar = () => {
           />
         </label>
         <label>
-          Time Signature:
+          Time:
           <input
             type="number"
             value={newBeatsPerMeasure}
@@ -81,6 +93,23 @@ export const ControlBar = () => {
             ))}
           </select>
         </label>
+      </div>
+      <div className="control-group">
+        <label>
+          Volume:
+          <input
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value={isMuted ? 0 : volume}
+            onChange={handleVolumeChange}
+            disabled={isMuted}
+          />
+        </label>
+        <button onClick={toggleMute}>
+          {isMuted ? 'Unmute' : 'Mute'}
+        </button>
       </div>
     </div>
   );

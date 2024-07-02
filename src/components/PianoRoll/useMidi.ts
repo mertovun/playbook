@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { SplendidGrandPiano } from 'smplr';
 import { create } from 'zustand';
 import { useTimelineGridStore } from './TimelineGrid/useTimelineGridStore';
+import { TimeSignature } from './interface';
 
 type MidiNote = {
   note: number;
@@ -15,8 +16,8 @@ type RecordedNotes = {[key: number]:MidiNote}[];
 interface MidiStore {
   tempo: number;
   setTempo: (tempo: number) => void;
-  timeSignature: [number, number];
-  setTimeSignature: (timeSignature: [number, number]) => void;
+  timeSignature: TimeSignature;
+  setTimeSignature: (timeSignature: TimeSignature) => void;
   activeNotes: (MidiNote|undefined)[];
   recordedNotes: RecordedNotes;
   clearRecordedNotes: () => void;

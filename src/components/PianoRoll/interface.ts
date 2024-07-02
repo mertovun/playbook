@@ -42,3 +42,5 @@ export enum EOctave {
 }
 
 export type NoteWithOctave = [ENote,EOctave]
+
+export type TimeSignature = [number, number]

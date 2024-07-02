@@ -2,7 +2,7 @@ import { EOrientation } from './interface';
 import { Keyboard } from './Keyboard/Keyboard';
 import './PianoRoll.css';
 import { TimelineGrid } from './TimelineGrid/TimelineGrid';
-import { TimelineBackground } from './TimelineBackground/TimelineBackground';
+import { TimelineBackground } from './Timeline/TimelineBackground';
 import usePianoRollLayoutStore from './usePianoRollLayoutStore';
 import { usePianoRollHandlers } from './usePianoRollHandlers';
 import { usePianoRollUpdate } from './usePianoRollUpdate';

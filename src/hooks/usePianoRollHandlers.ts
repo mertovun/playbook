@@ -3,12 +3,15 @@ import { MAX_ZOOM_IN, MAX_ZOOM_OUT, useTimelineGridStore } from '../stores/useTi
 import usePianoRollLayoutStore from '../stores/usePianoRollLayoutStore';
 import { useMidiStore } from '../stores/useMidiStore';
 import { EOrientation } from '../components/PianoRoll/interface';
+import { useControlBarStore } from '../stores/useControlBarStore';
 
 export const usePianoRollHandlers = () => {
   const { 
     orientation, 
     setOrientation 
   } = usePianoRollLayoutStore();
+
+  const { autoSlide, setAutoSlide } = useControlBarStore();
 
   const { 
     isPlaying, 
@@ -29,6 +32,10 @@ export const usePianoRollHandlers = () => {
   const toggleOrientation = useCallback(() => {
     setOrientation(orientation === EOrientation.HORIZONTAL ? EOrientation.VERTICAL : EOrientation.HORIZONTAL);
   }, [orientation, setOrientation]);
+
+  const toggleAutoSlide = useCallback(() => {
+    setAutoSlide(!autoSlide);
+  }, [autoSlide, setAutoSlide]);
 
   const togglePlayPause =  useCallback(() => isPlaying ? pause() : play(), [isPlaying, pause, play]);
 
@@ -54,7 +61,7 @@ export const usePianoRollHandlers = () => {
       const newWindowStartTime = timeAtMousePosition - (mousePosition / newPixelsPerSecond);
   
       setPixelsPerSecond(newPixelsPerSecond);
-      if (pixelsPerSecond<MAX_ZOOM_IN && pixelsPerSecond> MAX_ZOOM_OUT)setWindowStartTime(newWindowStartTime);
+      if (pixelsPerSecond<MAX_ZOOM_IN && pixelsPerSecond> MAX_ZOOM_OUT) setWindowStartTime(newWindowStartTime);
     } else {
       const scrollAmount = e.deltaY / pixelsPerSecond * 0.3;
       const newWindowStartTime = windowStartTime - scrollAmount;
@@ -77,6 +84,7 @@ export const usePianoRollHandlers = () => {
   return {
     timelineSvgRef,
     toggleOrientation,
+    toggleAutoSlide,
     togglePlayPause,
     handleTimelineClick
   };

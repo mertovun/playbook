@@ -10,7 +10,7 @@ import { useControlBarStore } from './useControlBarStore';
 export const ControlBar = () => {
   const { isPlaying, isRecording, stop, record, cursorStartTime, currentTime } = useTimelineGridStore();
   const { toggleOrientation, togglePlayPause } = usePianoRollHandlers();
-  const { tempo, setTempo, timeSignature, setTimeSignature } = useMidiStore();
+  const { tempo, setTempo, timeSignature, setTimeSignature, recordedNotes, updateRecordedNotes } = useMidiStore();
 
   const formattedMeasureBeatQuarter = formatMeasureBeatQuarter(...measureBeatQuarter(currentTime, tempo, timeSignature));
 
@@ -38,6 +38,11 @@ export const ControlBar = () => {
     setVolume(newVolume);
   };
 
+  const handleRecord = useCallback(() => {
+    updateRecordedNotes(recordedNotes);
+    record();
+  }, [record, recordedNotes, updateRecordedNotes]);
+
   const toggleMute = useCallback(() => {
     setIsMuted(!isMuted);
   },[isMuted, setIsMuted]);
@@ -54,7 +59,7 @@ export const ControlBar = () => {
         <button disabled={cursorStartTime === currentTime} onClick={stop}>
           {'Stop'}
         </button>
-        <button disabled={isPlaying} onClick={record}>
+        <button disabled={isPlaying} onClick={handleRecord}>
           {'Record'}
         </button>
         {formattedMeasureBeatQuarter}

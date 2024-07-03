@@ -11,7 +11,7 @@ const colorScheme = {
   timelineBlackNote: '#222222',
 }
 
-const ASPECT_RATIO = 1.4;
+const ASPECT_RATIO = 1.6;
 
 const horizontalLayout: LayoutConfig = {
   whiteNoteWidth: 15 * ASPECT_RATIO,

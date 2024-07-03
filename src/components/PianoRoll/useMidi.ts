@@ -1,14 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { SplendidGrandPiano } from 'smplr';
+import { useMidiStore } from './useMidiStore';
 import { useTimelineGridStore } from './TimelineGrid/useTimelineGridStore';
 import { useControlBarStore } from './ControlBar/useControlBarStore';
-import { useMidiStore } from './useMidiStore';
 
 export const useMidi = () => {
   const contextRef = useRef<AudioContext | null>(null);
   const pianoRef = useRef<SplendidGrandPiano | null>(null);
   
-  const { noteOn, noteOff, recordNote } = useMidiStore();
+  const { noteOn, noteOff, recordNote, undo, redo } = useMidiStore();
   const { currentTime, isRecording } = useTimelineGridStore();
   const { volume, isMuted } = useControlBarStore();
 
@@ -22,9 +22,9 @@ export const useMidi = () => {
 
   useEffect(() => {
     if (pianoRef.current) {
-      pianoRef.current.output.setVolume(isMuted ? 0: Math.ceil(volume*127)  );
+      pianoRef.current.output.setVolume(isMuted ? 0 : Math.ceil(volume * 127));
     }
-  })
+  });
 
   useEffect(() => {
     if (!contextRef.current) {
@@ -48,7 +48,6 @@ export const useMidi = () => {
         pianoRef.current?.stop(note);
         const recordedNote = noteOff(note, currentTime);
         if (isRecording) recordNote(recordedNote);
-        
       }
     };
 
@@ -89,6 +88,23 @@ export const useMidi = () => {
     };
   }, []);
 
+  // undo/redo ctrl+z ctrl+y
+  useEffect(() => {
+    const handleKeyDown = (e: any) => {
+      if (e.ctrlKey && e.key === 'z') {
+          undo();
+      }
+      if (e.ctrlKey && e.key === 'y') {
+        redo();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [undo, redo]);
+
   return null;
 };
-

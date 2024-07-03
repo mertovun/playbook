@@ -25,7 +25,7 @@ interface MidiStore {
   futureRecordedNotes: RecordedNotes[];
   undo: () => void;
   redo: () => void;
-  changeRecordedNotes: (newRecordedNotes: RecordedNotes) => void;
+  updateRecordedNotes: (newRecordedNotes: RecordedNotes) => void;
 }
 
 export const useMidiStore = create<MidiStore>((set, get) => ({
@@ -92,7 +92,7 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
       futureRecordedNotes: futureRecordedNotes.slice(1),
     });
   },
-  changeRecordedNotes: (newRecordedNotes) => {
+  updateRecordedNotes: (newRecordedNotes) => {
     const { recordedNotes, pastRecordedNotes } = get();
     set({ 
       recordedNotes: newRecordedNotes, 

@@ -18,7 +18,7 @@ interface MidiStore {
   activeNotes: (MidiNote | undefined)[];
   recordedNotes: RecordedNotes;
   clearRecordedNotes: () => void;
-  addRecordedNote: (note: MidiNote) => void;
+  recordNote: (note: MidiNote) => void;
   noteOn: (note: number, velocity: number, startTime: number) => void;
   noteOff: (note: number, endTime: number) => MidiNote;
   pastRecordedNotes: RecordedNotes[];
@@ -55,10 +55,10 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
   pastRecordedNotes: [],
   futureRecordedNotes: [],
   clearRecordedNotes: () => set({ recordedNotes: Array(128).fill(null).map(() => ({})) }),
-  addRecordedNote: (note: MidiNote) => {
-    const { recordedNotes, pastRecordedNotes } = get();
+  recordNote: (note: MidiNote) => {
+    const { recordedNotes } = get();
     recordedNotes[note.note][note.start] = note;
-    set({ recordedNotes, pastRecordedNotes: [...pastRecordedNotes, JSON.parse(JSON.stringify(recordedNotes))], futureRecordedNotes: [] });
+    set({ recordedNotes });
   },
   noteOn: (note, velocity, startTime) => {
     const { activeNotes } = get();

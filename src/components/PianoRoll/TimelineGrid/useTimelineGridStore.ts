@@ -3,19 +3,20 @@ import {create} from 'zustand';
 interface TimelineGridStore {
   isPlaying: boolean;
   isRecording: boolean;
-  cursorStartTime: number;
   currentTime: number;
-  windowStartTime: number;
-  pixelsPerSecond: number;
-  setPlaying: (playing: boolean) => void;
   setCurrentTime: (time: number) => void;
-  setCursorStartTime: (time: number) => void;
-  setWindowStartTime: (time: number) => void;
-  setPixelsPerSecond: (pixelsPerSecond: number) => void;
   play: () => void;
   record: () => void;
   pause: () => void;
   stop: () => void;
+  
+  cursorStartTime: number;
+  windowStartTime: number;
+  pixelsPerSecond: number;
+  setCursorStartTime: (time: number) => void;
+  setWindowStartTime: (time: number) => void;
+  setPixelsPerSecond: (pixelsPerSecond: number) => void;
+
 }
 
 export const MAX_ZOOM_IN = 400;
@@ -24,12 +25,19 @@ export const MAX_ZOOM_OUT = 16;
 export const useTimelineGridStore = create<TimelineGridStore>((set, get) => ({
   isPlaying: false,
   isRecording: false,
-  cursorStartTime: 0,
   currentTime: 0,
+  setCurrentTime: (time) => set({ currentTime: Math.max(time,0) }),
+  play: () => set({ isPlaying:true}),
+  pause: () => set({ isPlaying:false}),
+  record: () => set({ isPlaying: true, isRecording:true }),
+  stop: () => {
+    const { cursorStartTime } = get();
+    set({ isPlaying: false, currentTime: cursorStartTime, isRecording: false })
+  },
+
+  cursorStartTime: 0,
   pixelsPerSecond: 100,
   windowStartTime: 0,
-  setPlaying: (playing) => set({ isPlaying: playing }),
-  setCurrentTime: (time) => set({ currentTime: Math.max(time,0) }),
   setCursorStartTime: (time) => {
     time = Math.max(time,0);
     const { isPlaying } = get();
@@ -42,11 +50,4 @@ export const useTimelineGridStore = create<TimelineGridStore>((set, get) => ({
     pixelsPerSecond = Math.min(MAX_ZOOM_IN, pixelsPerSecond);
     set({ pixelsPerSecond })
   },
-  play: () => set({ isPlaying:true}),
-  pause: () => set({ isPlaying:false}),
-  record: () => set({ isPlaying: true, isRecording:true }),
-  stop: () => {
-    const { cursorStartTime } = get();
-    set({ isPlaying: false, currentTime: cursorStartTime, isRecording: false })
-  }
 }));

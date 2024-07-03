@@ -28,9 +28,12 @@ export const ControlBar = () => {
   };
 
   const handleTimeSignatureChange = (index: number, value: string) => {
-    const newTimeSignature = [...timeSignature];
-    newTimeSignature[index] = Number(value);
-    setTimeSignature(newTimeSignature as TimeSignature);
+    const newValue = Number(value);
+    if (newValue > 0) { // Ensure positive value
+      const newTimeSignature = [...timeSignature];
+      newTimeSignature[index] = newValue;
+      setTimeSignature(newTimeSignature as TimeSignature);
+    }
   };
 
   const handleVolumeChange = (e: any) => {
@@ -78,6 +81,8 @@ export const ControlBar = () => {
           Time:
           <input
             type="number"
+            min={1}
+            max={16}
             value={newBeatsPerMeasure}
             disabled={isRecording}
             onChange={(e) => {

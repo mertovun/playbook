@@ -1,4 +1,4 @@
-import usePianoRollLayoutStore from '../usePianoRollLayoutStore';
+import usePianoRollLayoutStore from '../../../stores/usePianoRollLayoutStore';
 import { TimelineOctave } from './TimelineOctave';
 
 

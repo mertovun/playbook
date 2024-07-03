@@ -1,11 +1,11 @@
 import { useState, useCallback } from 'react';
-import { useTimelineGridStore } from '../TimelineGrid/useTimelineGridStore';
-import { usePianoRollHandlers } from '../usePianoRollHandlers';
+import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
+import { usePianoRollHandlers } from '../../../hooks/usePianoRollHandlers';
 import { measureBeatQuarter, formatMeasureBeatQuarter } from '../../../utils/time';
-import { useMidiStore } from '../useMidiStore';
+import { useMidiStore } from '../../../stores/useMidiStore';
 import { TimeSignature } from '../interface';
 import './ControlBar.css'; // Import the CSS for styling
-import { useControlBarStore } from './useControlBarStore';
+import { useControlBarStore } from '../../../stores/useControlBarStore';
 
 export const ControlBar = () => {
   const { isPlaying, isRecording, stop, record, cursorStartTime, currentTime } = useTimelineGridStore();

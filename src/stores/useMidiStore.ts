@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { TimeSignature } from './interface';
+import { TimeSignature } from '../components/PianoRoll/interface';
 
 type MidiNote = {
   note: number;

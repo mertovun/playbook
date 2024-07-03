@@ -1,8 +1,8 @@
 // src/hooks/useGridlines.ts
-import { useTimelineGridStore } from './useTimelineGridStore';
-import usePianoRollLayoutStore from '../usePianoRollLayoutStore';
-import { EOrientation } from '../interface';
-import { useMidiStore } from '../useMidiStore';
+import { useTimelineGridStore } from '../stores/useTimelineGridStore';
+import usePianoRollLayoutStore from '../stores/usePianoRollLayoutStore';
+import { useMidiStore } from '../stores/useMidiStore';
+import { EOrientation } from '../components/PianoRoll/interface';
 
 export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: number) => {
   const { orientation } = usePianoRollLayoutStore();

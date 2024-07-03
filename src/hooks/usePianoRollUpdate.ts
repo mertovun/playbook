@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useTimelineGridStore } from './TimelineGrid/useTimelineGridStore';
-import usePianoRollLayoutStore from './usePianoRollLayoutStore';
-import { EOrientation } from './interface';
+import { useTimelineGridStore } from '../stores/useTimelineGridStore';
+import usePianoRollLayoutStore from '../stores/usePianoRollLayoutStore';
+import { EOrientation } from '../components/PianoRoll/interface';
 
 export const usePianoRollUpdate = () => {
   const { 

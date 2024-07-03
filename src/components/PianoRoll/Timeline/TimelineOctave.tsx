@@ -1,7 +1,7 @@
 import React from 'react';
 import { TimelineNote } from './TimelineNote';
 import { ENote, EOctave } from '../interface';
-import usePianoRollLayoutStore from '../usePianoRollLayoutStore';
+import usePianoRollLayoutStore from '../../../stores/usePianoRollLayoutStore';
 import { TimelineMidiNote } from './TimelineMidiNote';
 
 export interface TimelineOctaveProps {

@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { SplendidGrandPiano } from 'smplr';
-import { useMidiStore } from './useMidiStore';
-import { useTimelineGridStore } from './TimelineGrid/useTimelineGridStore';
-import { useControlBarStore } from './ControlBar/useControlBarStore';
+import { useMidiStore } from '../stores/useMidiStore';
+import { useTimelineGridStore } from '../stores/useTimelineGridStore';
+import { useControlBarStore } from '../stores/useControlBarStore';
 
 export const useMidi = () => {
   const contextRef = useRef<AudioContext | null>(null);

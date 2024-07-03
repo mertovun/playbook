@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { ENote, EOctave, EOrientation, KeyboardRange, LayoutConfig } from './interface';
-import { noteToString } from '../../utils/note';
+import { ENote, EOctave, EOrientation, KeyboardRange, LayoutConfig } from '../components/PianoRoll/interface';
+import { noteToString } from '../utils/note';
 
 const keyboardRange: KeyboardRange = [[ENote.A, EOctave._0], [ENote.C, EOctave._8]];
 

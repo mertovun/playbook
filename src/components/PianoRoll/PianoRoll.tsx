@@ -3,10 +3,10 @@ import { Keyboard } from './Keyboard/Keyboard';
 import './PianoRoll.css';
 import { TimelineGrid } from './TimelineGrid/TimelineGrid';
 import { TimelineBackground } from './Timeline/TimelineBackground';
-import usePianoRollLayoutStore from './usePianoRollLayoutStore';
-import { usePianoRollHandlers } from './usePianoRollHandlers';
-import { usePianoRollUpdate } from './usePianoRollUpdate';
-import { useMidi } from './useMidi';
+import usePianoRollLayoutStore from '../../stores/usePianoRollLayoutStore';
+import { usePianoRollHandlers } from '../../hooks/usePianoRollHandlers';
+import { usePianoRollUpdate } from '../../hooks/usePianoRollUpdate';
+import { useMidi } from '../../hooks/useMidi';
 import { ControlBar } from './ControlBar/ControlBar'; // import the new ControlBar component
 
 export const PianoRoll = () => {

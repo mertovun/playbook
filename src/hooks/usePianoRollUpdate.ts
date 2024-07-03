@@ -6,7 +6,7 @@ import { EOrientation } from '../components/PianoRoll/interface';
 
 export const usePianoRollUpdate = () => {
   const { orientation } = usePianoRollLayoutStore();
-  const { autoSlide } = useControlBarStore();
+  const { autoSlide, setAutoSlide } = useControlBarStore();
 
   const { 
     isPlaying, 
@@ -33,10 +33,12 @@ export const usePianoRollUpdate = () => {
           else setWindowStartTime(windowStartTime+elapsed);
         }
         else {
-          const thresholdPx = orientation === EOrientation.HORIZONTAL ? 600 : 1000;
+          const thresholdPx = orientation === EOrientation.HORIZONTAL ? 600 : 1100;
           const threshold = thresholdPx / pixelsPerSecond;
-          if (windowStartTime > currentTime) setWindowStartTime(currentTime-1);
-          if (windowStartTime + threshold < currentTime) setWindowStartTime(currentTime-1);
+          if (windowStartTime > currentTime || windowStartTime + threshold < currentTime) {
+            setWindowStartTime(currentTime);
+            setAutoSlide(true);
+          }
         }
         
         animationFrameId = requestAnimationFrame(update);

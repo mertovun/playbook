@@ -6,12 +6,13 @@ interface GridLineProps {
   x2: number;
   y2: number;
   color: string;
+  opacity: number;
   label: string | number;
   labelX?: number;
   labelY?: number;
 }
 
-export const GridLine: React.FC<GridLineProps> = ({ x1, y1, x2, y2, color, label, labelX, labelY }) => (
+export const GridLine: React.FC<GridLineProps> = ({ x1, y1, x2, y2, color, opacity, label, labelX, labelY }) => (
   <React.Fragment>
     <line 
       x1={x1} 
@@ -21,7 +22,7 @@ export const GridLine: React.FC<GridLineProps> = ({ x1, y1, x2, y2, color, label
       stroke={color} 
       strokeWidth="0.5" 
       style={{ pointerEvents: 'none' }} 
-      strokeOpacity="0.5" 
+      strokeOpacity={opacity}
     />
     {label && (
       <text

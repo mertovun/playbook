@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from 'react';
 import { MAX_ZOOM_IN, MAX_ZOOM_OUT, useTimelineGridStore } from './TimelineGrid/useTimelineGridStore';
 import usePianoRollLayoutStore from './usePianoRollLayoutStore';
 import { EOrientation } from './interface';
-import { useMidiStore } from './useMidi';
+import { useMidiStore } from './useMidiStore';
 
 export const usePianoRollHandlers = () => {
   const { 

@@ -2,13 +2,13 @@ import { useState, useCallback } from 'react';
 import { useTimelineGridStore } from '../TimelineGrid/useTimelineGridStore';
 import { usePianoRollHandlers } from '../usePianoRollHandlers';
 import { measureBeatQuarter, formatMeasureBeatQuarter } from '../../../utils/time';
-import { useMidiStore } from '../useMidi';
+import { useMidiStore } from '../useMidiStore';
 import { TimeSignature } from '../interface';
 import './ControlBar.css'; // Import the CSS for styling
 import { useControlBarStore } from './useControlBarStore';
 
 export const ControlBar = () => {
-  const { isPlaying, stop, record, cursorStartTime, currentTime } = useTimelineGridStore();
+  const { isPlaying, isRecording, stop, record, cursorStartTime, currentTime } = useTimelineGridStore();
   const { toggleOrientation, togglePlayPause } = usePianoRollHandlers();
   const { tempo, setTempo, timeSignature, setTimeSignature } = useMidiStore();
 
@@ -65,6 +65,7 @@ export const ControlBar = () => {
           <input
             type="number"
             value={newTempo}
+            disabled={isRecording}
             onChange={handleTempoChange}
           />
         </label>
@@ -73,6 +74,7 @@ export const ControlBar = () => {
           <input
             type="number"
             value={newBeatsPerMeasure}
+            disabled={isRecording}
             onChange={(e) => {
               setNewBeatsPerMeasure(Number(e.target.value));
               handleTimeSignatureChange(0, e.target.value);
@@ -81,6 +83,7 @@ export const ControlBar = () => {
           /
           <select
             value={newBeatUnit}
+            disabled={isRecording}
             onChange={(e) => {
               setNewBeatUnit(Number(e.target.value));
               handleTimeSignatureChange(1, e.target.value);

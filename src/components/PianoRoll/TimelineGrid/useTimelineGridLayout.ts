@@ -2,7 +2,7 @@
 import { useTimelineGridStore } from './useTimelineGridStore';
 import usePianoRollLayoutStore from '../usePianoRollLayoutStore';
 import { EOrientation } from '../interface';
-import { useMidiStore } from '../useMidi';
+import { useMidiStore } from '../useMidiStore';
 
 export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: number) => {
   const { orientation } = usePianoRollLayoutStore();
@@ -20,9 +20,14 @@ export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: num
 
   // todo: grid layout
   const labelOffset = 6;
-  const quarterLineColor = "#555";
-  const beatLineColor = "#aaa";
-  const measureLineColor = "#fff";
+  const quarterLineOpacity = 0.15;
+  const beatLineOpacity = 0.3;
+  const measureLineOpacity = 0.5;
+
+  // const quarterLineColor = "#555";
+  // const beatLineColor = "#aaa";
+  // const measureLineColor = "#fff";\
+  const gridLineColor = "#fff";
 
   const gridlines = [];
   for (let quarterLineIndex = quarterStartIndex; quarterLineIndex < quarterEndIndex; quarterLineIndex++) {
@@ -39,11 +44,13 @@ export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: num
     const labelY = orientation === EOrientation.HORIZONTAL ? timelineHeight - x - labelOffset : labelOffset;
 
     const quarterLine = quarterLineIndex % quarterPerBeat === 0;
-    const color = measureLine ? measureLineColor : (quarterLine ? beatLineColor : quarterLineColor);
+    const opacity = measureLine ? measureLineOpacity : (quarterLine ? beatLineOpacity : quarterLineOpacity);
+    // const color = measureLine ? measureLineColor : (quarterLine ? beatLineColor : quarterLineColor);
+    const color = gridLineColor;
     const label: string  = measureLine ? measureLineIndex.toString() : '';
     gridlines.push(
       {
-        x1,x2,y1,y2,label,labelX,labelY,color
+        x1,x2,y1,y2,label,labelX,labelY,color,opacity
       }
     ); 
   }

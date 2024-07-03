@@ -3,7 +3,7 @@ import './KeyboardNote.css';
 import { ENote } from '../interface';
 import { noteToMidiNum } from '../../../utils/note';
 import { useTimelineGridStore } from '../TimelineGrid/useTimelineGridStore';
-import { useMidiStore } from '../useMidi';
+import { useMidiStore } from '../useMidiStore';
 import { dispatchNoteOffMessage, dispatchNoteOnMessage } from '../../../utils/midi';
 
 export interface NoteProps {

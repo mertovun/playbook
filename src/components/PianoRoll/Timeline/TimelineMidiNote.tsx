@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import './TimelineNote.css';
 import { ENote, EOrientation } from '../interface';
 import { noteToMidiNum } from '../../../utils/note';
-import { useMidiStore } from '../useMidi';
+import { useMidiStore } from '../useMidiStore';
 import { useTimelineGridStore } from '../TimelineGrid/useTimelineGridStore';
 import usePianoRollLayoutStore from '../usePianoRollLayoutStore';
 import { dispatchNoteOffMessage, dispatchNoteOnMessage } from '../../../utils/midi';

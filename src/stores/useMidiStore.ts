@@ -1,14 +1,14 @@
 import { create } from 'zustand';
 import { TimeSignature } from '../components/PianoRoll/interface';
 
-type MidiNote = {
+export type MidiNote = {
   note: number;
   velocity: number;
   start: number;
   end?: number;
 }
 
-type RecordedNotes = { [key: number]: MidiNote }[];
+export type RecordedNotes = { [key: number]: MidiNote }[];
 
 interface MidiStore {
   tempo: number;

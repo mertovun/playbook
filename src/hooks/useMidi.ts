@@ -92,9 +92,11 @@ export const useMidi = () => {
   useEffect(() => {
     const handleKeyDown = (e: any) => {
       if (e.ctrlKey && e.key === 'z') {
+          e.preventDefault();
           undo();
       }
       if (e.ctrlKey && e.key === 'y') {
+        e.preventDefault();
         redo();
       }
     };

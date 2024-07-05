@@ -4,6 +4,7 @@ import usePianoRollLayoutStore from '../stores/usePianoRollLayoutStore';
 import { useMidiStore } from '../stores/useMidiStore';
 import { EOrientation } from '../components/PianoRoll/interface';
 import { useControlBarStore } from '../stores/useControlBarStore';
+import { parseMidiFile } from '../utils/midi';
 
 export const usePianoRollHandlers = () => {
   const { 
@@ -46,6 +47,19 @@ export const usePianoRollHandlers = () => {
     setCursorStartTime(newStartTime);
   }, [orientation, windowStartTime, tempo, setCursorStartTime, setCurrentTime]);
 
+  const handleDrop = useCallback(async (event: React.DragEvent) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file && file.type === 'audio/midi') {
+      const arrayBuffer = await file.arrayBuffer();
+      parseMidiFile(arrayBuffer); // Call the MIDI parser function
+    }
+  }, []);
+
+  const handleDragOver = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+  }, []);
+
   const handleTimelineScroll = useCallback((e: any) => {
     e.preventDefault();
 
@@ -86,6 +100,8 @@ export const usePianoRollHandlers = () => {
     toggleOrientation,
     toggleAutoSlide,
     togglePlayPause,
-    handleTimelineClick
+    handleTimelineClick,
+    handleDrop,
+    handleDragOver,
   };
 };

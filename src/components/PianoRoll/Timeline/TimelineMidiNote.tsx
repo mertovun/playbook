@@ -41,10 +41,10 @@ export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = React.memo(({ n
     const notes = Object.values(recordedNotesAtNum);
     if (isPlaying && !isRecording && notes.length) {
       for (let note of notes) {
-        if (currentTimeRef.current < note.start && currentTime >= note.start) {
+        if (currentTimeRef.current <= note.start && currentTime >= note.start) {
           dispatchNoteOnMessage(midiNum, note.velocity);
         }
-        if (currentTimeRef.current < note.end! && currentTime >= note.end!) {
+        if (currentTimeRef.current <= note.end! && currentTime >= note.end!) {
           dispatchNoteOffMessage(midiNum, note.velocity);
         }
       }

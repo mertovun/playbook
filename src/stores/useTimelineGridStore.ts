@@ -40,9 +40,7 @@ export const useTimelineGridStore = create<TimelineGridStore>((set, get) => ({
   windowStartTime: 0,
   setCursorStartTime: (time) => {
     time = Math.max(time,0);
-    const { isPlaying } = get();
-    if (isPlaying) set({ cursorStartTime: time, currentTime: time });
-    else set({ cursorStartTime: time, currentTime: time });
+     set({ cursorStartTime: time });
   },
   setWindowStartTime: (time) => set({ windowStartTime: Math.max(time,0) }),
   setPixelsPerSecond: (pixelsPerSecond) => {

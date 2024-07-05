@@ -70,5 +70,5 @@ export const usePianoRollUpdate = () => {
     if (isPlaying) {
       setCurrentTime(currentTime);
     }
-  }, 40, [currentTime, isPlaying, setCurrentTime]);
+  }, 50, [currentTime, isPlaying, setCurrentTime]);
 };

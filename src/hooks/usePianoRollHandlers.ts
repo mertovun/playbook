@@ -49,6 +49,7 @@ export const usePianoRollHandlers = () => {
     tick = Math.floor(tick)
     const snapStartTime = measureBeatTickToTime(measure, beat, tick, tempo, timeSignature);
     setCursorStartTime(snapStartTime);
+    setCurrentTime(snapStartTime);
   }, [orientation, windowStartTime, tempo, setCursorStartTime, setCurrentTime]);
 
   const handleDrop = useCallback(async (event: React.DragEvent) => {

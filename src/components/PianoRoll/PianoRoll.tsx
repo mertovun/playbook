@@ -8,6 +8,7 @@ import { usePianoRollHandlers } from '../../hooks/usePianoRollHandlers';
 import { usePianoRollUpdate } from '../../hooks/usePianoRollUpdate';
 import { useMidi } from '../../hooks/useMidi';
 import { ControlBar } from './ControlBar/ControlBar';
+import { useMetronome } from '../../hooks/useMetronome';
 
 export const PianoRoll = () => {
   const { 
@@ -28,6 +29,8 @@ export const PianoRoll = () => {
   } = usePianoRollHandlers();
 
   usePianoRollUpdate();
+
+  useMetronome();
   useMidi();
 
   const height = orientation === EOrientation.HORIZONTAL ? pianoRollLength : pianoRollWidth;

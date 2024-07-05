@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useMemo } from 'react';
 import './TimelineNote.css';
 import { ENote, EOrientation } from '../interface';
 import { noteToMidiNum } from '../../../utils/note';
@@ -22,12 +22,12 @@ const calculateNotePosition = (note: any, windowStartTime: number, pixelsPerSeco
   return { startPx, durationPx, key: note.start };
 };
 
-export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = ({ note, level, x, y, width, height }) => {
+export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = React.memo(({ note, level, x, y, width, height }) => {
   const midiNum = noteToMidiNum([note, level]);
 
   const { recordedNotes, activeNotes } = useMidiStore();
   const { currentTime, isPlaying, isRecording, windowStartTime, pixelsPerSecond } = useTimelineGridStore();
-  const { orientation, timelineHeight } = usePianoRollLayoutStore();
+  const { orientation, timelineHeight, timelineWidth } = usePianoRollLayoutStore();
 
   const noteDefaultColor = '#eb9';
   const noteDefaultStrokeColor = '#643';
@@ -57,7 +57,11 @@ export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = ({ note, level,
     if (isRecording && activeNote) {
       notes.push(calculateNotePosition({ ...activeNote, end: currentTime }, windowStartTime, pixelsPerSecond));
     }
-    return notes.map(({ startPx, durationPx, key }) => {
+
+    return notes.filter(({ startPx, durationPx }) => {
+      const noteEndPx = startPx + durationPx;
+      return (startPx >= 0 && startPx < timelineWidth) || (noteEndPx >= 0 && noteEndPx < timelineWidth);
+    }).map(({ startPx, durationPx, key }) => {
       const noteX = orientation === EOrientation.HORIZONTAL ? 0 : startPx;
       const noteY = orientation === EOrientation.HORIZONTAL ? timelineHeight - startPx - durationPx : 0;
       const noteWidth = orientation === EOrientation.HORIZONTAL ? width : durationPx;
@@ -78,11 +82,11 @@ export const TimelineMidiNote: React.FC<TimelineMidiNoteProps> = ({ note, level,
         />
       );
     });
-  }, [midiNum, recordedNotesAtNum, activeNote, currentTime, windowStartTime, pixelsPerSecond, isRecording, orientation]);
+  }, [midiNum, recordedNotesAtNum, activeNote, currentTime, windowStartTime, pixelsPerSecond, isRecording, orientation, timelineWidth, timelineHeight, width, height]);
 
   return (
     <svg x={x} y={y}>
       {renderNotes()}
     </svg>
   );
-};
+});

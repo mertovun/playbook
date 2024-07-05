@@ -16,7 +16,7 @@ export const ControlBar = () => {
 
   const [beatsPerMeasure, beatUnit] = timeSignature;
 
-  const { volume, isMuted, setVolume, setIsMuted } = useControlBarStore();
+  const { volume, isMuted, setVolume, setIsMuted, metronome, setMetronome } = useControlBarStore();
 
   const handleTempoChange = (e:any) => {
     const newTempoValue = Number(e.target.value);
@@ -49,8 +49,9 @@ export const ControlBar = () => {
   return (
     <div className="control-bar">
       <div className="control-group">
-        <button onClick={toggleOrientation}>Orientation</button>
-        <button onClick={toggleAutoSlide}>Autoslide</button>
+        <button onClick={toggleOrientation}>O</button>
+        <button onClick={()=>{setMetronome(!metronome)}}>Metronom</button>
+        <button onClick={toggleAutoSlide}>Auto</button>
         {formattedMeasureBeatQuarter}
       </div>
       <div className="control-group">

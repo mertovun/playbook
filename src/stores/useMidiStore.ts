@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { TimeSignature } from '../components/PianoRoll/interface';
+import { useTimelineGridStore } from './useTimelineGridStore';
 
 export type MidiNote = {
   note: number;
@@ -31,6 +32,7 @@ interface MidiStore {
 export const useMidiStore = create<MidiStore>((set, get) => ({
   tempo: 120,
   setTempo: (newTempo) => {
+    const { currentTime, setCurrentTime, cursorStartTime, setCursorStartTime } = useTimelineGridStore.getState();
     const { tempo, recordedNotes } = get();
     const newRecordedNotes: RecordedNotes = Array(128).fill(null).map(() => ({}));
     const change = tempo / newTempo;
@@ -46,6 +48,8 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
         };
       }
     }
+    setCurrentTime(change * currentTime);
+    setCursorStartTime(change * cursorStartTime);
     set({ tempo: newTempo, recordedNotes: newRecordedNotes });
   },
   timeSignature: [4, 4],

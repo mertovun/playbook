@@ -19,8 +19,8 @@ export const parseMidiFile = async (arrayBuffer: ArrayBuffer) => {
 
   console.log(midi)
 
-  midi.tracks.forEach(track =>
-    track.notes.forEach(note => {
+  midi.tracks.forEach((track: any) =>
+    track.notes.forEach((note: any) => {
       const midiNote = {
         note: note.midi,
         velocity: note.velocity * 127, 

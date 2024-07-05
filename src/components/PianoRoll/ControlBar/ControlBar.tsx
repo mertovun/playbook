@@ -15,15 +15,11 @@ export const ControlBar = () => {
   const formattedMeasureBeatQuarter = formatMeasureBeatQuarter(...measureBeatQuarter(currentTime, tempo, timeSignature));
 
   const [beatsPerMeasure, beatUnit] = timeSignature;
-  const [newTempo, setNewTempo] = useState(tempo);
-  const [newBeatsPerMeasure, setNewBeatsPerMeasure] = useState(beatsPerMeasure);
-  const [newBeatUnit, setNewBeatUnit] = useState(beatUnit);
 
   const { volume, isMuted, setVolume, setIsMuted } = useControlBarStore();
 
   const handleTempoChange = (e:any) => {
     const newTempoValue = Number(e.target.value);
-    setNewTempo(newTempoValue);
     setTempo(newTempoValue);
   };
 
@@ -86,19 +82,17 @@ export const ControlBar = () => {
             type="number"
             min={1}
             max={16}
-            value={newBeatsPerMeasure}
+            value={beatsPerMeasure}
             disabled={isRecording}
             onChange={(e) => {
-              setNewBeatsPerMeasure(Number(e.target.value));
               handleTimeSignatureChange(0, e.target.value);
             }}
           />
           /
           <select
-            value={newBeatUnit}
+            value={beatUnit}
             disabled={isRecording}
             onChange={(e) => {
-              setNewBeatUnit(Number(e.target.value));
               handleTimeSignatureChange(1, e.target.value);
             }}
           >

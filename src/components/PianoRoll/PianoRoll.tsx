@@ -1,4 +1,3 @@
-import React, { useCallback } from 'react';
 import { EOrientation } from './interface';
 import { Keyboard } from './Keyboard/Keyboard';
 import './PianoRoll.css';

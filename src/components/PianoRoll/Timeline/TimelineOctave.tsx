@@ -2,7 +2,7 @@ import React from 'react';
 import { TimelineNote } from './TimelineNote';
 import { ENote, EOctave } from '../interface';
 import usePianoRollLayoutStore from '../../../stores/usePianoRollLayoutStore';
-import { TimelineMidiNote } from './TimelineMidiNote';
+import { MidiNote } from './MidiNote';
 
 export interface TimelineOctaveProps {
   range: [ENote, ENote];
@@ -22,10 +22,10 @@ export const TimelineOctave: React.FC<TimelineOctaveProps> = React.memo(({ range
         <TimelineNote key={i + whiteNotesArray.length} {...noteProps} level={level} />
       ))}
       {whiteNotesArray.map((noteProps:any, i:number) => (
-        <TimelineMidiNote key={i} {...noteProps} level={level} />
+        <MidiNote key={i} {...noteProps} level={level} />
       ))}
       {blackNotesArray.map((noteProps:any, i:number) => (
-        <TimelineMidiNote key={i + whiteNotesArray.length} {...noteProps} level={level} />
+        <MidiNote key={i + whiteNotesArray.length} {...noteProps} level={level} />
       ))}
     </g>
   );

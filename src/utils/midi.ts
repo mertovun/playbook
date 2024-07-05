@@ -17,8 +17,6 @@ export const parseMidiFile = async (arrayBuffer: ArrayBuffer) => {
   
   const newRecordedNotes: RecordedNotes = Array(128).fill(null).map(() => ({}));
 
-  console.log(midi)
-
   midi.tracks.forEach((track: any) =>
     track.notes.forEach((note: any) => {
       const midiNote = {
@@ -30,9 +28,6 @@ export const parseMidiFile = async (arrayBuffer: ArrayBuffer) => {
       newRecordedNotes[midiNote.note][midiNote.start] = midiNote;    
     }));
 
-
-  console.log(midi.header);
-  console.log(midi.header.tempos[0].bpm);
   setTempo(midi.header.tempos[0].bpm);
   updateRecordedNotes(newRecordedNotes);
 };

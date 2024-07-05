@@ -1,10 +1,10 @@
-import { useState, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
 import { usePianoRollHandlers } from '../../../hooks/usePianoRollHandlers';
 import { measureBeatQuarter, formatMeasureBeatQuarter } from '../../../utils/time';
 import { useMidiStore } from '../../../stores/useMidiStore';
 import { TimeSignature } from '../interface';
-import './ControlBar.css'; // Import the CSS for styling
+import './ControlBar.css';
 import { useControlBarStore } from '../../../stores/useControlBarStore';
 
 export const ControlBar = () => {

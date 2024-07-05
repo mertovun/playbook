@@ -1,20 +1,34 @@
 
-export function measureBeatQuarter(timeInSeconds:number, tempo:number, timeSignature:[number, number]): [number, number, number]{
+export function timeToMeasureBeatTick(timeInSeconds:number, tempo:number, timeSignature:[number, number]): [number, number, number]{
   const [beatsPerMeasure, beatUnit] = timeSignature;
-  const quarterPerBeat = 16 / beatUnit;
+  const tickPerBeat = 16 / beatUnit;
 
-  const secondsPerQuarter = 60 / tempo / 4;
-  let quarter = timeInSeconds /  secondsPerQuarter;
-  let beat = Math.floor(quarter / quarterPerBeat);
-  quarter -= beat * quarterPerBeat;
+  const secondsPerTick = 60 / tempo / 4;
+  let quarter = timeInSeconds /  secondsPerTick;
+  let beat = Math.floor(quarter / tickPerBeat);
+  quarter -= beat * tickPerBeat;
   const measure = Math.floor(beat/ beatsPerMeasure);
   beat -= measure * beatsPerMeasure;
   return [measure, beat, quarter]
 }
 
-export function formatMeasureBeatQuarter(measure:number, beat:number, quarter:number) {
+export function measureBeatTickToTime(measure: number, beat: number, tick: number, tempo: number, timeSignature: [number, number]): number {
+  const [beatsPerMeasure, beatUnit] = timeSignature;
+  const tickPerBeat = 16 / beatUnit;
+
+  const secondsPerTick = 60 / tempo / 4;
+
+  const totalTicks = (measure * beatsPerMeasure * tickPerBeat) + (beat * tickPerBeat) + tick;
+
+  const timeInSeconds = totalTicks * secondsPerTick;
+
+  return timeInSeconds;
+}
+
+
+export function formatMeasureBeatTick(measure:number, beat:number, tick:number) {
   const formattedMeasure = measure.toString().padStart(1, '0');
   const formattedBeat = beat.toString().padStart(1, '0');
-  const formattedQuarter = quarter.toFixed(3).padStart(5, '0');
+  const formattedQuarter = tick.toFixed(3).padStart(5, '0');
   return ` ${formattedMeasure} : ${formattedBeat} : ${formattedQuarter}`;
 }

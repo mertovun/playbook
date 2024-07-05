@@ -5,6 +5,7 @@ import { useMidiStore } from '../stores/useMidiStore';
 import { EOrientation } from '../components/PianoRoll/interface';
 import { useControlBarStore } from '../stores/useControlBarStore';
 import { parseMidiFile } from '../utils/midi';
+import { measureBeatTickToTime, timeToMeasureBeatTick } from '../utils/time';
 
 export const usePianoRollHandlers = () => {
   const { 
@@ -26,7 +27,7 @@ export const usePianoRollHandlers = () => {
     setPixelsPerSecond,
   } = useTimelineGridStore();
 
-  const { tempo } = useMidiStore();
+  const { tempo, timeSignature } = useMidiStore();
 
   const timelineSvgRef = useRef(null);
 
@@ -44,7 +45,10 @@ export const usePianoRollHandlers = () => {
     const rect = e.target.getBoundingClientRect();
     const position = orientation === EOrientation.HORIZONTAL ? rect.bottom - e.clientY : e.clientX - rect.left;
     const newStartTime = position / pixelsPerSecond + windowStartTime;
-    setCursorStartTime(newStartTime);
+    let [measure, beat, tick] = timeToMeasureBeatTick(newStartTime, tempo, timeSignature);
+    tick = Math.floor(tick)
+    const snapStartTime = measureBeatTickToTime(measure, beat, tick, tempo, timeSignature);
+    setCursorStartTime(snapStartTime);
   }, [orientation, windowStartTime, tempo, setCursorStartTime, setCurrentTime]);
 
   const handleDrop = useCallback(async (event: React.DragEvent) => {

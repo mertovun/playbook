@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
 import { usePianoRollHandlers } from '../../../hooks/usePianoRollHandlers';
-import { measureBeatQuarter, formatMeasureBeatQuarter } from '../../../utils/time';
+import { timeToMeasureBeatTick, formatMeasureBeatTick } from '../../../utils/time';
 import { useMidiStore } from '../../../stores/useMidiStore';
 import { TimeSignature } from '../interface';
 import './ControlBar.css';
@@ -12,7 +12,7 @@ export const ControlBar = () => {
   const { toggleOrientation, toggleAutoSlide, togglePlayPause } = usePianoRollHandlers();
   const { tempo, setTempo, timeSignature, setTimeSignature, recordedNotes, updateRecordedNotes } = useMidiStore();
 
-  const formattedMeasureBeatQuarter = formatMeasureBeatQuarter(...measureBeatQuarter(currentTime, tempo, timeSignature));
+  const formattedMeasureBeatQuarter = formatMeasureBeatTick(...timeToMeasureBeatTick(currentTime, tempo, timeSignature));
 
   const [beatsPerMeasure, beatUnit] = timeSignature;
 

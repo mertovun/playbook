@@ -73,7 +73,9 @@ export const ControlBar = () => {
           BPM:
           <input
             type="number"
-            value={newTempo}
+            min={10}
+            max={300}
+            value={tempo}
             disabled={isRecording}
             onChange={handleTempoChange}
           />

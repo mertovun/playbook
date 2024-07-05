@@ -34,7 +34,6 @@ export const PianoRoll = () => {
   const width = orientation === EOrientation.HORIZONTAL ? pianoRollWidth : pianoRollLength;
 
   const handleDrop = useCallback(async (event: React.DragEvent) => {
-    console.log(event);
     event.preventDefault();
     const file = event.dataTransfer.files[0];
     if (file && file.type === 'audio/midi') {
@@ -44,7 +43,6 @@ export const PianoRoll = () => {
   }, []);
 
   const handleDragOver = useCallback((event: React.DragEvent) => {
-    console.log(event)
     event.preventDefault();
   }, []);
 

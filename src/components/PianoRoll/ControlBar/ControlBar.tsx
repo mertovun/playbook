@@ -6,6 +6,9 @@ import { useMidiStore } from '../../../stores/useMidiStore';
 import { TimeSignature } from '../interface';
 import './ControlBar.css';
 import { useControlBarStore } from '../../../stores/useControlBarStore';
+import { FaVolumeMute, FaVolumeUp } from 'react-icons/fa';
+import { PiPianoKeysFill } from "react-icons/pi";
+import { TbMetronome, TbArrowBigRightLines, TbPlayerPlayFilled, TbPlayerPauseFilled, TbPlayerStopFilled, TbPlayerRecordFilled } from "react-icons/tb";
 
 export const ControlBar = () => {
   const { isPlaying, isRecording, stop, record, cursorStartTime, currentTime } = useTimelineGridStore();
@@ -49,25 +52,15 @@ export const ControlBar = () => {
   return (
     <div className="control-bar">
       <div className="control-group">
-        <button onClick={toggleOrientation}>O</button>
-        <button onClick={()=>{setMetronome(!metronome)}}>Metronom</button>
-        <button onClick={toggleAutoSlide}>Auto</button>
-        {formattedMeasureBeatQuarter}
-      </div>
-      <div className="control-group">
-        <button onClick={togglePlayPause}>
-          {isPlaying ? 'Pause' : 'Play'}
-        </button>
-        <button disabled={cursorStartTime === currentTime} onClick={stop}>
-          {'Stop'}
-        </button>
-        <button disabled={isPlaying} onClick={handleRecord}>
-          {'Record'}
+        <button onClick={toggleOrientation}>
+          <PiPianoKeysFill />
         </button>
       </div>
       <div className="control-group">
+        <button onClick={()=>{setMetronome(!metronome)}}>
+          <TbMetronome />
+        </button>
         <label>
-          BPM:
           <input
             type="number"
             min={10}
@@ -78,7 +71,6 @@ export const ControlBar = () => {
           />
         </label>
         <label>
-          Time:
           <input
             type="number"
             min={1}
@@ -104,10 +96,31 @@ export const ControlBar = () => {
             ))}
           </select>
         </label>
+      
+      </div>  
+      <div className="control-group">
+        <button onClick={toggleAutoSlide}>
+          <TbArrowBigRightLines />
+        </button>
+        {formattedMeasureBeatQuarter}
       </div>
       <div className="control-group">
+        <button onClick={togglePlayPause}>
+          {isPlaying ? <TbPlayerPauseFilled /> : <TbPlayerPlayFilled />}
+        </button>
+        <button disabled={cursorStartTime === currentTime} onClick={stop}>
+          <TbPlayerStopFilled />
+        </button>
+        <button disabled={isPlaying} onClick={handleRecord}>
+          <TbPlayerRecordFilled />
+        </button>
+      </div>
+
+      <div className="control-group">
         <label>
-          Volume:
+          <button onClick={toggleMute}>
+            {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+          </button>
           <input
             type="range"
             min="0"
@@ -118,9 +131,7 @@ export const ControlBar = () => {
             disabled={isMuted}
           />
         </label>
-        <button onClick={toggleMute}>
-          {isMuted ? 'Unmute' : 'Mute'}
-        </button>
+        
       </div>
     </div>
   );

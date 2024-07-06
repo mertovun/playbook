@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   padding: 10px;
-  background-color: #222;
+  background-color: #1a1a1a;
   border-bottom: 1px solid #444;
 }
 
@@ -13,13 +13,13 @@
 }
 
 .control-group + .control-group {
-  border-left: 1px solid #444;
+  border-left: 1px solid #222;
   padding-left: 20px;
   margin-left: 20px;
 }
 
 .control-group button {
-  margin-right: 5px;
+  margin-right: 1px;
 }
 
 .control-group label {

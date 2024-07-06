@@ -29,7 +29,10 @@ export const useTimelineGridStore = create<TimelineGridStore>((set, get) => ({
   setCurrentTime: (time) => set({ currentTime: Math.max(time,0) }),
   play: () => set({ isPlaying:true}),
   pause: () => set({ isPlaying:false}),
-  record: () => set({ isPlaying: true, isRecording:true }),
+  record: () => {
+    const { cursorStartTime } = get();
+    set({ isPlaying: true, currentTime: cursorStartTime, isRecording: true })
+  },
   stop: () => {
     const { cursorStartTime } = get();
     set({ isPlaying: false, currentTime: cursorStartTime, isRecording: false })

@@ -14,7 +14,7 @@ interface ControlBarStore {
 export const useControlBarStore = create<ControlBarStore>((set) =>({
   autoSlide: false,
   setAutoSlide: (autoSlide) => set({ autoSlide }),
-  metronome: true,
+  metronome: false,
   setMetronome: (metronome) => set({metronome}),
   volume:0.5,
   isMuted: false,

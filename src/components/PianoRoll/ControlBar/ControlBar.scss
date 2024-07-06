@@ -1,0 +1,98 @@
+.control-bar {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  background-color: #1a1a1a;
+  border-bottom: 1px solid #444;
+}
+
+.control-group {
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+
+  & + .control-group {
+    border-left: 1px solid #222;
+    padding-left: 20px;
+    margin-left: 20px;
+  }
+
+  button {
+    margin-right: 1px;
+
+    &:hover {
+      color: rgb(226, 197, 125);
+    }
+
+    &:disabled {
+      color: #666;
+    }
+
+    &.selected {
+      color: rgb(243, 192, 64);
+    }
+  }
+
+  label {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+
+  input,
+  select {
+    margin-left: 5px;
+    width: 30px; // Adjusted width to make the input fields narrower
+    border: 0;
+    background-color: #1a1a1a;
+    font-family: Arial, sans-serif; // Change to your desired font
+    font-size: 14px; // Change to your desired font size
+  }
+
+  input {
+    -webkit-appearance: none; // For Chrome, Safari, and Opera
+    -moz-appearance: none;    // For Firefox
+    appearance: none;         // For modern browsers
+    width: 20px;
+
+    &[type="number"] {
+      text-align: center;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none; // For Chrome, Safari, and Opera
+        margin: 0; // Removes any margin that might exist
+      }
+    }
+
+    &.tempo {
+      width: 30px;
+    }
+
+    &.volume {
+      width: 80px;
+      height: 2px;
+      background: #666; // Transparent background
+      cursor: pointer;  // Pointer cursor on hover
+    }
+  }
+
+  
+
+  .orientation {
+    transition: transform 0.2s ease;
+
+    &.horizontal:hover {
+      transform: rotate(-90deg);
+    }
+
+    &.vertical {
+      transform: rotate(-90deg);
+
+      &:hover {
+        transform: rotate(0deg);
+      }
+    }
+  }
+}

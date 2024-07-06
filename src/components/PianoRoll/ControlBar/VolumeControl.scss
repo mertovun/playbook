@@ -1,0 +1,43 @@
+.volume {
+  input[type="range"] {
+    -webkit-appearance: none;  // Override default styles
+    width: 80px;  // Set width of the slider
+    height: 8px;  // Set height of the track
+    background: #ddd;  // Background color of the track
+    border-radius: 5px;  // Rounded corners
+    outline: none;  // Remove outline
+    opacity: 0.7;  // Slightly transparent
+    transition: opacity 0.2s;  // Transition effect
+
+    &::-webkit-slider-thumb,
+    &::-moz-range-thumb,
+    &::-ms-thumb {
+      -webkit-appearance: none;  // Override default styles
+      width: 20px;  // Width of the thumb
+      height: 20px;  // Height of the thumb
+      background: #4CAF50;  // Background color of the thumb
+      border: 2px solid #000;  // Border color and size
+      border-radius: 50%;  // Rounded corners for a circular thumb
+      cursor: pointer;  // Pointer cursor on hover
+      transition: background 0.3s;  // Transition effect
+    }
+
+    &:active {
+      &::-webkit-slider-thumb,
+      &::-moz-range-thumb,
+      &::-ms-thumb {
+        background: #45a049;  // Change background on active (click and hold)
+      }
+    }
+
+    &::-webkit-slider-runnable-track,
+    &::-moz-range-track,
+    &::-ms-track {
+      width: 100%;  // Width of the track
+      height: 8px;  // Height of the track
+      background: #ddd;  // Background color of the track
+      border-radius: 5px;  // Rounded corners
+      cursor: pointer;  // Pointer cursor on hover
+    }
+  }
+}

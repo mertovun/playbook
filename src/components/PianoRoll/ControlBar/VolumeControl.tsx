@@ -15,7 +15,7 @@ const VolumeControl: React.FC<VolumeControlProps> = ({
   handleVolumeChange,
 }) => {
   return (
-    <div className="control-group">
+    <div className="control-group volume">
       <button onClick={toggleMute}>
         {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
       </button>
@@ -24,6 +24,7 @@ const VolumeControl: React.FC<VolumeControlProps> = ({
         min="0"
         max="1"
         step="0.01"
+        className="volume"
         value={isMuted ? 0 : volume}
         onChange={handleVolumeChange}
         disabled={isMuted}

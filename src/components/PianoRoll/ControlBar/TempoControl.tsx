@@ -24,11 +24,12 @@ const TempoControl: React.FC<TempoControlProps> = ({
 
   return (
     <div className="control-group">
-      <button onClick={toggleMetronome}>
+      <button onClick={toggleMetronome} className={metronome ? 'selected':''}>
         <TbMetronome />
       </button>
       <label>
         <input
+          className="tempo"
           type="number"
           min={10}
           max={300}

@@ -1,6 +1,6 @@
 import { EOrientation } from './interface';
 import { Keyboard } from './Keyboard/Keyboard';
-import './PianoRoll.css';
+import './PianoRoll.scss';
 import { TimelineGrid } from './TimelineGrid/TimelineGrid';
 import { TimelineBackground } from './Timeline/TimelineBackground';
 import usePianoRollLayoutStore from '../../stores/usePianoRollLayoutStore';

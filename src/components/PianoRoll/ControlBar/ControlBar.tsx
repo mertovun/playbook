@@ -9,7 +9,7 @@ import TempoControl from './TempoControl';
 import AutoSlideControl from './AutoSlideControl';
 import PlaybackControl from './PlaybackControl';
 import VolumeControl from './VolumeControl';
-import './ControlBar.css';
+import './ControlBar.scss';
 import usePianoRollLayoutStore from '../../../stores/usePianoRollLayoutStore';
 
 export const ControlBar: React.FC = () => {
@@ -20,7 +20,7 @@ export const ControlBar: React.FC = () => {
 
   const formattedMeasureBeatQuarter = formatMeasureBeatTick(...timeToMeasureBeatTick(currentTime, tempo, timeSignature));
 
-  const { volume, isMuted, setVolume, setIsMuted, metronome, setMetronome } = useControlBarStore();
+  const { autoSlide, volume, isMuted, setVolume, setIsMuted, metronome, setMetronome } = useControlBarStore();
 
   const toggleMetronome = () => {
     setMetronome(!metronome);
@@ -67,6 +67,7 @@ export const ControlBar: React.FC = () => {
         handleTimeSignatureChange={handleTimeSignatureChange}
       />
       <AutoSlideControl
+        autoSlide={autoSlide}
         toggleAutoSlide={toggleAutoSlide}
         formattedMeasureBeatQuarter={formattedMeasureBeatQuarter}
       />

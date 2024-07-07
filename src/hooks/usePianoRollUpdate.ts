@@ -3,6 +3,7 @@ import { useTimelineGridStore } from '../stores/useTimelineGridStore';
 import { useControlBarStore } from '../stores/useControlBarStore';
 import usePianoRollLayoutStore from '../stores/usePianoRollLayoutStore';
 import { EOrientation } from '../components/PianoRoll/interface';
+import { TEMPO_MULTIPLIER } from '../utils/time';
 
 const useDebouncedEffect = (effect: () => void, delay: number, deps: any[]) => {
   const [timeoutId, setTimeoutId] = useState<number | null>(null);
@@ -35,7 +36,7 @@ export const usePianoRollUpdate = () => {
     let startClock = performance.now();
 
     const update = () => {
-      const elapsed = (performance.now() - startClock) / 1000;
+      const elapsed = (performance.now() - startClock) * TEMPO_MULTIPLIER / 1000;
       const newCurrentTime = currentTime + elapsed;
       setCurrentTime(newCurrentTime);
 

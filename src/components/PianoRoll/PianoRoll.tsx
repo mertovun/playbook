@@ -37,7 +37,7 @@ export const PianoRoll = () => {
   const width = orientation === EOrientation.HORIZONTAL ? pianoRollWidth : pianoRollLength;
 
   return (
-    <>
+    <div className='pianoroll'>
       <ControlBar />
       <div >
         <svg className={`pianoroll-svg ${orientation}`} width={width} height={height}>
@@ -56,7 +56,7 @@ export const PianoRoll = () => {
           </svg>
         </svg>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,10 +1,10 @@
 .control-bar {
+  margin:0;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 5px;
   background-color: #1a1a1a;
-  border-bottom: 1px solid #444;
 }
 
 .control-group {
@@ -82,7 +82,7 @@
   
 
   .orientation {
-    transition: transform 0.2s ease;
+    transition: transform 0.14s ease;
 
     &.horizontal:hover {
       transform: rotate(-90deg);

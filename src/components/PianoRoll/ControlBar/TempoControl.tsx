@@ -73,6 +73,7 @@ const TempoControl: React.FC = () => {
           ))}
         </select>
       </label>
+
     </div>
   );
 };

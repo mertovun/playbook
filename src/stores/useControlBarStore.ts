@@ -17,6 +17,8 @@ interface ControlBarStore {
   setIsMuted: (isMuted:boolean) => void;
   editMode: EditMode;
   setEditMode: (editMode: EditMode) => void;
+  bookmarkSidebar: boolean;
+  setBookmarkSidebar: (bookmarkSidebar: boolean) => void;
 }
 
 export const useControlBarStore = create<ControlBarStore>((set) =>({
@@ -30,4 +32,6 @@ export const useControlBarStore = create<ControlBarStore>((set) =>({
   setIsMuted: (isMuted) => set({isMuted}),
   editMode: EditMode.CURSOR,
   setEditMode: (editMode) => set({editMode}),
+  bookmarkSidebar: false,
+  setBookmarkSidebar: (bookmarkSidebar) => set({bookmarkSidebar}),
 }));

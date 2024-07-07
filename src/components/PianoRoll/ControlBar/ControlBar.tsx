@@ -6,6 +6,7 @@ import PlaybackControl from './PlaybackControl';
 import VolumeControl from './VolumeControl';
 import './ControlBar.scss';
 import EditModeControl from './EditModeControl';
+import BookmarkBarControl from './BookmarkBarControl';
 
 export const ControlBar: React.FC = () => {
   return (
@@ -15,7 +16,8 @@ export const ControlBar: React.FC = () => {
       <AutoSlideControl />
       <PlaybackControl />
       <VolumeControl />
-      <EditModeControl/>
+      <EditModeControl />
+      <BookmarkBarControl />
     </div>
   );
 };

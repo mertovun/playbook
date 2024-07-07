@@ -38,24 +38,27 @@ export const PianoRoll = () => {
 
   return (
     <div className='pianoroll'>
-      <ControlBar />
-      <div >
-        <svg className={`pianoroll-svg ${orientation}`} width={width} height={height}>
-          <Keyboard />
-          <svg
-            x={timelineX}
-            y={timelineY}
-            width={timelineWidth}
-            height={timelineHeight}
-            onClick={handleTimelineClick}
-            ref={timelineSvgRef}
-            onDrop={handleDrop} onDragOver={handleDragOver}
-          >
-            <TimelineBackground />
-            <TimelineGrid timelineWidth={timelineWidth} timelineHeight={timelineHeight} />
+      <div>
+        <ControlBar />
+        <div >
+          <svg className={`pianoroll-svg ${orientation}`} width={width} height={height}>
+            <Keyboard />
+            <svg
+              x={timelineX}
+              y={timelineY}
+              width={timelineWidth}
+              height={timelineHeight}
+              onClick={handleTimelineClick}
+              ref={timelineSvgRef}
+              onDrop={handleDrop} onDragOver={handleDragOver}
+            >
+              <TimelineBackground />
+              <TimelineGrid timelineWidth={timelineWidth} timelineHeight={timelineHeight} />
+            </svg>
           </svg>
-        </svg>
+        </div>
       </div>
+      
     </div>
   );
 };

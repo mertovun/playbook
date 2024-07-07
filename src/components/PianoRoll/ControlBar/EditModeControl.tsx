@@ -1,5 +1,5 @@
 import React from 'react';
-import { PiCursorFill, PiSelectionPlusBold, PiPencilSimpleLineBold } from "react-icons/pi";
+import { PiCursor, PiSelectionPlusBold, PiPencilSimpleLineBold } from "react-icons/pi";
 import { EditMode, useControlBarStore } from '../../../stores/useControlBarStore';
 
 
@@ -11,7 +11,7 @@ const EditModeControl: React.FC = () => {
         onClick={() => setEditMode(EditMode.CURSOR)} 
         className={editMode === EditMode.CURSOR ? 'selected':''}
         >
-        <PiCursorFill />
+        <PiCursor />
       </button>
       <button 
         onClick={() => setEditMode(EditMode.SELECT)} 

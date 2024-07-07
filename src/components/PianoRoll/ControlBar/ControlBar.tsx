@@ -10,35 +10,16 @@ import AutoSlideControl from './AutoSlideControl';
 import PlaybackControl from './PlaybackControl';
 import VolumeControl from './VolumeControl';
 import './ControlBar.scss';
-import usePianoRollLayoutStore from '../../../stores/usePianoRollLayoutStore';
+import EditModeControl from './EditModeControl';
 
 export const ControlBar: React.FC = () => {
-  const { isPlaying, isRecording, stop, record, cursorStartTime, currentTime } = useTimelineGridStore();
-  const { toggleOrientation, toggleAutoSlide, togglePlayPause } = usePianoRollHandlers();
-  const { orientation } = usePianoRollLayoutStore();
-  const { tempo, setTempo, timeSignature, setTimeSignature, recordedNotes, updateRecordedNotes } = useMidiStore();
+  const { isPlaying, stop, record, cursorStartTime, currentTime } = useTimelineGridStore();
+  const { toggleAutoSlide, togglePlayPause } = usePianoRollHandlers();
+  const { tempo, timeSignature,  recordedNotes, updateRecordedNotes } = useMidiStore();
 
   const formattedMeasureBeatQuarter = formatMeasureBeatTick(...timeToMeasureBeatTick(currentTime, tempo, timeSignature));
 
-  const { autoSlide, volume, isMuted, setVolume, setIsMuted, metronome, setMetronome } = useControlBarStore();
-
-  const toggleMetronome = () => {
-    setMetronome(!metronome);
-  }
-
-  const handleTempoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTempoValue = Number(e.target.value);
-    setTempo(newTempoValue);
-  };
-
-  const handleTimeSignatureChange = (index: number, value: string) => {
-    const newValue = Number(value);
-    if (newValue > 0) { // Ensure positive value
-      const newTimeSignature = [...timeSignature];
-      newTimeSignature[index] = newValue;
-      setTimeSignature(newTimeSignature as [number, number]);
-    }
-  };
+  const { autoSlide, volume, isMuted, setVolume, setIsMuted } = useControlBarStore();
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newVolume = Number(e.target.value);
@@ -56,16 +37,8 @@ export const ControlBar: React.FC = () => {
 
   return (
     <div className="control-bar">
-      <OrientationControl toggleOrientation={toggleOrientation} orientation={orientation} />
-      <TempoControl
-        metronome={metronome}
-        toggleMetronome={toggleMetronome}
-        tempo={tempo}
-        isRecording={isRecording}
-        handleTempoChange={handleTempoChange}
-        timeSignature={timeSignature}
-        handleTimeSignatureChange={handleTimeSignatureChange}
-      />
+      <OrientationControl />
+      <TempoControl />
       <AutoSlideControl
         autoSlide={autoSlide}
         toggleAutoSlide={toggleAutoSlide}
@@ -85,6 +58,7 @@ export const ControlBar: React.FC = () => {
         toggleMute={toggleMute}
         handleVolumeChange={handleVolumeChange}
       />
+      <EditModeControl/>
     </div>
   );
 };

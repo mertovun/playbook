@@ -1,13 +1,13 @@
 import React from 'react';
 import { PiPianoKeysFill } from "react-icons/pi";
 import { EOrientation } from '../interface';
+import { usePianoRollHandlers } from '../../../hooks/usePianoRollHandlers';
+import usePianoRollLayoutStore from '../../../stores/usePianoRollLayoutStore';
 
-interface OrientationControlProps {
-  toggleOrientation: () => void;
-  orientation: EOrientation
-}
+const OrientationControl: React.FC= () => {
+  const { toggleOrientation } = usePianoRollHandlers();
+  const { orientation } = usePianoRollLayoutStore();
 
-const OrientationControl: React.FC<OrientationControlProps> = ({ toggleOrientation, orientation }) => {
   return (
     <div className="control-group">
       <button

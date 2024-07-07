@@ -1,25 +1,35 @@
 import React from 'react';
 import { TbMetronome } from "react-icons/tb";
+import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
+import { useMidiStore } from '../../../stores/useMidiStore';
+import { useControlBarStore } from '../../../stores/useControlBarStore';
 
-interface TempoControlProps {
-  metronome: boolean
-  toggleMetronome: () => void;
-  tempo: number;
-  isRecording: boolean;
-  handleTempoChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  timeSignature: number[];
-  handleTimeSignatureChange: (index: number, value: string) => void;
-}
 
-const TempoControl: React.FC<TempoControlProps> = ({
-  metronome,
-  toggleMetronome,
-  tempo,
-  isRecording,
-  handleTempoChange,
-  timeSignature,
-  handleTimeSignatureChange,
-}) => {
+const TempoControl: React.FC = () => {
+  const { isRecording, currentTime } = useTimelineGridStore();
+  const { tempo, setTempo, timeSignature, setTimeSignature, recordedNotes, updateRecordedNotes } = useMidiStore();
+
+
+  const { metronome, setMetronome } = useControlBarStore();
+
+  const toggleMetronome = () => {
+    setMetronome(!metronome);
+  }
+
+  const handleTempoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTempoValue = Number(e.target.value);
+    setTempo(newTempoValue);
+  };
+
+  const handleTimeSignatureChange = (index: number, value: string) => {
+    const newValue = Number(value);
+    if (newValue > 0) { // Ensure positive value
+      const newTimeSignature = [...timeSignature];
+      newTimeSignature[index] = newValue;
+      setTimeSignature(newTimeSignature as [number, number]);
+    }
+  };
+
   const [beatsPerMeasure, beatUnit] = timeSignature;
 
   return (

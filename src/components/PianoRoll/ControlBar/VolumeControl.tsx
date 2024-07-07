@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
+import { TbVolume, TbVolume3 } from "react-icons/tb";
 
 interface VolumeControlProps {
   isMuted: boolean;
@@ -17,7 +18,7 @@ const VolumeControl: React.FC<VolumeControlProps> = ({
   return (
     <div className="control-group volume">
       <button onClick={toggleMute}>
-        {isMuted ? <FaVolumeMute /> : <FaVolumeUp />}
+        {isMuted ? <TbVolume3 /> : <TbVolume />}
       </button>
       <input
         type="range"

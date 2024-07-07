@@ -1,5 +1,11 @@
 import { create } from "zustand";
 
+export enum EditMode {
+  CURSOR,
+  SELECT,
+  PENCIL,
+}
+
 interface ControlBarStore {
   autoSlide: boolean;
   setAutoSlide: (autoSlide:boolean) => void;
@@ -9,6 +15,8 @@ interface ControlBarStore {
   isMuted: boolean;
   setVolume: (volume:number) => void;
   setIsMuted: (isMuted:boolean) => void;
+  editMode: EditMode;
+  setEditMode: (editMode: EditMode) => void;
 }
 
 export const useControlBarStore = create<ControlBarStore>((set) =>({
@@ -19,5 +27,7 @@ export const useControlBarStore = create<ControlBarStore>((set) =>({
   volume:0.5,
   isMuted: false,
   setVolume: (volume) => set({volume}),
-  setIsMuted: (isMuted) => set({isMuted})
+  setIsMuted: (isMuted) => set({isMuted}),
+  editMode: EditMode.CURSOR,
+  setEditMode: (editMode) => set({editMode}),
 }));

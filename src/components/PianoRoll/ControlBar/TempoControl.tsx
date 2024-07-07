@@ -6,9 +6,8 @@ import { useControlBarStore } from '../../../stores/useControlBarStore';
 
 
 const TempoControl: React.FC = () => {
-  const { isRecording, currentTime } = useTimelineGridStore();
-  const { tempo, setTempo, timeSignature, setTimeSignature, recordedNotes, updateRecordedNotes } = useMidiStore();
-
+  const { isRecording } = useTimelineGridStore();
+  const { tempo, setTempo, timeSignature, setTimeSignature } = useMidiStore();
 
   const { metronome, setMetronome } = useControlBarStore();
 

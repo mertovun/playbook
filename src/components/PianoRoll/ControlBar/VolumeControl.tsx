@@ -1,20 +1,19 @@
-import React from 'react';
-import { FaVolumeMute, FaVolumeUp } from "react-icons/fa";
+import React, { useCallback } from 'react';
 import { TbVolume, TbVolume3 } from "react-icons/tb";
+import { useControlBarStore } from '../../../stores/useControlBarStore';
 
-interface VolumeControlProps {
-  isMuted: boolean;
-  volume: number;
-  toggleMute: () => void;
-  handleVolumeChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+const VolumeControl: React.FC = () => {
+  const {  volume, isMuted, setVolume, setIsMuted } = useControlBarStore();
 
-const VolumeControl: React.FC<VolumeControlProps> = ({
-  isMuted,
-  volume,
-  toggleMute,
-  handleVolumeChange,
-}) => {
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = Number(e.target.value);
+    setVolume(newVolume);
+  };
+
+  const toggleMute = useCallback(() => {
+    setIsMuted(!isMuted);
+  }, [isMuted, setIsMuted]);
+
   return (
     <div className="control-group volume">
       <button onClick={toggleMute}>

@@ -1,23 +1,19 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { TbPlayerPlayFilled, TbPlayerPauseFilled, TbPlayerStopFilled, TbPlayerRecordFilled } from "react-icons/tb";
+import { usePianoRollHandlers } from '../../../hooks/usePianoRollHandlers';
+import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
+import { useMidiStore } from '../../../stores/useMidiStore';
 
-interface PlaybackControlProps {
-  isPlaying: boolean;
-  togglePlayPause: () => void;
-  stop: () => void;
-  cursorStartTime: number;
-  currentTime: number;
-  handleRecord: () => void;
-}
+const PlaybackControl: React.FC = () => {
+  const { isPlaying, stop, record, cursorStartTime, currentTime } = useTimelineGridStore();
+  const { togglePlayPause } = usePianoRollHandlers();
+  const { recordedNotes, updateRecordedNotes } = useMidiStore();
 
-const PlaybackControl: React.FC<PlaybackControlProps> = ({
-  isPlaying,
-  togglePlayPause,
-  stop,
-  cursorStartTime,
-  currentTime,
-  handleRecord,
-}) => {
+  const handleRecord = useCallback(() => {
+    updateRecordedNotes(recordedNotes);
+    record();
+  }, [record, recordedNotes, updateRecordedNotes]);
+
   return (
     <div className="control-group">
       <button onClick={togglePlayPause}>

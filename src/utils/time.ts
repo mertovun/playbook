@@ -1,24 +1,24 @@
 
 export const TEMPO_MULTIPLIER = 1.6;
 
-export function timeToMeasureBeatTick(timeInSeconds:number, tempo:number, timeSignature:[number, number]): [number, number, number]{
+export function timeToMeasureBeatTick(timeInSeconds:number, tempo:number, timeSignature:[number, number], gridTick:number): [number, number, number]{
   const [beatsPerMeasure, beatUnit] = timeSignature;
-  const tickPerBeat = 16 / beatUnit;
+  const tickPerBeat = 4 * gridTick / beatUnit;
 
-  const secondsPerTick = 60 / tempo / 4;
-  let quarter = timeInSeconds /  secondsPerTick;
-  let beat = Math.floor(quarter / tickPerBeat);
-  quarter -= beat * tickPerBeat;
+  const secondsPerTick = 60 / tempo / gridTick;
+  let tick = timeInSeconds /  secondsPerTick;
+  let beat = Math.floor(tick / tickPerBeat);
+  tick -= beat * tickPerBeat;
   const measure = Math.floor(beat/ beatsPerMeasure);
   beat -= measure * beatsPerMeasure;
-  return [measure, beat, quarter]
+  return [measure, beat, tick]
 }
 
-export function measureBeatTickToTime(measure: number, beat: number, tick: number, tempo: number, timeSignature: [number, number]): number {
+export function measureBeatTickToTime(measure: number, beat: number, tick: number, tempo: number, timeSignature: [number, number], gridTick:number): number {
   const [beatsPerMeasure, beatUnit] = timeSignature;
-  const tickPerBeat = 16 / beatUnit;
+  const tickPerBeat = 4 * gridTick / beatUnit;
 
-  const secondsPerTick = 60 / tempo / 4;
+  const secondsPerTick = 60 / tempo / gridTick;
 
   const totalTicks = (measure * beatsPerMeasure * tickPerBeat) + (beat * tickPerBeat) + tick;
 
@@ -31,6 +31,6 @@ export function measureBeatTickToTime(measure: number, beat: number, tick: numbe
 export function formatMeasureBeatTick(measure:number, beat:number, tick:number) {
   const formattedMeasure = measure.toString().padStart(1, '0');
   const formattedBeat = beat.toString().padStart(1, '0');
-  const formattedQuarter = tick.toFixed(3).padStart(5, '0');
-  return ` ${formattedMeasure} : ${formattedBeat} : ${formattedQuarter}`;
+  const formattedTick = tick.toFixed(3).padStart(5, '0');
+  return ` ${formattedMeasure} : ${formattedBeat} : ${formattedTick}`;
 }

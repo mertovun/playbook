@@ -11,7 +11,7 @@ export const useMetronome = () => {
 
   const { metronome } = useControlBarStore();
   const { tempo, timeSignature } = useMidiStore();
-  const { currentTime, isPlaying } = useTimelineGridStore();
+  const { currentTime, isPlaying, gridTick } = useTimelineGridStore();
 
   const currentTimeRef = useRef<number>(currentTime);
 
@@ -25,15 +25,15 @@ export const useMetronome = () => {
     }
 
     if (isPlaying  && metronome) {
-      const [_prevMeasure, prevBeat, _prevTick] = timeToMeasureBeatTick(currentTimeRef.current, tempo, timeSignature);
-      const [_measure, beat, _tick] = timeToMeasureBeatTick(currentTime, tempo, timeSignature);
+      const [_prevMeasure, prevBeat, _prevTick] = timeToMeasureBeatTick(currentTimeRef.current, tempo, timeSignature, gridTick);
+      const [_measure, beat, _tick] = timeToMeasureBeatTick(currentTime, tempo, timeSignature, gridTick);
 
       if (prevBeat !== beat) {
         dmRef.current.start({ note: "clave" });
       }
     }
     currentTimeRef.current = currentTime;
-  }, [currentTime, isPlaying, metronome, tempo, timeSignature]);
+  }, [currentTime, isPlaying, metronome, tempo, timeSignature, gridTick]);
 
   return null;
 };

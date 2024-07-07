@@ -16,7 +16,8 @@ interface TimelineGridStore {
   setCursorStartTime: (time: number) => void;
   setWindowStartTime: (time: number) => void;
   setPixelsPerSecond: (pixelsPerSecond: number) => void;
-
+  gridTick: number;
+  setGridTick: (gridTick:number) => void;
 }
 
 export const MAX_ZOOM_IN = 400;
@@ -51,4 +52,6 @@ export const useTimelineGridStore = create<TimelineGridStore>((set, get) => ({
     pixelsPerSecond = Math.min(MAX_ZOOM_IN, pixelsPerSecond);
     set({ pixelsPerSecond })
   },
+  gridTick: 3,
+  setGridTick: (gridTick) => set({gridTick}),
 }));

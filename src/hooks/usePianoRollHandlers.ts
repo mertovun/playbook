@@ -25,6 +25,7 @@ export const usePianoRollHandlers = () => {
     setCurrentTime,
     setWindowStartTime,
     setPixelsPerSecond,
+    gridTick
   } = useTimelineGridStore();
 
   const { tempo, timeSignature } = useMidiStore();
@@ -45,12 +46,12 @@ export const usePianoRollHandlers = () => {
     const rect = e.target.getBoundingClientRect();
     const position = orientation === EOrientation.HORIZONTAL ? rect.bottom - e.clientY : e.clientX - rect.left;
     const newStartTime = position / pixelsPerSecond + windowStartTime;
-    let [measure, beat, tick] = timeToMeasureBeatTick(newStartTime, tempo, timeSignature);
+    let [measure, beat, tick] = timeToMeasureBeatTick(newStartTime, tempo, timeSignature, gridTick);
     tick = Math.floor(tick)
-    const snapStartTime = measureBeatTickToTime(measure, beat, tick, tempo, timeSignature);
+    const snapStartTime = measureBeatTickToTime(measure, beat, tick, tempo, timeSignature, gridTick);
     setCursorStartTime(snapStartTime);
     setCurrentTime(snapStartTime);
-  }, [orientation, windowStartTime, tempo, setCursorStartTime, setCurrentTime]);
+  }, [orientation, windowStartTime, tempo, setCursorStartTime, setCurrentTime, gridTick]);
 
   const handleDrop = useCallback(async (event: React.DragEvent) => {
     event.preventDefault();

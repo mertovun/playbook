@@ -6,34 +6,31 @@ import { EOrientation } from '../components/PianoRoll/interface';
 
 export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: number) => {
   const { orientation } = usePianoRollLayoutStore();
-  const { isRecording, cursorStartTime, currentTime, windowStartTime, pixelsPerSecond } = useTimelineGridStore();
+  const { isRecording, cursorStartTime, currentTime, windowStartTime, pixelsPerSecond, gridTick } = useTimelineGridStore();
   const { tempo, timeSignature } = useMidiStore();
   const [beatsPerMeasure, beatUnit] = timeSignature;
-  const quarterPerBeat = 16 / beatUnit;
-  const secondsPerQuarter = (60 / tempo) / 4;
-  // const quarterPerMeasure = quarterPerBeat * beatsPerMeasure;
-  const pixelsPerQuarter = secondsPerQuarter * pixelsPerSecond;
-  
+  const tickPerBeat = 4 * gridTick / beatUnit;
+  const secondsPerTick = (60 / tempo) / gridTick;
 
-  const quarterStartIndex = Math.floor(windowStartTime / secondsPerQuarter);
-  const quarterEndIndex = Math.ceil(timelineWidth / pixelsPerQuarter + quarterStartIndex);
+  const pixelsPerTick = secondsPerTick * pixelsPerSecond;
+
+  const tickStartIndex = Math.floor(windowStartTime / secondsPerTick);
+  const tickEndIndex = Math.ceil(timelineWidth / pixelsPerTick + tickStartIndex);
 
   // todo: grid layout
   const labelOffset = 6;
-  const quarterLineOpacity = 0.15;
+  const tickLineOpacity = 0.15;
   const beatLineOpacity = 0.3;
   const measureLineOpacity = 0.5;
 
-  // const quarterLineColor = "#555";
-  // const beatLineColor = "#aaa";
-  // const measureLineColor = "#fff";\
+
   const gridLineColor = "#fff";
 
   const gridlines = [];
-  for (let quarterLineIndex = quarterStartIndex; quarterLineIndex < quarterEndIndex; quarterLineIndex++) {
-    const measureLine = quarterLineIndex % (beatsPerMeasure * quarterPerBeat) === 0;
-    const measureLineIndex = Math.floor(quarterLineIndex / (beatsPerMeasure * quarterPerBeat) );
-    const x = quarterLineIndex * pixelsPerQuarter - windowStartTime * pixelsPerSecond;
+  for (let tickLineIndex = tickStartIndex; tickLineIndex < tickEndIndex; tickLineIndex++) {
+    const measureLine = tickLineIndex % (beatsPerMeasure * tickPerBeat) === 0;
+    const measureLineIndex = Math.floor(tickLineIndex / (beatsPerMeasure * tickPerBeat) );
+    const x = tickLineIndex * pixelsPerTick - windowStartTime * pixelsPerSecond;
     
     const x1 = orientation === EOrientation.HORIZONTAL ? 0 : x;
     const x2 = orientation === EOrientation.HORIZONTAL ? timelineWidth : x;
@@ -43,9 +40,9 @@ export const useTimelineGridLayout = (timelineWidth: number, timelineHeight: num
     const labelX = orientation === EOrientation.HORIZONTAL ? labelOffset : x + labelOffset ;
     const labelY = orientation === EOrientation.HORIZONTAL ? timelineHeight - x - labelOffset : labelOffset;
 
-    const quarterLine = quarterLineIndex % quarterPerBeat === 0;
-    const opacity = measureLine ? measureLineOpacity : (quarterLine ? beatLineOpacity : quarterLineOpacity);
-    // const color = measureLine ? measureLineColor : (quarterLine ? beatLineColor : quarterLineColor);
+    const tickLine = tickLineIndex % tickPerBeat === 0;
+    const opacity = measureLine ? measureLineOpacity : (tickLine ? beatLineOpacity : tickLineOpacity);
+
     const color = gridLineColor;
     const label: string  = measureLine ? measureLineIndex.toString() : '';
     gridlines.push(

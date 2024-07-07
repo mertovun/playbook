@@ -7,9 +7,9 @@ import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
 import { useMidiStore } from '../../../stores/useMidiStore';
 
 const AutoSlideControl: React.FC = () => {
-  const { currentTime } = useTimelineGridStore();
+  const { currentTime, gridTick } = useTimelineGridStore();
   const { tempo, timeSignature } = useMidiStore();
-  const formattedMeasureBeatTick = formatMeasureBeatTick(...timeToMeasureBeatTick(currentTime, tempo, timeSignature));
+  const formattedMeasureBeatTick = formatMeasureBeatTick(...timeToMeasureBeatTick(currentTime, tempo, timeSignature, gridTick));
 
   const { autoSlide } = useControlBarStore();
   const { toggleAutoSlide } = usePianoRollHandlers();

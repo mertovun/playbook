@@ -3,7 +3,7 @@ import { useMidiStore } from '../stores/useMidiStore';
 import { MidiNote } from '../stores/useMidiStore';
 import { useTimelineGridStore } from '../stores/useTimelineGridStore';
 import { usePianoRollLayoutStore } from '../stores/usePianoRollLayoutStore';
-import { EOrientation } from '../components/PianoRoll/interface';
+import { EOrientation, LayoutConfig } from '../components/PianoRoll/interface';
 import { midiNumToIsWhiteNote, midiNumToNoteStart } from '../utils/note';
 import { EditMode, useControlBarStore } from '../stores/useControlBarStore';
 
@@ -16,7 +16,7 @@ export const useTimelineSelect = () => {
   const { windowStartTime, pixelsPerSecond } = useTimelineGridStore();
   const { orientation, timelineHeight, layoutConfig } = usePianoRollLayoutStore();
   
-  const { whiteNoteWidth, blackNoteWidth } = layoutConfig;
+
 
   const handleMouseDown = useCallback((e: any) => {
     if (editMode === EditMode.SELECT) {
@@ -37,23 +37,24 @@ export const useTimelineSelect = () => {
     if (editMode === EditMode.SELECT) {
       if (!e.ctrlKey) deselectAll();
       if (selectionStart && selectionEnd) {
-        handleNoteSelection(selectionStart, selectionEnd);
+        handleNoteSelection(selectionStart, selectionEnd, layoutConfig);
       }
       setSelectionStart(null);
       setSelectionEnd(null);
     }
-  }, [selectionStart, selectionEnd, editMode]);
+  }, [selectionStart, selectionEnd, editMode, layoutConfig]);
 
   const handleClickSelect = useCallback((e: any) => {
     if (editMode === EditMode.SELECT && !selectionEnd) {
       const rect = e.target.getBoundingClientRect();
-      handleNoteSelection({ x: e.clientX - rect.left, y: e.clientY - rect.top }, { x: e.clientX - rect.left, y: e.clientY - rect.top });
+      handleNoteSelection({ x: e.clientX - rect.left, y: e.clientY - rect.top }, { x: e.clientX - rect.left, y: e.clientY - rect.top }, layoutConfig);
       setSelectionStart(null);
       setSelectionEnd(null);
     }
-  }, [selectionStart, selectionEnd, editMode]);
+  }, [selectionStart, selectionEnd, editMode, layoutConfig]);
 
-  const handleNoteSelection = (start: { x: number, y: number }, end: { x: number, y: number }) => {
+  const handleNoteSelection = (start: { x: number, y: number }, end: { x: number, y: number }, layoutConfig: LayoutConfig) => {
+    const { whiteNoteWidth, blackNoteWidth } = layoutConfig;
     const selectionRect = {
       x: Math.min(start.x, end.x),
       y: Math.min(start.y, end.y),
@@ -71,7 +72,7 @@ export const useTimelineSelect = () => {
 
         const noteRect = orientation === EOrientation.HORIZONTAL
           ? { x: startY, y: timelineHeight - startPx - durationPx, width: noteWidth, height: durationPx } 
-          : { x: startPx, y: startY, width: durationPx, height: noteWidth }; 
+          : { x: startPx, y: timelineHeight - startY - noteWidth, width: durationPx, height: noteWidth }; 
 
         if (rectIntersect(selectionRect, noteRect)) {
           selectNote(note.note, note.start);

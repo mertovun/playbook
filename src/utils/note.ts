@@ -27,7 +27,7 @@ export function noteToString(note:NoteWithOctave, withOctave:boolean){
 export function midiNumToNoteStart(midiNum: number, whiteNoteWidth: number, blackNoteWidth: number) {
   const octave = Math.floor((midiNum-12)/12);
   const note = midiNum % 12;
-  const base = (octave * 7 - 5)* whiteNoteWidth - 5;
+  const base = (octave * 7 - 5)* whiteNoteWidth;
   if (note == 0) return base;                                             // C
   if (note == 1) return base + whiteNoteWidth - blackNoteWidth /2;        // C#
   if (note == 2) return base + whiteNoteWidth;                            // D
@@ -39,7 +39,7 @@ export function midiNumToNoteStart(midiNum: number, whiteNoteWidth: number, blac
   if (note == 8) return base + whiteNoteWidth * 5 - blackNoteWidth /2;    // G#
   if (note == 9) return base + whiteNoteWidth * 5;                        // A
   if (note == 10) return base + whiteNoteWidth * 6 - blackNoteWidth /2;   // A#
-  if (note == 11) return base + whiteNoteWidth * 6;                       // B
+  return base + whiteNoteWidth * 6;                                       // B
 }
 
 export function midiNumToIsWhiteNote(midiNum: number) {
@@ -55,5 +55,5 @@ export function midiNumToIsWhiteNote(midiNum: number) {
   if (note == 8) return false;        // G#
   if (note == 9) return true;         // A
   if (note == 10) return false;       // A#
-  if (note == 11) return true;        // B
+  return true;                        // B
 }

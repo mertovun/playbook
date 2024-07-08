@@ -23,3 +23,37 @@ export function noteToString(note:NoteWithOctave, withOctave:boolean){
   if (withOctave) str += note[1];
   return str;
 }
+
+export function midiNumToNoteStart(midiNum: number, whiteNoteWidth: number, blackNoteWidth: number) {
+  const octave = Math.floor((midiNum-12)/12);
+  const note = midiNum % 12;
+  const base = (octave * 7 - 5)* whiteNoteWidth - 5;
+  if (note == 0) return base;                                             // C
+  if (note == 1) return base + whiteNoteWidth - blackNoteWidth /2;        // C#
+  if (note == 2) return base + whiteNoteWidth;                            // D
+  if (note == 3) return base + whiteNoteWidth * 2 - blackNoteWidth /2;    // D#
+  if (note == 4) return base + whiteNoteWidth * 2;                        // E
+  if (note == 5) return base + whiteNoteWidth * 3;                        // F
+  if (note == 6) return base + whiteNoteWidth * 4 - blackNoteWidth /2;    // F#
+  if (note == 7) return base + whiteNoteWidth * 4;                        // G
+  if (note == 8) return base + whiteNoteWidth * 5 - blackNoteWidth /2;    // G#
+  if (note == 9) return base + whiteNoteWidth * 5;                        // A
+  if (note == 10) return base + whiteNoteWidth * 6 - blackNoteWidth /2;   // A#
+  if (note == 11) return base + whiteNoteWidth * 6;                       // B
+}
+
+export function midiNumToIsWhiteNote(midiNum: number) {
+  const note = midiNum % 12;
+  if (note == 0) return true;         // C
+  if (note == 1) return false;        // C#
+  if (note == 2) return true;         // D
+  if (note == 3) return false;        // D#
+  if (note == 4) return true;         // E
+  if (note == 5) return true;         // F
+  if (note == 6) return false;        // F#
+  if (note == 7) return true;         // G
+  if (note == 8) return false;        // G#
+  if (note == 9) return true;         // A
+  if (note == 10) return false;       // A#
+  if (note == 11) return true;        // B
+}

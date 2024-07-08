@@ -1,38 +1,57 @@
-// src/hooks/useTimelineSelect.ts
 import { useState, useCallback } from 'react';
 import { useMidiStore } from '../stores/useMidiStore';
 import { MidiNote } from '../stores/useMidiStore';
 import { useTimelineGridStore } from '../stores/useTimelineGridStore';
 import { usePianoRollLayoutStore } from '../stores/usePianoRollLayoutStore';
 import { EOrientation } from '../components/PianoRoll/interface';
+import { midiNumToIsWhiteNote, midiNumToNoteStart } from '../utils/note';
+import { EditMode, useControlBarStore } from '../stores/useControlBarStore';
 
 export const useTimelineSelect = () => {
   const [selectionStart, setSelectionStart] = useState<{ x: number, y: number } | null>(null);
   const [selectionEnd, setSelectionEnd] = useState<{ x: number, y: number } | null>(null);
-  const [selectedNotes, setSelectedNotes] = useState<Set<number>>(new Set());
 
-  const { recordedNotes } = useMidiStore();
+  const { editMode } = useControlBarStore();
+  const { recordedNotes, selectNote, deselectAll } = useMidiStore();
   const { windowStartTime, pixelsPerSecond } = useTimelineGridStore();
-  const { orientation, timelineHeight } = usePianoRollLayoutStore();
+  const { orientation, timelineHeight, layoutConfig } = usePianoRollLayoutStore();
+  
+  const { whiteNoteWidth, blackNoteWidth } = layoutConfig;
 
-  const handleMouseDown = useCallback((e: React.MouseEvent) => {
-    setSelectionStart({ x: e.clientX, y: e.clientY });
-    setSelectionEnd(null);
-  }, []);
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (selectionStart) {
-      setSelectionEnd({ x: e.clientX, y: e.clientY });
+  const handleMouseDown = useCallback((e: any) => {
+    if (editMode === EditMode.SELECT) {
+      const rect = e.target.getBoundingClientRect();
+      setSelectionStart({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+      setSelectionEnd(null);
     }
-  }, [selectionStart]);
+  }, [editMode]);
 
-  const handleMouseUp = useCallback(() => {
-    if (selectionStart && selectionEnd) {
-      handleNoteSelection(selectionStart, selectionEnd);
+  const handleMouseMove = useCallback((e: any) => {
+    if (editMode === EditMode.SELECT && selectionStart) {
+      const rect = e.target.getBoundingClientRect();
+      setSelectionEnd({ x: e.clientX - rect.left, y: e.clientY - rect.top });
     }
-    setSelectionStart(null);
-    setSelectionEnd(null);
-  }, [selectionStart, selectionEnd]);
+  }, [selectionStart, editMode]);
+
+  const handleMouseUp = useCallback((e: any) => {
+    if (editMode === EditMode.SELECT) {
+      if (!e.ctrlKey) deselectAll();
+      if (selectionStart && selectionEnd) {
+        handleNoteSelection(selectionStart, selectionEnd);
+      }
+      setSelectionStart(null);
+      setSelectionEnd(null);
+    }
+  }, [selectionStart, selectionEnd, editMode]);
+
+  const handleClickSelect = useCallback((e: any) => {
+    if (editMode === EditMode.SELECT && !selectionEnd) {
+      const rect = e.target.getBoundingClientRect();
+      handleNoteSelection({ x: e.clientX - rect.left, y: e.clientY - rect.top }, { x: e.clientX - rect.left, y: e.clientY - rect.top });
+      setSelectionStart(null);
+      setSelectionEnd(null);
+    }
+  }, [selectionStart, selectionEnd, editMode]);
 
   const handleNoteSelection = (start: { x: number, y: number }, end: { x: number, y: number }) => {
     const selectionRect = {
@@ -41,27 +60,25 @@ export const useTimelineSelect = () => {
       width: Math.abs(end.x - start.x),
       height: Math.abs(end.y - start.y),
     };
-
-    const newSelectedNotes = new Set<number>();
     
-    // Check if a note falls within the selection rectangle
     Object.values(recordedNotes).forEach((notes: { [key: number]: MidiNote }) => {
       Object.values(notes).forEach((note: MidiNote) => {
         const startPx = (note.start - windowStartTime) * pixelsPerSecond;
         const durationPx = (note.end! - note.start) * pixelsPerSecond;
-        const endPx = startPx + durationPx;
+        const startY = midiNumToNoteStart(note.note, whiteNoteWidth, blackNoteWidth);
+        const isWhiteNote = midiNumToIsWhiteNote(note.note);
+        const noteWidth = isWhiteNote ? whiteNoteWidth:blackNoteWidth;
 
         const noteRect = orientation === EOrientation.HORIZONTAL
-          ? { x: startPx, y: timelineHeight - note.note * 10, width: durationPx, height: 10 } // Adjust based on your note height logic
-          : { x: note.note * 10, y: startPx, width: 10, height: durationPx }; // Adjust based on your note width logic
+          ? { x: startY, y: timelineHeight - startPx - durationPx, width: noteWidth, height: durationPx } 
+          : { x: startPx, y: startY, width: durationPx, height: noteWidth }; 
 
         if (rectIntersect(selectionRect, noteRect)) {
-          newSelectedNotes.add(note.note);
+          selectNote(note.note, note.start);
         }
       });
     });
 
-    setSelectedNotes(newSelectedNotes);
   };
 
   const rectIntersect = (rect1: any, rect2: any) => {
@@ -76,9 +93,9 @@ export const useTimelineSelect = () => {
   return {
     selectionStart,
     selectionEnd,
-    selectedNotes,
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
+    handleClickSelect,
   };
 };

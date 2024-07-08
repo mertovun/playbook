@@ -7,6 +7,7 @@ export type MidiNote = {
   velocity: number;
   start: number;
   end?: number;
+  selected?: boolean;
 }
 
 export type RecordedNotes = { [key: number]: MidiNote }[];
@@ -27,6 +28,8 @@ interface MidiStore {
   undo: () => void;
   redo: () => void;
   updateRecordedNotes: (newRecordedNotes: RecordedNotes) => void;
+  selectNote: (midiNum: number, key: number) => void;
+  deselectAll: () => void;
 }
 
 export const useMidiStore = create<MidiStore>((set, get) => ({
@@ -44,7 +47,8 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
           note: note.note,
           velocity: note.velocity,
           start: newStart,
-          end: newEnd
+          end: newEnd,
+          selected: note.selected,
         };
       }
     }
@@ -71,7 +75,7 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
   },
   noteOff: (note, endTime) => {
     const { activeNotes } = get();
-    const recordedNote: MidiNote = { ...(activeNotes[note] as MidiNote), end: endTime };
+    const recordedNote: MidiNote = { ...(activeNotes[note] as MidiNote), end: endTime, selected: false };
     activeNotes[note] = undefined;
     set({ activeNotes });
     return recordedNote;
@@ -103,5 +107,21 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
       pastRecordedNotes: [...pastRecordedNotes, JSON.parse(JSON.stringify(recordedNotes))], 
       futureRecordedNotes: [] 
     });
+  },
+  selectNote: (midiNum, key) => {
+    const { recordedNotes } = get();
+    if (recordedNotes[midiNum] && recordedNotes[midiNum][key]) {
+      recordedNotes[midiNum][key].selected = true;
+      set({ recordedNotes });
+    }
+  },
+  deselectAll: () => {
+    const { recordedNotes } = get();
+    for (let i = 0; i < 128; i++) {
+      for (let note of Object.values(recordedNotes[i])) {
+        note.selected = false;
+      }
+    }
+    set({ recordedNotes });
   },
 }));

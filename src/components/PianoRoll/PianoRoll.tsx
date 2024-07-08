@@ -3,13 +3,15 @@ import { Keyboard } from './Keyboard/Keyboard';
 import './PianoRoll.scss';
 import { TimelineGrid } from './TimelineGrid/TimelineGrid';
 import { TimelineBackground } from './Timeline/TimelineBackground';
-import usePianoRollLayoutStore from '../../stores/usePianoRollLayoutStore';
+import { usePianoRollLayoutStore } from '../../stores/usePianoRollLayoutStore';
 import { usePianoRollHandlers } from '../../hooks/usePianoRollHandlers';
 import { usePianoRollUpdate } from '../../hooks/usePianoRollUpdate';
 import { useMidi } from '../../hooks/useMidi';
 import { ControlBar } from './ControlBar/ControlBar';
 import { useMetronome } from '../../hooks/useMetronome';
 import { useTimelineClick } from '../../hooks/useTimelineClick';
+import { useTimelineSelect } from '../../hooks/useTimelineSelect';
+import { SelectionRectangle } from './Timeline/SelectionRectangle';
 
 export const PianoRoll = () => {
   const { 
@@ -29,9 +31,8 @@ export const PianoRoll = () => {
   } = usePianoRollHandlers();
 
   const { handleTimelineClick } = useTimelineClick();
-
+  const { selectionStart, selectionEnd, handleMouseDown, handleMouseMove, handleMouseUp, handleClickSelect } = useTimelineSelect();
   usePianoRollUpdate();
-
   useMetronome();
   useMidi();
 
@@ -42,7 +43,7 @@ export const PianoRoll = () => {
     <div className='pianoroll'>
       <div>
         <ControlBar />
-        <div >
+        <div>
           <svg className={`pianoroll-svg ${orientation}`} width={width} height={height}>
             <Keyboard />
             <svg
@@ -50,19 +51,24 @@ export const PianoRoll = () => {
               y={timelineY}
               width={timelineWidth}
               height={timelineHeight}
-              onClick={handleTimelineClick}
+              onClick={(e:any)=>{
+                handleTimelineClick(e);
+                handleClickSelect(e);
+              }}
               ref={timelineSvgRef}
-              onDrop={handleDrop} onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
             >
-              <TimelineBackground />
+              <TimelineBackground width={timelineWidth} height={timelineHeight} />
               <TimelineGrid timelineWidth={timelineWidth} timelineHeight={timelineHeight} />
+              <SelectionRectangle selectionStart={selectionStart} selectionEnd={selectionEnd} />
             </svg>
           </svg>
         </div>
       </div>
-      
     </div>
   );
 };
-
-export default PianoRoll;

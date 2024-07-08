@@ -22,13 +22,15 @@ export const MidiNote: React.FC<MidiNoteProps> = React.memo(({ note, level, x, y
 
   const noteDefaultColor = '#eb9';
   const noteDefaultStrokeColor = '#643';
+  const noteSelectedColor = '#9be';
+  const noteSelectedStrokeColor = '#346';
 
   useMidiNotePlayback(midiNum);
   const notes = useMidiNote(midiNum);
 
   return (
     <svg x={x} y={y}>
-      {notes().map(({ startPx, durationPx, key }) => {
+      {notes().map(({ startPx, durationPx, key, selected }) => {
       const noteX = orientation === EOrientation.HORIZONTAL ? 0 : startPx;
       const noteY = orientation === EOrientation.HORIZONTAL ? timelineHeight - startPx - durationPx : 0;
       const noteWidth = orientation === EOrientation.HORIZONTAL ? width : durationPx;
@@ -40,8 +42,8 @@ export const MidiNote: React.FC<MidiNoteProps> = React.memo(({ note, level, x, y
           y={noteY}
           width={noteWidth}
           height={noteHeight}
-          fill={noteDefaultColor}
-          stroke={noteDefaultStrokeColor}
+          fill={selected ? noteSelectedColor : noteDefaultColor}
+          stroke={selected ? noteSelectedStrokeColor : noteDefaultStrokeColor}
           strokeWidth={1.2}
           rx={5}
           ry={5}

@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
 import { useTimelineGridStore } from '../stores/useTimelineGridStore';
-import usePianoRollLayoutStore from '../stores/usePianoRollLayoutStore';
-import { useMidiStore } from '../stores/useMidiStore';
+import { usePianoRollLayoutStore } from '../stores/usePianoRollLayoutStore';
+import { MidiNote, useMidiStore } from '../stores/useMidiStore';
 
-const calculateNotePosition = (note: any, windowStartTime: number, pixelsPerSecond: number) => {
+const calculateNotePosition = (note: MidiNote, windowStartTime: number, pixelsPerSecond: number) => {
   const startPx = (note.start - windowStartTime) * pixelsPerSecond;
   const durationPx = (note.end! - note.start) * pixelsPerSecond;
-  return { startPx, durationPx, key: note.start };
+  return { startPx, durationPx, key: note.start, selected: note.selected || false };
 };
 
 export const useMidiNote = (midiNum: number) => {

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTimelineGridStore } from '../stores/useTimelineGridStore';
 import { useControlBarStore } from '../stores/useControlBarStore';
-import usePianoRollLayoutStore from '../stores/usePianoRollLayoutStore';
+import { usePianoRollLayoutStore } from '../stores/usePianoRollLayoutStore';
 import { EOrientation } from '../components/PianoRoll/interface';
 import { TEMPO_MULTIPLIER } from '../utils/time';
 

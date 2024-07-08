@@ -9,11 +9,6 @@ const EditModeControl: React.FC = () => {
   const { deselectAll } = useMidiStore();
   const { editMode, setEditMode } = useControlBarStore();
   const { gridTick, setGridTick } = useTimelineGridStore();
-
-  const handleCursor = useCallback(() => {
-    deselectAll();
-    setEditMode(EditMode.CURSOR)
-  }, [deselectAll, setEditMode]);
   
   const handleSelect = useCallback(() => {
     deselectAll();
@@ -42,12 +37,6 @@ const EditModeControl: React.FC = () => {
           ))}
         </select>
       </label>
-      <button 
-        onClick={handleCursor} 
-        className={editMode === EditMode.CURSOR ? 'selected':''}
-        >
-        <PiCursor />
-      </button>
       <button 
         onClick={handleSelect} 
         className={editMode === EditMode.SELECT ? 'selected':''}

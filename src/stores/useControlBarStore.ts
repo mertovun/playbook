@@ -1,7 +1,6 @@
 import { create } from "zustand";
 
 export enum EditMode {
-  CURSOR,
   SELECT,
   PENCIL,
 }
@@ -30,7 +29,7 @@ export const useControlBarStore = create<ControlBarStore>((set) =>({
   isMuted: false,
   setVolume: (volume) => set({volume}),
   setIsMuted: (isMuted) => set({isMuted}),
-  editMode: EditMode.CURSOR,
+  editMode: EditMode.SELECT,
   setEditMode: (editMode) => set({editMode}),
   bookmarkSidebar: false,
   setBookmarkSidebar: (bookmarkSidebar) => set({bookmarkSidebar}),

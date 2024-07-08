@@ -6,17 +6,22 @@ import { usePianoRollLayoutStore } from '../stores/usePianoRollLayoutStore';
 import { EOrientation, LayoutConfig } from '../components/PianoRoll/interface';
 import { midiNumToIsWhiteNote, midiNumToNoteStart } from '../utils/note';
 import { EditMode, useControlBarStore } from '../stores/useControlBarStore';
+import { measureBeatTickToTime, timeToMeasureBeatTick } from '../utils/time';
 
 export const useTimelineSelect = () => {
   const [selectionStart, setSelectionStart] = useState<{ x: number, y: number } | null>(null);
   const [selectionEnd, setSelectionEnd] = useState<{ x: number, y: number } | null>(null);
 
   const { editMode } = useControlBarStore();
-  const { recordedNotes, selectNote, deselectAll } = useMidiStore();
-  const { windowStartTime, pixelsPerSecond } = useTimelineGridStore();
+  const { recordedNotes, selectNote, deselectAll, tempo, timeSignature } = useMidiStore();
+  const { 
+    windowStartTime, 
+    pixelsPerSecond,
+    setCursorStartTime,
+    setCurrentTime,
+    gridTick
+  } = useTimelineGridStore();
   const { orientation, timelineHeight, layoutConfig } = usePianoRollLayoutStore();
-  
-
 
   const handleMouseDown = useCallback((e: any) => {
     if (editMode === EditMode.SELECT) {
@@ -45,15 +50,31 @@ export const useTimelineSelect = () => {
   }, [selectionStart, selectionEnd, editMode, layoutConfig]);
 
   const handleClickSelect = useCallback((e: any) => {
+    let intersected: boolean = false;
     if (editMode === EditMode.SELECT && !selectionEnd) {
       const rect = e.target.getBoundingClientRect();
-      handleNoteSelection({ x: e.clientX - rect.left, y: e.clientY - rect.top }, { x: e.clientX - rect.left, y: e.clientY - rect.top }, layoutConfig);
+      intersected = handleNoteSelection({ x: e.clientX - rect.left, y: e.clientY - rect.top }, { x: e.clientX - rect.left, y: e.clientY - rect.top }, layoutConfig);
       setSelectionStart(null);
       setSelectionEnd(null);
     }
+    console.log(intersected);
+    if (!intersected) {
+      const rect = e.target.getBoundingClientRect();
+      const position = orientation === EOrientation.HORIZONTAL ? rect.bottom - e.clientY : e.clientX - rect.left;
+      let newStartTime = position / pixelsPerSecond + windowStartTime;
+      let [measure, beat, tick] = timeToMeasureBeatTick(newStartTime, tempo, timeSignature, gridTick);
+      tick = Math.floor(tick);
+      newStartTime = measureBeatTickToTime(measure, beat, tick, tempo, timeSignature, gridTick);
+      setCursorStartTime(newStartTime);
+      setCurrentTime(newStartTime); 
+    }
   }, [selectionStart, selectionEnd, editMode, layoutConfig]);
 
-  const handleNoteSelection = (start: { x: number, y: number }, end: { x: number, y: number }, layoutConfig: LayoutConfig) => {
+  const handleNoteSelection = (
+    start: { x: number, y: number }, 
+    end: { x: number, y: number }, 
+    layoutConfig: LayoutConfig
+  ) => {
     const { whiteNoteWidth, blackNoteWidth } = layoutConfig;
     const selectionRect = {
       x: Math.min(start.x, end.x),
@@ -61,6 +82,8 @@ export const useTimelineSelect = () => {
       width: Math.abs(end.x - start.x),
       height: Math.abs(end.y - start.y),
     };
+
+    let intersected = false;
     
     Object.values(recordedNotes).forEach((notes: { [key: number]: MidiNote }) => {
       Object.values(notes).forEach((note: MidiNote) => {
@@ -76,10 +99,11 @@ export const useTimelineSelect = () => {
 
         if (rectIntersect(selectionRect, noteRect)) {
           selectNote(note.note, note.start);
+          intersected = true;
         }
       });
     });
-
+    return intersected;
   };
 
   const rectIntersect = (rect1: any, rect2: any) => {

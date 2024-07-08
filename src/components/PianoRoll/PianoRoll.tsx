@@ -9,7 +9,6 @@ import { usePianoRollUpdate } from '../../hooks/usePianoRollUpdate';
 import { useMidi } from '../../hooks/useMidi';
 import { ControlBar } from './ControlBar/ControlBar';
 import { useMetronome } from '../../hooks/useMetronome';
-import { useTimelineClick } from '../../hooks/useTimelineClick';
 import { useTimelineSelect } from '../../hooks/useTimelineSelect';
 import { SelectionRectangle } from './Timeline/SelectionRectangle';
 
@@ -29,8 +28,6 @@ export const PianoRoll = () => {
     handleDrop,
     handleDragOver
   } = usePianoRollHandlers();
-
-  const { handleTimelineClick } = useTimelineClick();
   const { selectionStart, selectionEnd, handleMouseDown, handleMouseMove, handleMouseUp, handleClickSelect } = useTimelineSelect();
   usePianoRollUpdate();
   useMetronome();
@@ -51,10 +48,7 @@ export const PianoRoll = () => {
               y={timelineY}
               width={timelineWidth}
               height={timelineHeight}
-              onClick={(e:any)=>{
-                handleTimelineClick(e);
-                handleClickSelect(e);
-              }}
+              onClick={handleClickSelect}
               ref={timelineSvgRef}
               onDrop={handleDrop}
               onDragOver={handleDragOver}

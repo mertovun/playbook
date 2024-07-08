@@ -46,7 +46,7 @@ interface PianoRollLayoutState {
   mapRangeToOctaves: () => { range: [ENote, ENote], level: EOctave, xOffset: number }[];
 }
 
-const usePianoRollLayoutStore = create<PianoRollLayoutState>((set, get) => ({
+export const usePianoRollLayoutStore = create<PianoRollLayoutState>((set, get) => ({
   orientation: EOrientation.HORIZONTAL,
   layoutConfig: horizontalLayout,
   pianoRollWidth: 52 * horizontalLayout.whiteNoteWidth,
@@ -178,5 +178,3 @@ const usePianoRollLayoutStore = create<PianoRollLayoutState>((set, get) => ({
     return octaves;
   }
 }));
-
-export default usePianoRollLayoutStore;

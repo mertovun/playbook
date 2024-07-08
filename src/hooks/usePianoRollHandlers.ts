@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { MAX_ZOOM_IN, MAX_ZOOM_OUT, useTimelineGridStore } from '../stores/useTimelineGridStore';
-import usePianoRollLayoutStore from '../stores/usePianoRollLayoutStore';
-import { useMidiStore } from '../stores/useMidiStore';
+import { usePianoRollLayoutStore } from '../stores/usePianoRollLayoutStore';
 import { EOrientation } from '../components/PianoRoll/interface';
 import { useControlBarStore } from '../stores/useControlBarStore';
 import { parseMidiFile } from '../utils/midi';
-import { measureBeatTickToTime, timeToMeasureBeatTick } from '../utils/time';
 
 export const usePianoRollHandlers = () => {
   const { 

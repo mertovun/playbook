@@ -24,6 +24,7 @@ export const useTimelineSelect = () => {
   const { orientation, timelineHeight, layoutConfig } = usePianoRollLayoutStore();
 
   const handleMouseDown = useCallback((e: any) => {
+    if (e.button !== 0) return;
     if (editMode === EditMode.SELECT) {
       const rect = e.target.getBoundingClientRect();
       setSelectionStart({ x: e.clientX - rect.left, y: e.clientY - rect.top });
@@ -32,6 +33,7 @@ export const useTimelineSelect = () => {
   }, [editMode]);
 
   const handleMouseMove = useCallback((e: any) => {
+    if (e.button !== 0) return;
     if (editMode === EditMode.SELECT && selectionStart) {
       const rect = e.target.getBoundingClientRect();
       setSelectionEnd({ x: e.clientX - rect.left, y: e.clientY - rect.top });
@@ -39,6 +41,7 @@ export const useTimelineSelect = () => {
   }, [selectionStart, editMode]);
 
   const handleMouseUp = useCallback((e: any) => {
+    if (e.button !== 0) return;
     if (editMode === EditMode.SELECT) {
       if (!e.ctrlKey) deselectAll();
       if (selectionStart && selectionEnd) {
@@ -50,6 +53,7 @@ export const useTimelineSelect = () => {
   }, [selectionStart, selectionEnd, editMode, layoutConfig]);
 
   const handleClickSelect = useCallback((e: any) => {
+    if (e.button !== 0) return;
     let intersected: boolean = false;
     if (editMode === EditMode.SELECT && !selectionEnd) {
       const rect = e.target.getBoundingClientRect();

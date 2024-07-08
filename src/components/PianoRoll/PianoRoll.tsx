@@ -9,6 +9,7 @@ import { usePianoRollUpdate } from '../../hooks/usePianoRollUpdate';
 import { useMidi } from '../../hooks/useMidi';
 import { ControlBar } from './ControlBar/ControlBar';
 import { useMetronome } from '../../hooks/useMetronome';
+import { useTimelineClick } from '../../hooks/useTimelineClick';
 
 export const PianoRoll = () => {
   const { 
@@ -23,10 +24,11 @@ export const PianoRoll = () => {
 
   const { 
     timelineSvgRef, 
-    handleTimelineClick,
     handleDrop,
     handleDragOver
   } = usePianoRollHandlers();
+
+  const { handleTimelineClick } = useTimelineClick();
 
   usePianoRollUpdate();
 

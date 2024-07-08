@@ -1,6 +1,5 @@
-// src/hooks/useGridlines.ts
 import { useTimelineGridStore } from '../stores/useTimelineGridStore';
-import usePianoRollLayoutStore from '../stores/usePianoRollLayoutStore';
+import { usePianoRollLayoutStore } from '../stores/usePianoRollLayoutStore';
 import { useMidiStore } from '../stores/useMidiStore';
 import { EOrientation } from '../components/PianoRoll/interface';
 

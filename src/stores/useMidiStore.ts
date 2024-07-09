@@ -23,19 +23,23 @@ interface MidiStore {
   recordNote: (note: MidiNote) => void;
   noteOn: (note: number, velocity: number, startTime: number) => void;
   noteOff: (note: number, endTime: number) => MidiNote;
-  pastRecordedNotes: RecordedNotes[];
-  futureRecordedNotes: RecordedNotes[];
+  pastRecordedStates: { tempo: number; recordedNotes: RecordedNotes }[];
+  futureRecordedStates: { tempo: number; recordedNotes: RecordedNotes }[];
   undo: () => void;
   redo: () => void;
   updateRecordedNotes: (newRecordedNotes: RecordedNotes) => void;
   selectNote: (midiNum: number, key: number) => void;
   deselectAll: () => void;
+  countSelected: () => void;
+  deleteSelected: () => void;
+  clipboardNotes: RecordedNotes;
+  copySelectedToClipboard: () => void;
 }
 
 export const useMidiStore = create<MidiStore>((set, get) => ({
   tempo: 120,
   setTempo: (newTempo) => {
-    const { currentTime, setCurrentTime, cursorStartTime, setCursorStartTime } = useTimelineGridStore.getState();
+    const { currentTime, setCurrentTime, cursorStartTime, setCursorStartTime, updateRecordedNotes } = useTimelineGridStore.getState();
     const { tempo, recordedNotes } = get();
     const newRecordedNotes: RecordedNotes = Array(128).fill(null).map(() => ({}));
     const change = tempo / newTempo;
@@ -54,7 +58,8 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
     }
     setCurrentTime(change * currentTime);
     setCursorStartTime(change * cursorStartTime);
-    set({ tempo: newTempo, recordedNotes: newRecordedNotes });
+    set({ tempo: newTempo });
+    updateRecordedNotes(newRecordedNotes);
   },
   timeSignature: [4, 4],
   setTimeSignature: (timeSignature) => set({ timeSignature }),
@@ -101,17 +106,17 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
     });
   },
   updateRecordedNotes: (newRecordedNotes) => {
-    const { recordedNotes, pastRecordedNotes } = get();
+    const { recordedNotes, tempo, pastRecordedStates } = get();
     set({ 
       recordedNotes: newRecordedNotes, 
-      pastRecordedNotes: [...pastRecordedNotes, JSON.parse(JSON.stringify(recordedNotes))], 
-      futureRecordedNotes: [] 
+      pastRecordedStates: [...pastRecordedStates, { tempo, recordedNotes }], 
+      futureRecordedStates: [] 
     });
   },
   selectNote: (midiNum, key) => {
     const { recordedNotes } = get();
     if (recordedNotes[midiNum] && recordedNotes[midiNum][key]) {
-      recordedNotes[midiNum][key].selected = true;
+      recordedNotes[midiNum][key].selected = !recordedNotes[midiNum][key].selected;
       set({ recordedNotes });
     }
   },
@@ -123,5 +128,55 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
       }
     }
     set({ recordedNotes });
+  },
+  countSelected: () => {
+    const { recordedNotes } = get();
+    let count = 0;
+    for (let i = 0; i < 128; i++) {
+      for (let note of Object.values(recordedNotes[i])) {
+        if (note.selected) {
+          count++;
+        }
+      }
+    }
+    return count;
+  },
+  deleteSelected: () => {
+    const { recordedNotes } = get();
+    const newRecordedNotes: RecordedNotes = Array(128).fill(null).map(() => ({}));
+    for (let i = 0; i < 128; i++) {
+      for (let [key, note] of Object.entries(recordedNotes[i])) {
+        if (!note.selected) {
+          // @ts-ignore
+          newRecordedNotes[i][key] = note;
+        }
+      }
+    }
+    set({ recordedNotes: newRecordedNotes });
+  },
+  clipboardNotes: [],
+  copySelectedToClipboard: () => {
+    const { recordedNotes } = get();
+    let clipboardNotes: RecordedNotes = Array(128).fill(null).map(() => ({}));
+    let minStart = Infinity;
+    for (let i = 0; i < 128; i++) {
+      for (let note of Object.values(recordedNotes[i])) {
+        if (note.selected) {
+          minStart = Math.min(minStart, note.start);
+        }
+      }
+    }
+    for (let i = 0; i < 128; i++) {
+      for (let note of Object.values(recordedNotes[i])) {
+        if (note.selected) {
+          clipboardNotes[i][note.start - minStart] = {
+            ...note,
+            start: note.start - minStart,
+            end: note.end! - minStart,
+          };
+        }
+      }
+    }
+    set({ clipboardNotes });
   },
 }));

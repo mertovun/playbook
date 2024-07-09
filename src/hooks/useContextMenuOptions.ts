@@ -1,7 +1,7 @@
 export enum ContextMenuOptions {
-  OPTION_1 = 'Option 1',
-  OPTION_2 = 'Option 2',
-  OPTION_3 = 'Option 3',
+  OPTION_1 = 'Cut',
+  OPTION_2 = 'Copy',
+  OPTION_3 = 'Paste',
 }
 
 export const useContextMenuOptions = () => {

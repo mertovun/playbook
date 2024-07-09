@@ -52,6 +52,16 @@ export const useTimelineSelect = () => {
     }
   }, [selectionStart, selectionEnd, editMode, layoutConfig]);
 
+  const handleMouseLeave = useCallback((e: any) => {
+    if (editMode === EditMode.SELECT) {
+      if (selectionStart && selectionEnd) {
+        handleNoteSelection(selectionStart, selectionEnd, layoutConfig);
+      }
+      setSelectionStart(null);
+      setSelectionEnd(null);
+    }
+  }, [selectionStart, selectionEnd, editMode, layoutConfig]);
+
   const handleClickSelect = useCallback((e: any) => {
     if (e.button !== 0) return;
     let intersected: boolean = false;
@@ -61,7 +71,6 @@ export const useTimelineSelect = () => {
       setSelectionStart(null);
       setSelectionEnd(null);
     }
-    console.log(intersected);
     if (!intersected) {
       const rect = e.target.getBoundingClientRect();
       const position = orientation === EOrientation.HORIZONTAL ? rect.bottom - e.clientY : e.clientX - rect.left;
@@ -125,6 +134,7 @@ export const useTimelineSelect = () => {
     handleMouseDown,
     handleMouseMove,
     handleMouseUp,
+    handleMouseLeave,
     handleClickSelect,
   };
 };

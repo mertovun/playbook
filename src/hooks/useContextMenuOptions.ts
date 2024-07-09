@@ -1,26 +1,40 @@
+import { useSelection } from "./useSelection";
+
 export enum ContextMenuOptions {
-  OPTION_1 = 'Cut',
-  OPTION_2 = 'Copy',
-  OPTION_3 = 'Paste',
+  CUT = 'Cut',
+  COPY = 'Copy',
+  PASTE = 'Paste',
+  DELETE = 'Delete',
 }
 
 export const useContextMenuOptions = () => {
   const options = [
-    ContextMenuOptions.OPTION_1,
-    ContextMenuOptions.OPTION_2,
-    ContextMenuOptions.OPTION_3,
+    ContextMenuOptions.CUT,
+    ContextMenuOptions.COPY,
+    ContextMenuOptions.PASTE,
+    ContextMenuOptions.DELETE,
   ];
+
+  const {
+    handleCut,
+    handleCopy,
+    handlePaste,
+    handleDelete
+  } = useSelection();
 
   const handleOptionClick = (option: ContextMenuOptions) => {
     switch (option) {
-      case ContextMenuOptions.OPTION_1:
-        alert('Option 1 clicked!');
+      case ContextMenuOptions.CUT:
+        handleCut();
         break;
-      case ContextMenuOptions.OPTION_2:
-        alert('Option 2 clicked!');
+      case ContextMenuOptions.COPY:
+        handleCopy();
         break;
-      case ContextMenuOptions.OPTION_3:
-        alert('Option 3 clicked!');
+      case ContextMenuOptions.PASTE:
+        handlePaste();
+        break;
+      case ContextMenuOptions.DELETE:
+        handleDelete();
         break;
       default:
         break;

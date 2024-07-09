@@ -31,6 +31,7 @@ interface MidiStore {
   selectNote: (midiNum: number, key: number) => void;
   deselectAll: () => void;
   countSelected: () => number;
+  countClipboard: () => number;
   deleteSelected: () => void;
   clipboardNotes: RecordedNotes;
   copySelectedToClipboard: () => void;
@@ -128,6 +129,7 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
     }
   },
   deselectAll: () => {
+    console.log("deselectAll")
     const { recordedNotes } = get();
     for (let i = 0; i < 128; i++) {
       for (let note of Object.values(recordedNotes[i])) {
@@ -148,6 +150,16 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
     }
     return count;
   },
+  countClipboard: () => {
+    const { clipboardNotes } = get();
+    let count = 0;
+    for (let i = 0; i < 128; i++) {
+      for (let note of Object.values(clipboardNotes[i])) {
+        count++;
+      }
+    }
+    return count;
+  },
   deleteSelected: () => {
     const { recordedNotes, updateRecordedNotes } = get();
     const newRecordedNotes: RecordedNotes = Array(128).fill(null).map(() => ({}));
@@ -161,7 +173,7 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
     }
     updateRecordedNotes(newRecordedNotes);
   },
-  clipboardNotes: [],
+  clipboardNotes: Array(128).fill(null).map(() => ({})),
   copySelectedToClipboard: () => {
     const { recordedNotes } = get();
     let clipboardNotes: RecordedNotes = Array(128).fill(null).map(() => ({}));

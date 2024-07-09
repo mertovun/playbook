@@ -30,7 +30,7 @@ export const PianoRoll = () => {
     handleDrop,
     handleDragOver
   } = usePianoRollHandlers();
-  const { selectionStart, selectionEnd, handleMouseDown, handleMouseMove, handleMouseUp, handleClickSelect } = useTimelineSelect();
+  const { selectionStart, selectionEnd, handleMouseDown, handleMouseMove, handleMouseUp, handleMouseLeave, handleClickSelect } = useTimelineSelect();
   usePianoRollUpdate();
   useMetronome();
   useMidi();
@@ -65,7 +65,7 @@ export const PianoRoll = () => {
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
-              onMouseLeave={handleMouseUp}
+              onMouseLeave={handleMouseLeave}
               onContextMenu={handleRightClick}
             >
               <TimelineBackground width={timelineWidth} height={timelineHeight} />

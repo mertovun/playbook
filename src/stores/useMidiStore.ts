@@ -23,14 +23,14 @@ interface MidiStore {
   recordNote: (note: MidiNote) => void;
   noteOn: (note: number, velocity: number, startTime: number) => void;
   noteOff: (note: number, endTime: number) => MidiNote;
-  pastRecordedNotes: RecordedNotes[];
-  futureRecordedNotes: RecordedNotes[];
+  pastRecordedNotes: { recordedNotes: RecordedNotes, tempo: number }[];
+  futureRecordedNotes: { recordedNotes: RecordedNotes, tempo: number }[];
   undo: () => void;
   redo: () => void;
   updateRecordedNotes: (newRecordedNotes: RecordedNotes) => void;
   selectNote: (midiNum: number, key: number) => void;
   deselectAll: () => void;
-  countSelected: () => void;
+  countSelected: () => number;
   deleteSelected: () => void;
   clipboardNotes: RecordedNotes;
   copySelectedToClipboard: () => void;
@@ -40,7 +40,7 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
   tempo: 120,
   setTempo: (newTempo) => {
     const { currentTime, setCurrentTime, cursorStartTime, setCursorStartTime } = useTimelineGridStore.getState();
-    const { tempo, recordedNotes } = get();
+    const { tempo, recordedNotes, pastRecordedNotes } = get();
     const newRecordedNotes: RecordedNotes = Array(128).fill(null).map(() => ({}));
     const change = tempo / newTempo;
     for (let i = 0; i < 128; i++) {
@@ -58,7 +58,12 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
     }
     setCurrentTime(change * currentTime);
     setCursorStartTime(change * cursorStartTime);
-    set({ tempo: newTempo, recordedNotes: newRecordedNotes });
+    set({
+      tempo: newTempo,
+      recordedNotes: newRecordedNotes,
+      pastRecordedNotes: [...pastRecordedNotes, { recordedNotes: JSON.parse(JSON.stringify(recordedNotes)), tempo }],
+      futureRecordedNotes: [],
+    });
   },
   timeSignature: [4, 4],
   setTimeSignature: (timeSignature) => set({ timeSignature }),
@@ -85,30 +90,32 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
     return recordedNote;
   },
   undo: () => {
-    const { pastRecordedNotes, recordedNotes, futureRecordedNotes } = get();
+    const { pastRecordedNotes, recordedNotes, tempo, futureRecordedNotes } = get();
     if (pastRecordedNotes.length === 0) return;
-    const previousRecordedNotes = pastRecordedNotes[pastRecordedNotes.length - 1];
+    const previousState = pastRecordedNotes[pastRecordedNotes.length - 1];
     set({
-      recordedNotes: previousRecordedNotes,
+      recordedNotes: previousState.recordedNotes,
+      tempo: previousState.tempo,
       pastRecordedNotes: pastRecordedNotes.slice(0, pastRecordedNotes.length - 1),
-      futureRecordedNotes: [JSON.parse(JSON.stringify(recordedNotes)), ...futureRecordedNotes],
+      futureRecordedNotes: [{ recordedNotes: JSON.parse(JSON.stringify(recordedNotes)), tempo }, ...futureRecordedNotes],
     });
   },
   redo: () => {
-    const { pastRecordedNotes, recordedNotes, futureRecordedNotes } = get();
+    const { pastRecordedNotes, recordedNotes, tempo, futureRecordedNotes } = get();
     if (futureRecordedNotes.length === 0) return;
-    const nextRecordedNotes = futureRecordedNotes[0];
+    const nextState = futureRecordedNotes[0];
     set({
-      recordedNotes: nextRecordedNotes,
-      pastRecordedNotes: [...pastRecordedNotes, JSON.parse(JSON.stringify(recordedNotes))],
+      recordedNotes: nextState.recordedNotes,
+      tempo: nextState.tempo,
+      pastRecordedNotes: [...pastRecordedNotes, { recordedNotes: JSON.parse(JSON.stringify(recordedNotes)), tempo }],
       futureRecordedNotes: futureRecordedNotes.slice(1),
     });
   },
   updateRecordedNotes: (newRecordedNotes) => {
-    const { recordedNotes, pastRecordedNotes } = get();
+    const { recordedNotes, pastRecordedNotes, tempo } = get();
     set({ 
       recordedNotes: newRecordedNotes, 
-      pastRecordedNotes: [...pastRecordedNotes, JSON.parse(JSON.stringify(recordedNotes))], 
+      pastRecordedNotes: [...pastRecordedNotes, { recordedNotes: JSON.parse(JSON.stringify(recordedNotes)), tempo }], 
       futureRecordedNotes: [] 
     });
   },
@@ -141,7 +148,7 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
     return count;
   },
   deleteSelected: () => {
-    const { recordedNotes } = get();
+    const { recordedNotes, updateRecordedNotes } = get();
     const newRecordedNotes: RecordedNotes = Array(128).fill(null).map(() => ({}));
     for (let i = 0; i < 128; i++) {
       for (let [key, note] of Object.entries(recordedNotes[i])) {
@@ -151,7 +158,7 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
         }
       }
     }
-    set({ recordedNotes: newRecordedNotes });
+    updateRecordedNotes(newRecordedNotes);
   },
   clipboardNotes: [],
   copySelectedToClipboard: () => {

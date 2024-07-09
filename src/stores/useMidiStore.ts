@@ -34,6 +34,7 @@ interface MidiStore {
   deleteSelected: () => void;
   clipboardNotes: RecordedNotes;
   copySelectedToClipboard: () => void;
+  pasteClipboardToRecordedNotes: (start:number) => void;
 }
 
 export const useMidiStore = create<MidiStore>((set, get) => ({
@@ -184,5 +185,21 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
       }
     }
     set({ clipboardNotes });
+  },
+  pasteClipboardToRecordedNotes: (start: number) => {
+    const { clipboardNotes, recordedNotes, updateRecordedNotes } = get();
+    const newRecordedNotes: RecordedNotes = JSON.parse(JSON.stringify(recordedNotes));
+    for (let i = 0; i < 128; i++) {
+      for (let note of Object.values(clipboardNotes[i])) {
+        const newStart = note.start + start;
+        const newEnd = note.end! + start;
+        newRecordedNotes[i][newStart] = {
+          ...note,
+          start: newStart,
+          end: newEnd,
+        };
+      }
+    }
+    updateRecordedNotes(newRecordedNotes);
   },
 }));

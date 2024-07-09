@@ -23,8 +23,8 @@ interface MidiStore {
   recordNote: (note: MidiNote) => void;
   noteOn: (note: number, velocity: number, startTime: number) => void;
   noteOff: (note: number, endTime: number) => MidiNote;
-  pastRecordedStates: { tempo: number; recordedNotes: RecordedNotes }[];
-  futureRecordedStates: { tempo: number; recordedNotes: RecordedNotes }[];
+  pastRecordedNotes: RecordedNotes[];
+  futureRecordedNotes: RecordedNotes[];
   undo: () => void;
   redo: () => void;
   updateRecordedNotes: (newRecordedNotes: RecordedNotes) => void;
@@ -39,7 +39,7 @@ interface MidiStore {
 export const useMidiStore = create<MidiStore>((set, get) => ({
   tempo: 120,
   setTempo: (newTempo) => {
-    const { currentTime, setCurrentTime, cursorStartTime, setCursorStartTime, updateRecordedNotes } = useTimelineGridStore.getState();
+    const { currentTime, setCurrentTime, cursorStartTime, setCursorStartTime } = useTimelineGridStore.getState();
     const { tempo, recordedNotes } = get();
     const newRecordedNotes: RecordedNotes = Array(128).fill(null).map(() => ({}));
     const change = tempo / newTempo;
@@ -58,8 +58,7 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
     }
     setCurrentTime(change * currentTime);
     setCursorStartTime(change * cursorStartTime);
-    set({ tempo: newTempo });
-    updateRecordedNotes(newRecordedNotes);
+    set({ tempo: newTempo, recordedNotes: newRecordedNotes });
   },
   timeSignature: [4, 4],
   setTimeSignature: (timeSignature) => set({ timeSignature }),
@@ -106,11 +105,11 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
     });
   },
   updateRecordedNotes: (newRecordedNotes) => {
-    const { recordedNotes, tempo, pastRecordedStates } = get();
+    const { recordedNotes, pastRecordedNotes } = get();
     set({ 
       recordedNotes: newRecordedNotes, 
-      pastRecordedStates: [...pastRecordedStates, { tempo, recordedNotes }], 
-      futureRecordedStates: [] 
+      pastRecordedNotes: [...pastRecordedNotes, JSON.parse(JSON.stringify(recordedNotes))], 
+      futureRecordedNotes: [] 
     });
   },
   selectNote: (midiNum, key) => {

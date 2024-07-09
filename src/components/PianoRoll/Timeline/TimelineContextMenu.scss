@@ -1,0 +1,17 @@
+
+.context-menu {
+  position: absolute;
+  background: #1a1a1a;
+  border: 1px solid #222;
+  z-index: 1000;
+}
+
+.context-menu-option {
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.context-menu-option:hover {
+  background-color: #333;
+}

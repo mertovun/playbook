@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { PiCursor, PiSelectionPlusBold, PiPencilSimpleLineBold } from "react-icons/pi";
+import { PiSelectionPlusBold, PiPencilSimpleLineBold } from "react-icons/pi";
 import { EditMode, useControlBarStore } from '../../../stores/useControlBarStore';
 import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
 import { useMidiStore } from '../../../stores/useMidiStore';

@@ -11,6 +11,8 @@ import { ControlBar } from './ControlBar/ControlBar';
 import { useMetronome } from '../../hooks/useMetronome';
 import { useTimelineSelect } from '../../hooks/useTimelineSelect';
 import { SelectionRectangle } from './Timeline/SelectionRectangle';
+import { useTimelineRightClick } from '../../hooks/useTimelineRightClick';
+import { TimelineContextMenu } from './Timeline/TimelineContextMenu';
 
 export const PianoRoll = () => {
   const { 
@@ -36,12 +38,20 @@ export const PianoRoll = () => {
   const height = orientation === EOrientation.HORIZONTAL ? pianoRollLength : pianoRollWidth;
   const width = orientation === EOrientation.HORIZONTAL ? pianoRollWidth : pianoRollLength;
 
+  const { contextMenuPosition, showContextMenu, handleRightClick, handleOptionClick, options } = useTimelineRightClick();
+
+
   return (
     <div className='pianoroll'>
       <div>
         <ControlBar />
         <div>
-          <svg className={`pianoroll-svg ${orientation}`} width={width} height={height}>
+          <svg 
+            className={`pianoroll-svg ${orientation}`} 
+            width={width} 
+            height={height}
+            
+          >
             <Keyboard />
             <svg
               x={timelineX}
@@ -55,12 +65,22 @@ export const PianoRoll = () => {
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseUp}
+              onContextMenu={handleRightClick}
             >
               <TimelineBackground width={timelineWidth} height={timelineHeight} />
               <TimelineGrid timelineWidth={timelineWidth} timelineHeight={timelineHeight} />
               <SelectionRectangle selectionStart={selectionStart} selectionEnd={selectionEnd} />
             </svg>
           </svg>
+          {showContextMenu && contextMenuPosition && (
+            <TimelineContextMenu 
+              x={contextMenuPosition.x} 
+              y={contextMenuPosition.y} 
+              options={options} 
+              onOptionClick={handleOptionClick} 
+            />
+          )}
         </div>
       </div>
     </div>

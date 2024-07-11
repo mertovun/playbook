@@ -34,7 +34,7 @@ const TempoControl: React.FC = () => {
   return (
     <div className="control-group">
       <button onClick={toggleMetronome} className={metronome ? 'selected':''}>
-        <TbMetronome />
+        <TbMetronome title='Metronome' />
       </button>
       <label>
         <input

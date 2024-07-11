@@ -25,7 +25,6 @@ export const useTimelinePencil = () => {
     if (editMode === EditMode.PENCIL) {
       const rect = e.target.getBoundingClientRect();
       intersected = noteIntersect(e.clientX - rect.left, e.clientY - rect.top, layoutConfig);
-      console.log(intersected)
       if (!intersected) {
         const rect = e.target.getBoundingClientRect();
         const timePx = orientation === EOrientation.HORIZONTAL ? rect.bottom - e.clientY : e.clientX - rect.left;
@@ -51,7 +50,7 @@ export const useTimelinePencil = () => {
         addToRecordedNotes(note);
       }
     }
-  }, [editMode, layoutConfig, recordedNotes, windowStartTime, pixelsPerSecond, orientation, tempo, timeSignature, gridTick]);
+  }, [editMode, layoutConfig, recordedNotes, windowStartTime, pixelsPerSecond, orientation, tempo, timeSignature, gridTick, gridSnap]);
 
   const noteIntersect = (
     x: number,

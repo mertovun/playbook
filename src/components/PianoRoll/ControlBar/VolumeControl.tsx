@@ -17,7 +17,7 @@ const VolumeControl: React.FC = () => {
   return (
     <div className="control-group volume">
       <button onClick={toggleMute}>
-        {isMuted ? <TbVolume3 /> : <TbVolume />}
+        {isMuted ? <TbVolume3 title='Unmute' /> : <TbVolume title='Mute' />}
       </button>
       <input
         type="range"

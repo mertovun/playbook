@@ -17,7 +17,7 @@ const AutoSlideControl: React.FC = () => {
   return (
     <div className="control-group">
       <button onClick={toggleAutoSlide} className={autoSlide ? 'selected':''}>
-        <TbArrowBigRightLines />
+        <TbArrowBigRightLines title='Auto-slide' />
       </button>
       {formattedMeasureBeatTick}
     </div>

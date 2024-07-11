@@ -14,9 +14,6 @@ export const usePianoRollHandlers = () => {
   const { autoSlide, setAutoSlide } = useControlBarStore();
 
   const { 
-    isPlaying, 
-    play,
-    pause,
     pixelsPerSecond,
     windowStartTime,
     setWindowStartTime,
@@ -33,8 +30,6 @@ export const usePianoRollHandlers = () => {
   const toggleAutoSlide = useCallback(() => {
     setAutoSlide(!autoSlide);
   }, [autoSlide, setAutoSlide]);
-
-  const togglePlayPause =  useCallback(() => isPlaying ? pause() : play(), [isPlaying, pause, play]);
 
   const handleDrop = useCallback(async (event: React.DragEvent) => {
     event.preventDefault();
@@ -88,7 +83,6 @@ export const usePianoRollHandlers = () => {
     timelineSvgRef,
     toggleOrientation,
     toggleAutoSlide,
-    togglePlayPause,
     handleDrop,
     handleDragOver,
   };

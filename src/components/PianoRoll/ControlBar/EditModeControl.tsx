@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { PiSelectionPlusBold, PiPencilSimpleLineBold } from "react-icons/pi";
 import { EditMode, useControlBarStore } from '../../../stores/useControlBarStore';
 import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
@@ -25,13 +25,36 @@ const EditModeControl: React.FC = () => {
     setEditMode(EditMode.PENCIL)
   }, [deselectAll, setEditMode]);
   
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 's' || event.key === 'S') {
+        event.preventDefault(); // Prevent any default behavior associated with the 'S' key
+        handleSelect();
+      }
+      if (event.key === 'b' || event.key === 'B') {
+        event.preventDefault(); // Prevent any default behavior associated with the 'B' key
+        handlePencil();
+      }
+      if (event.key === 'g' || event.key === 'G') {
+        event.preventDefault(); // Prevent any default behavior associated with the 'B' key
+        handleSnap();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleSelect, handlePencil, handleSnap]);
+  
   return (
     <div className="control-group">
       <button 
         onClick={handleSnap} 
         className={gridSnap ? 'selected':''}
         >
-        <VscMagnet />
+        <VscMagnet title='Snap to Grid [G]' />
       </button>
       <label>
         Grid: 1 /
@@ -52,13 +75,13 @@ const EditModeControl: React.FC = () => {
         onClick={handleSelect} 
         className={editMode === EditMode.SELECT ? 'selected':''}
         >
-        <PiSelectionPlusBold />
+        <PiSelectionPlusBold title='Select Mode [S]' />
       </button>
       <button 
         onClick={handlePencil} 
         className={editMode === EditMode.PENCIL ? 'selected':''}
         >
-        <PiPencilSimpleLineBold />
+        <PiPencilSimpleLineBold title='Pencil Mode [B]' />
       </button>
     </div>
   );

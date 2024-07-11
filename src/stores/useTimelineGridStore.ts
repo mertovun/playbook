@@ -52,6 +52,6 @@ export const useTimelineGridStore = create<TimelineGridStore>((set, get) => ({
     pixelsPerSecond = Math.min(MAX_ZOOM_IN, pixelsPerSecond);
     set({ pixelsPerSecond })
   },
-  gridTick: 4,
+  gridTick: 2,
   setGridTick: (gridTick) => set({gridTick}),
 }));

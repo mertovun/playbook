@@ -14,6 +14,8 @@ interface ControlBarStore {
   isMuted: boolean;
   setVolume: (volume:number) => void;
   setIsMuted: (isMuted:boolean) => void;
+  gridSnap: boolean;
+  setGridSnap: (gridSnap: boolean) => void;
   editMode: EditMode;
   setEditMode: (editMode: EditMode) => void;
   bookmarkSidebar: boolean;
@@ -29,6 +31,8 @@ export const useControlBarStore = create<ControlBarStore>((set) =>({
   isMuted: false,
   setVolume: (volume) => set({volume}),
   setIsMuted: (isMuted) => set({isMuted}),
+  gridSnap: true,
+  setGridSnap: (gridSnap) => set({gridSnap}),
   editMode: EditMode.SELECT,
   setEditMode: (editMode) => set({editMode}),
   bookmarkSidebar: false,

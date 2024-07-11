@@ -28,6 +28,8 @@ interface MidiStore {
   undo: () => void;
   redo: () => void;
   updateRecordedNotes: (newRecordedNotes: RecordedNotes) => void;
+  addToRecordedNotes: (note: MidiNote) => void;
+  deleteFromRecordedNotes: (midiNum: number, key: number) => void;
   selectNote: (midiNum: number, key: number) => void;
   deselectAll: () => void;
   countSelected: () => number;
@@ -121,6 +123,20 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
       futureRecordedNotes: [] 
     });
   },
+  addToRecordedNotes: (note) => {
+    const { recordedNotes, updateRecordedNotes } = get();
+    const newRecordedNotes = JSON.parse(JSON.stringify(recordedNotes));
+    newRecordedNotes[note.note][note.start] = note;
+    updateRecordedNotes(newRecordedNotes);
+  },
+  deleteFromRecordedNotes: (midiNum, key) => {
+    const { recordedNotes, updateRecordedNotes } = get();
+    const newRecordedNotes = JSON.parse(JSON.stringify(recordedNotes));
+    if (newRecordedNotes[midiNum] && newRecordedNotes[midiNum][key]) {
+      delete newRecordedNotes[midiNum][key];
+      updateRecordedNotes(newRecordedNotes);
+    }
+  },
   selectNote: (midiNum, key) => {
     const { recordedNotes } = get();
     if (recordedNotes[midiNum] && recordedNotes[midiNum][key]) {
@@ -129,7 +145,6 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
     }
   },
   deselectAll: () => {
-    console.log("deselectAll")
     const { recordedNotes } = get();
     for (let i = 0; i < 128; i++) {
       for (let note of Object.values(recordedNotes[i])) {
@@ -154,7 +169,7 @@ export const useMidiStore = create<MidiStore>((set, get) => ({
     const { clipboardNotes } = get();
     let count = 0;
     for (let i = 0; i < 128; i++) {
-      for (let note of Object.values(clipboardNotes[i])) {
+      for (let _note of Object.keys(clipboardNotes[i])) {
         count++;
       }
     }

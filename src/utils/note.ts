@@ -24,6 +24,36 @@ export function noteToString(note:NoteWithOctave, withOctave:boolean){
   return str;
 }
 
+export function noteStartToMidiNum(noteStart: number, whiteNoteWidth: number, blackNoteWidth: number) {
+  const notesPerOctave = 12;
+  const whiteNotesPerOctave = 7;
+
+  const octaveWidth = whiteNoteWidth * whiteNotesPerOctave;
+
+  noteStart += 5 * whiteNoteWidth
+  const octave = Math.floor(noteStart / (octaveWidth));
+  const positionInOctave = noteStart % (octaveWidth);
+  // const note = Math.floor(12 * positionInOctave/octaveWidth);
+  let note;
+  if (positionInOctave> octaveWidth-whiteNoteWidth + blackNoteWidth/2) note = 11;
+  else if (positionInOctave> octaveWidth-whiteNoteWidth - blackNoteWidth/2) note = 10;
+  else if (positionInOctave> octaveWidth-whiteNoteWidth * 2 + blackNoteWidth/2) note = 9;
+  else if (positionInOctave> octaveWidth-whiteNoteWidth * 2 - blackNoteWidth/2) note = 8;
+  else if (positionInOctave> octaveWidth-whiteNoteWidth * 3 + blackNoteWidth/2) note = 7;
+  else if (positionInOctave> octaveWidth-whiteNoteWidth * 3 - blackNoteWidth/2) note = 6;
+  else if (positionInOctave> octaveWidth-whiteNoteWidth * 4 ) note = 5;
+  else if (positionInOctave> octaveWidth-whiteNoteWidth * 5 + blackNoteWidth/2) note = 4;
+  else if (positionInOctave> octaveWidth-whiteNoteWidth * 5 - blackNoteWidth/2) note = 3;
+  else if (positionInOctave> octaveWidth-whiteNoteWidth * 6 + blackNoteWidth/2) note = 2;
+  else if (positionInOctave> octaveWidth-whiteNoteWidth * 6 - blackNoteWidth/2) note = 1;
+  else note = 0;
+
+  let midiNum = (octave+1) * notesPerOctave + note;
+
+  return midiNum;
+}
+
+
 export function midiNumToNoteStart(midiNum: number, whiteNoteWidth: number, blackNoteWidth: number) {
   const octave = Math.floor((midiNum-12)/12);
   const note = midiNum % 12;

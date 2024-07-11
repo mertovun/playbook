@@ -5,7 +5,7 @@ export function timeToMeasureBeatTick(timeInSeconds:number, tempo:number, timeSi
   const [beatsPerMeasure, beatUnit] = timeSignature;
   const tickPerBeat = 4 * gridTick / beatUnit;
 
-  const secondsPerTick = 60 / tempo / gridTick;
+  const secondsPerTick = tickDuration(gridTick, tempo);
   let tick = timeInSeconds /  secondsPerTick;
   let beat = Math.floor(tick / tickPerBeat);
   tick -= beat * tickPerBeat;
@@ -18,7 +18,7 @@ export function measureBeatTickToTime(measure: number, beat: number, tick: numbe
   const [beatsPerMeasure, beatUnit] = timeSignature;
   const tickPerBeat = 4 * gridTick / beatUnit;
 
-  const secondsPerTick = 60 / tempo / gridTick;
+  const secondsPerTick = tickDuration(gridTick, tempo);
 
   const totalTicks = (measure * beatsPerMeasure * tickPerBeat) + (beat * tickPerBeat) + tick;
 
@@ -27,10 +27,13 @@ export function measureBeatTickToTime(measure: number, beat: number, tick: numbe
   return timeInSeconds;
 }
 
-
 export function formatMeasureBeatTick(measure:number, beat:number, tick:number) {
   const formattedMeasure = measure.toString().padStart(1, '0');
   const formattedBeat = beat.toString().padStart(1, '0');
   const formattedTick = tick.toFixed(3).padStart(5, '0');
   return ` ${formattedMeasure} : ${formattedBeat} : ${formattedTick}`;
+}
+
+export function tickDuration(gridTick:number, tempo: number) {
+  return 60 / tempo / gridTick;
 }

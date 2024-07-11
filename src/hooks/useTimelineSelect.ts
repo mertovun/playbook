@@ -12,7 +12,7 @@ export const useTimelineSelect = () => {
   const [selectionStart, setSelectionStart] = useState<{ x: number, y: number } | null>(null);
   const [selectionEnd, setSelectionEnd] = useState<{ x: number, y: number } | null>(null);
 
-  const { editMode } = useControlBarStore();
+  const { editMode, gridSnap } = useControlBarStore();
   const { recordedNotes, selectNote, deselectAll, tempo, timeSignature } = useMidiStore();
   const { 
     windowStartTime, 
@@ -52,7 +52,7 @@ export const useTimelineSelect = () => {
     }
   }, [selectionStart, selectionEnd, editMode, layoutConfig]);
 
-  const handleMouseLeave = useCallback((e: any) => {
+  const handleMouseLeave = useCallback(() => {
     if (editMode === EditMode.SELECT) {
       if (selectionStart && selectionEnd) {
         handleNoteSelection(selectionStart, selectionEnd, layoutConfig);
@@ -70,16 +70,18 @@ export const useTimelineSelect = () => {
       intersected = handleNoteSelection({ x: e.clientX - rect.left, y: e.clientY - rect.top }, { x: e.clientX - rect.left, y: e.clientY - rect.top }, layoutConfig);
       setSelectionStart(null);
       setSelectionEnd(null);
-    }
-    if (!intersected) {
-      const rect = e.target.getBoundingClientRect();
-      const position = orientation === EOrientation.HORIZONTAL ? rect.bottom - e.clientY : e.clientX - rect.left;
-      let newStartTime = position / pixelsPerSecond + windowStartTime;
-      let [measure, beat, tick] = timeToMeasureBeatTick(newStartTime, tempo, timeSignature, gridTick);
-      tick = Math.floor(tick);
-      newStartTime = measureBeatTickToTime(measure, beat, tick, tempo, timeSignature, gridTick);
-      setCursorStartTime(newStartTime);
-      setCurrentTime(newStartTime); 
+      if (!intersected) {
+        const rect = e.target.getBoundingClientRect();
+        const position = orientation === EOrientation.HORIZONTAL ? rect.bottom - e.clientY : e.clientX - rect.left;
+        let newStartTime = position / pixelsPerSecond + windowStartTime;
+        if (gridSnap) {
+          let [measure, beat, tick] = timeToMeasureBeatTick(newStartTime, tempo, timeSignature, gridTick);
+          tick = Math.floor(tick);
+          newStartTime = measureBeatTickToTime(measure, beat, tick, tempo, timeSignature, gridTick);
+        }
+        setCursorStartTime(newStartTime);
+        setCurrentTime(newStartTime); 
+      }
     }
   }, [selectionStart, selectionEnd, editMode, layoutConfig]);
 

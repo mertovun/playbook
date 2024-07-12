@@ -42,7 +42,6 @@ export const PianoRoll = () => {
 
   const { contextMenuPosition, showContextMenu, handleRightClick, handleOptionClick, options } = useTimelineRightClick();
 
-
   return (
     <div className='pianoroll'>
       <div>

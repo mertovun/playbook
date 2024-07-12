@@ -88,25 +88,7 @@ export const useMidi = () => {
     };
   }, []);
 
-  // undo/redo ctrl+z ctrl+y
-  useEffect(() => {
-    const handleKeyDown = (e: any) => {
-      if (e.ctrlKey && e.key === 'z') {
-          e.preventDefault();
-          undo();
-      }
-      if (e.ctrlKey && e.key === 'y') {
-        e.preventDefault();
-        redo();
-      }
-    };
 
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [undo, redo]);
 
   return null;
 };

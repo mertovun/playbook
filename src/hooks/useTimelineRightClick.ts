@@ -1,6 +1,9 @@
-// useTimelineRightClick.ts
 import { useState, useCallback, useEffect } from 'react';
+import { atom, useAtom } from 'jotai';
 import { ContextMenuOptions, useContextMenuOptions } from './useContextMenuOptions';
+
+// Define the Jotai atom for managing the showContextMenu state
+export const showContextMenuAtom = atom<boolean>(false);
 
 interface UseTimelineRightClickReturnType {
   contextMenuPosition: { x: number; y: number } | null;
@@ -13,7 +16,7 @@ interface UseTimelineRightClickReturnType {
 
 export const useTimelineRightClick = (): UseTimelineRightClickReturnType => {
   const [contextMenuPosition, setContextMenuPosition] = useState<{ x: number; y: number } | null>(null);
-  const [showContextMenu, setShowContextMenu] = useState(false);
+  const [showContextMenu, setShowContextMenu] = useAtom(showContextMenuAtom);
 
   const { options, handleOptionClick } = useContextMenuOptions();
 
@@ -21,11 +24,11 @@ export const useTimelineRightClick = (): UseTimelineRightClickReturnType => {
     e.preventDefault();
     setContextMenuPosition({ x: e.clientX, y: e.clientY });
     setShowContextMenu(true);
-  }, []);
+  }, [setContextMenuPosition, setShowContextMenu]);
 
   const closeContextMenu = useCallback(() => {
     setShowContextMenu(false);
-  }, []);
+  }, [setShowContextMenu]);
 
   useEffect(() => {
     const handleClickOutside = () => {

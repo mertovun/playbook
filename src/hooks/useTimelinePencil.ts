@@ -7,6 +7,8 @@ import { EOrientation, LayoutConfig } from '../components/PianoRoll/interface';
 import { midiNumToIsWhiteNote, midiNumToNoteStart, noteStartToMidiNum } from '../utils/note';
 import { EditMode, useControlBarStore } from '../stores/useControlBarStore';
 import { measureBeatTickToTime, tickDuration, timeToMeasureBeatTick } from '../utils/time';
+import { useAtom } from 'jotai';
+import { showContextMenuAtom } from './useTimelineRightClick';
 
 export const useTimelinePencil = () => {
 
@@ -19,8 +21,10 @@ export const useTimelinePencil = () => {
   } = useTimelineGridStore();
   const { orientation, timelineHeight, layoutConfig } = usePianoRollLayoutStore();
 
+  const [showContextMenu, _] = useAtom(showContextMenuAtom);
+
   const handleClickPencil = useCallback((e: any) => {
-    if (e.button !== 0) return;
+    if (e.button !== 0 || showContextMenu) return;
     let intersected: boolean = false;
     if (editMode === EditMode.PENCIL) {
       const rect = e.target.getBoundingClientRect();
@@ -50,7 +54,7 @@ export const useTimelinePencil = () => {
         addToRecordedNotes(note);
       }
     }
-  }, [editMode, layoutConfig, recordedNotes, windowStartTime, pixelsPerSecond, orientation, tempo, timeSignature, gridTick, gridSnap]);
+  }, [editMode, layoutConfig, recordedNotes, windowStartTime, pixelsPerSecond, orientation, tempo, timeSignature, gridTick, gridSnap, showContextMenu]);
 
   const noteIntersect = (
     x: number,

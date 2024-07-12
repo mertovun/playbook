@@ -1,3 +1,5 @@
+'use client'
+
 import { EOrientation } from './interface';
 import { Keyboard } from './Keyboard/Keyboard';
 import './PianoRoll.scss';

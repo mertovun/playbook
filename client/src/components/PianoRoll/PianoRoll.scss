@@ -1,3 +1,12 @@
+.pianoroll {
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
+  
+}
+
 .pianoroll-svg {
   border: 1px solid #444;
   margin: 0;

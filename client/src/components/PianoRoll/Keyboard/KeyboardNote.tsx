@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
 import './KeyboardNote.css';
 import { ENote } from '../interface';
 import { noteToMidiNum } from '../utils/note';
@@ -27,11 +27,11 @@ export const KeyboardNote: React.FC<NoteProps> = ({ note, level, x, y, width, he
 
   const velocity = 127; // Maximum velocity
 
-  const handleMouseDown = useCallback((e:any) => {
+  const handleMouseDown = useCallback(() => {
     if (!isPlaying || isRecording) dispatchNoteOnMessage(midiNumber, velocity);
   }, [midiNumber]);
 
-  const handleMouseUp = useCallback((e:any) => {
+  const handleMouseUp = useCallback(() => {
     if (!isPlaying || isRecording) dispatchNoteOffMessage(midiNumber, velocity);
   }, [midiNumber]);
 

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { MAX_ZOOM_IN, MAX_ZOOM_OUT, useTimelineGridStore } from '../stores/useTimelineGridStore';
 import { usePianoRollLayoutStore } from '../stores/usePianoRollLayoutStore';
-import { EOrientation } from '../components/PianoRoll/interface';
+import { EOrientation } from '../interface';
 import { useControlBarStore } from '../stores/useControlBarStore';
 import { parseMidiFile } from '../utils/midi';
 

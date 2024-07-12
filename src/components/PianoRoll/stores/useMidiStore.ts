@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { TimeSignature } from '../components/PianoRoll/interface';
+import { TimeSignature } from '../interface';
 import { useTimelineGridStore } from './useTimelineGridStore';
 
 export type MidiNote = {

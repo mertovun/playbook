@@ -1,10 +1,10 @@
 import React from 'react';
 import { TbArrowBigRightLines } from "react-icons/tb";
-import { useControlBarStore } from '../../../stores/useControlBarStore';
-import { formatMeasureBeatTick, timeToMeasureBeatTick } from '../../../utils/time';
-import { usePianoRollHandlers } from '../../../hooks/usePianoRollHandlers';
-import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
-import { useMidiStore } from '../../../stores/useMidiStore';
+import { useControlBarStore } from '../stores/useControlBarStore';
+import { formatMeasureBeatTick, timeToMeasureBeatTick } from '../utils/time';
+import { usePianoRollHandlers } from '../hooks/usePianoRollHandlers';
+import { useTimelineGridStore } from '../stores/useTimelineGridStore';
+import { useMidiStore } from '../stores/useMidiStore';
 
 const AutoSlideControl: React.FC = () => {
   const { currentTime, gridTick } = useTimelineGridStore();

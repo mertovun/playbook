@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { TbPlayerPlayFilled, TbPlayerPauseFilled, TbPlayerStopFilled, TbPlayerRecordFilled } from "react-icons/tb";
-import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
-import { useMidiStore } from '../../../stores/useMidiStore';
+import { useTimelineGridStore } from '../stores/useTimelineGridStore';
+import { useMidiStore } from '../stores/useMidiStore';
 
 const PlaybackControl: React.FC = () => {
   const { isPlaying, play, pause, stop, record, cursorStartTime, currentTime } = useTimelineGridStore();

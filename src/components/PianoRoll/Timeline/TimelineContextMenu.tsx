@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 import './TimelineContextMenu.scss';
-import { ContextMenuOptions } from '../../../hooks/useContextMenuOptions';
-import { useMidiStore } from '../../../stores/useMidiStore';
+import { ContextMenuOptions } from '../hooks/useContextMenuOptions';
+import { useMidiStore } from '../stores/useMidiStore';
 
 interface ContextMenuProps {
   x: number;

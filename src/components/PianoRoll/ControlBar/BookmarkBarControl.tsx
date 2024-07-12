@@ -1,6 +1,6 @@
 import React from 'react';
 import { BsFillBookmarksFill } from "react-icons/bs";
-import { useControlBarStore } from '../../../stores/useControlBarStore';
+import { useControlBarStore } from '../stores/useControlBarStore';
 
 
 const BookmarkBarControl: React.FC = () => {

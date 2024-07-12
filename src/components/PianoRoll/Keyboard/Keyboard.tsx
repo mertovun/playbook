@@ -1,4 +1,4 @@
-import { usePianoRollLayoutStore } from '../../../stores/usePianoRollLayoutStore';
+import { usePianoRollLayoutStore } from '../stores/usePianoRollLayoutStore';
 import { KeyboardOctave } from './KeyboardOctave';
 
 export const Keyboard = () => {

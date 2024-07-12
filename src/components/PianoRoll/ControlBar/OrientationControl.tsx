@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { PiPianoKeysFill } from "react-icons/pi";
 import { EOrientation } from '../interface';
-import { usePianoRollHandlers } from '../../../hooks/usePianoRollHandlers';
-import { usePianoRollLayoutStore } from '../../../stores/usePianoRollLayoutStore';
+import { usePianoRollHandlers } from '../hooks/usePianoRollHandlers';
+import { usePianoRollLayoutStore } from '../stores/usePianoRollLayoutStore';
 
 const OrientationControl: React.FC= () => {
   const { toggleOrientation } = usePianoRollHandlers();

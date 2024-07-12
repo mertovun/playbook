@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
 import { PiSelectionPlusBold, PiPencilSimpleLineBold } from "react-icons/pi";
-import { EditMode, useControlBarStore } from '../../../stores/useControlBarStore';
-import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
-import { useMidiStore } from '../../../stores/useMidiStore';
+import { EditMode, useControlBarStore } from '../stores/useControlBarStore';
+import { useTimelineGridStore } from '../stores/useTimelineGridStore';
+import { useMidiStore } from '../stores/useMidiStore';
 import { VscMagnet } from 'react-icons/vsc';
 
 

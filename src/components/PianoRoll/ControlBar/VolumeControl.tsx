@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { TbVolume, TbVolume3 } from "react-icons/tb";
-import { useControlBarStore } from '../../../stores/useControlBarStore';
+import { useControlBarStore } from '../stores/useControlBarStore';
 
 const VolumeControl: React.FC = () => {
   const {  volume, isMuted, setVolume, setIsMuted } = useControlBarStore();

@@ -1,8 +1,8 @@
 import React from 'react';
 import { TbMetronome } from "react-icons/tb";
-import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
-import { useMidiStore } from '../../../stores/useMidiStore';
-import { useControlBarStore } from '../../../stores/useControlBarStore';
+import { useTimelineGridStore } from '../stores/useTimelineGridStore';
+import { useMidiStore } from '../stores/useMidiStore';
+import { useControlBarStore } from '../stores/useControlBarStore';
 
 
 const TempoControl: React.FC = () => {

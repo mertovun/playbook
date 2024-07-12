@@ -1,10 +1,10 @@
 import React from 'react';
 import './TimelineNote.css';
 import { ENote, EOrientation } from '../interface';
-import { noteToMidiNum } from '../../../utils/note';
-import { usePianoRollLayoutStore } from '../../../stores/usePianoRollLayoutStore';
-import { useMidiNotePlayback } from '../../../hooks/useMidiNotePlayback';
-import { useMidiNote } from '../../../hooks/useMidiNote';
+import { noteToMidiNum } from '../utils/note';
+import { usePianoRollLayoutStore } from '../stores/usePianoRollLayoutStore';
+import { useMidiNotePlayback } from '../hooks/useMidiNotePlayback';
+import { useMidiNote } from '../hooks/useMidiNote';
 
 export interface MidiNoteProps {
   note: ENote;

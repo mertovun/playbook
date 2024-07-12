@@ -1,8 +1,8 @@
 import React from 'react';
-import { useTimelineGridLayout } from '../../../hooks/useTimelineGridLayout';
+import { useTimelineGridLayout } from '../hooks/useTimelineGridLayout';
 import {GridLine} from './GridLine';
 import {CursorLine} from './CursorLine';
-import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
+import { useTimelineGridStore } from '../stores/useTimelineGridStore';
 
 interface TimelineGridProps {
   timelineWidth: number;

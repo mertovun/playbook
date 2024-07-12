@@ -3,7 +3,7 @@ import { useMidiStore } from '../stores/useMidiStore';
 import { MidiNote } from '../stores/useMidiStore';
 import { useTimelineGridStore } from '../stores/useTimelineGridStore';
 import { usePianoRollLayoutStore } from '../stores/usePianoRollLayoutStore';
-import { EOrientation, LayoutConfig } from '../components/PianoRoll/interface';
+import { EOrientation, LayoutConfig } from '../interface';
 import { midiNumToIsWhiteNote, midiNumToNoteStart } from '../utils/note';
 import { EditMode, useControlBarStore } from '../stores/useControlBarStore';
 import { measureBeatTickToTime, timeToMeasureBeatTick } from '../utils/time';

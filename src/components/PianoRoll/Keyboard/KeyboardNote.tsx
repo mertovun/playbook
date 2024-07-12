@@ -1,10 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import './KeyboardNote.css';
 import { ENote } from '../interface';
-import { noteToMidiNum } from '../../../utils/note';
-import { useTimelineGridStore } from '../../../stores/useTimelineGridStore';
-import { useMidiStore } from '../../../stores/useMidiStore';
-import { dispatchNoteOffMessage, dispatchNoteOnMessage } from '../../../utils/midi';
+import { noteToMidiNum } from '../utils/note';
+import { useTimelineGridStore } from '../stores/useTimelineGridStore';
+import { useMidiStore } from '../stores/useMidiStore';
+import { dispatchNoteOffMessage, dispatchNoteOnMessage } from '../utils/midi';
 
 export interface NoteProps {
   note: ENote;

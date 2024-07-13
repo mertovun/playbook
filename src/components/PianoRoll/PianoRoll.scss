@@ -8,6 +8,10 @@
   -ms-user-select: none; /* For Internet Explorer and Edge */
 }
 
+.timeline {
+  cursor: crosshair;
+}
+
 button {
   border: 0;
   padding: 0.3em 0.3em;

@@ -59,6 +59,7 @@ export const PianoRoll = () => {
               y={timelineY}
               width={timelineWidth}
               height={timelineHeight}
+              className="timeline" 
               onClick={(e:any) => {
                 handleClickSelect(e);
                 handleClickPencil(e)

@@ -1,23 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { TbMetronome } from "react-icons/tb";
 import { useTimelineGridStore } from '../stores/useTimelineGridStore';
 import { useMidiStore } from '../stores/useMidiStore';
 import { useControlBarStore } from '../stores/useControlBarStore';
 
-
 const TempoControl: React.FC = () => {
   const { isRecording } = useTimelineGridStore();
   const { tempo, setTempo, timeSignature, setTimeSignature } = useMidiStore();
-
   const { metronome, setMetronome } = useControlBarStore();
+
+  const [inputTempo, setInputTempo] = useState(tempo);
+
+  useEffect(() => {
+    setInputTempo(tempo);
+  }, [tempo]);
 
   const toggleMetronome = () => {
     setMetronome(!metronome);
-  }
+  };
 
   const handleTempoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTempoValue = Number(e.target.value);
-    setTempo(newTempoValue);
+    setInputTempo(Number(e.target.value));
+  };
+
+  const handleTempoBlur = () => {
+    setTempo(inputTempo);
+  };
+
+  const handleTempoKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      setTempo(inputTempo);
+    }
   };
 
   const handleTimeSignatureChange = (index: number, value: string) => {
@@ -33,7 +46,7 @@ const TempoControl: React.FC = () => {
 
   return (
     <div className="control-group">
-      <button onClick={toggleMetronome} className={metronome ? 'selected':''}>
+      <button onClick={toggleMetronome} className={metronome ? 'selected' : ''}>
         <TbMetronome title='Metronome' />
       </button>
       <label>
@@ -42,9 +55,11 @@ const TempoControl: React.FC = () => {
           type="number"
           min={10}
           max={300}
-          value={tempo}
+          value={inputTempo}
           disabled={isRecording}
           onChange={handleTempoChange}
+          onBlur={handleTempoBlur}
+          onKeyDown={handleTempoKeyDown}
         />
       </label>
       <label>
@@ -73,7 +88,6 @@ const TempoControl: React.FC = () => {
           ))}
         </select>
       </label>
-
     </div>
   );
 };

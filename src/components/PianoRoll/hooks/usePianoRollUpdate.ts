@@ -1,22 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTimelineGridStore } from '../stores/useTimelineGridStore';
 import { useControlBarStore } from '../stores/useControlBarStore';
 import { usePianoRollLayoutStore } from '../stores/usePianoRollLayoutStore';
 import { EOrientation } from '../interface';
-import { TEMPO_MULTIPLIER } from '../utils/time';
-
-const useDebouncedEffect = (effect: () => void, delay: number, deps: any[]) => {
-  const [timeoutId, setTimeoutId] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    const id = setTimeout(effect, delay);
-    setTimeoutId(id);
-    return () => clearTimeout(id);
-  }, [...deps, delay]);
-};
 
 export const usePianoRollUpdate = () => {
   const { orientation } = usePianoRollLayoutStore();
@@ -27,32 +13,38 @@ export const usePianoRollUpdate = () => {
     windowStartTime,
     currentTime,
     pixelsPerSecond,
-    setCurrentTime,
-    setWindowStartTime,
+    incrementCurrentTime,
+    incrementWindowStartTime,
+    setWindowStartTime
   } = useTimelineGridStore();
 
-  useEffect(() => {
-    let animationFrameId: number;
-    let startClock = performance.now();
-
-    const update = () => {
-      const elapsed = (performance.now() - startClock) * TEMPO_MULTIPLIER / 1000;
-      const newCurrentTime = currentTime + elapsed;
-      setCurrentTime(newCurrentTime);
-
-      // slide logic
+  useEffect(() =>{
       if (autoSlide) {
-        if (windowStartTime > currentTime) setWindowStartTime(currentTime - 1);
-        else setWindowStartTime(windowStartTime + elapsed);
+        if (windowStartTime > currentTime) setWindowStartTime(currentTime);
       } else {
         const thresholdPx = orientation === EOrientation.HORIZONTAL ? 600 : 1100;
         const threshold = thresholdPx / pixelsPerSecond;
         if (windowStartTime > currentTime || windowStartTime + threshold < currentTime) {
           setWindowStartTime(currentTime);
-          setAutoSlide(true);
+          // setAutoSlide(true);
         }
       }
+  }, [windowStartTime,currentTime,setWindowStartTime, autoSlide])
+
+  useEffect(() => {
+    let animationFrameId: number;
+    let prevNow = performance.now();
+
+    const update = () => {
+      const now = performance.now();
+      const elapsed = (now - prevNow) / 1000;
+      incrementCurrentTime(elapsed);
+
+      if (autoSlide) {
+        incrementWindowStartTime(elapsed);
+      } 
       
+      prevNow = now;
       animationFrameId = requestAnimationFrame(update);
     };
 
@@ -65,11 +57,6 @@ export const usePianoRollUpdate = () => {
         cancelAnimationFrame(animationFrameId);
       }
     };
-  }, [isPlaying, autoSlide, orientation, windowStartTime, pixelsPerSecond, setAutoSlide, currentTime, setCurrentTime, setWindowStartTime]);
+  }, [isPlaying, autoSlide, orientation, pixelsPerSecond, setAutoSlide, incrementCurrentTime, incrementWindowStartTime, setWindowStartTime]);
 
-  useDebouncedEffect(() => {
-    if (isPlaying) {
-      setCurrentTime(currentTime);
-    }
-  }, 50, [currentTime, isPlaying, setCurrentTime]);
 };

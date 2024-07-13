@@ -155,7 +155,7 @@ export const usePianoRollLayoutStore = create<PianoRollLayoutState>((set, get) =
   mapRangeToOctaves: () => {
     const [[startNote, startLevel], [endNote, endLevel]] = keyboardRange;
     const { whiteNoteWidth } = get().layoutConfig;
-    const octaves = [];
+    const octaves: any[] = [];
     let currentXOffset = 0;
 
     for (let level = startLevel; level <= endLevel; level++) {

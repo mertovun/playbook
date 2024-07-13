@@ -1,6 +1,4 @@
 
-export const TEMPO_MULTIPLIER = 1.6;
-
 export function timeToMeasureBeatTick(timeInSeconds:number, tempo:number, timeSignature:[number, number], gridTick:number): [number, number, number]{
   const [beatsPerMeasure, beatUnit] = timeSignature;
   const tickPerBeat = 4 * gridTick / beatUnit;

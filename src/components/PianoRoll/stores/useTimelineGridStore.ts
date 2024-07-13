@@ -5,6 +5,7 @@ interface TimelineGridStore {
   isRecording: boolean;
   currentTime: number;
   setCurrentTime: (time: number) => void;
+  incrementCurrentTime: (elapsed: number) => void;
   play: () => void;
   record: () => void;
   pause: () => void;
@@ -15,6 +16,7 @@ interface TimelineGridStore {
   pixelsPerSecond: number;
   setCursorStartTime: (time: number) => void;
   setWindowStartTime: (time: number) => void;
+  incrementWindowStartTime: (elapsed: number) => void;
   setPixelsPerSecond: (pixelsPerSecond: number) => void;
   gridTick: number;
   setGridTick: (gridTick:number) => void;
@@ -28,6 +30,10 @@ export const useTimelineGridStore = create<TimelineGridStore>((set, get) => ({
   isRecording: false,
   currentTime: 0,
   setCurrentTime: (time) => set({ currentTime: Math.max(time,0) }),
+  incrementCurrentTime: (elapsed) => {
+    const { currentTime } = get();
+    set( {currentTime: currentTime+elapsed })
+  },
   play: () => set({ isPlaying:true}),
   pause: () => set({ isPlaying:false}),
   record: () => {
@@ -47,6 +53,10 @@ export const useTimelineGridStore = create<TimelineGridStore>((set, get) => ({
      set({ cursorStartTime: time });
   },
   setWindowStartTime: (time) => set({ windowStartTime: Math.max(time,0) }),
+  incrementWindowStartTime: (elapsed) => {
+    const { windowStartTime } = get();
+    set( {windowStartTime: windowStartTime+elapsed })
+  },
   setPixelsPerSecond: (pixelsPerSecond) => {
     pixelsPerSecond = Math.max(MAX_ZOOM_OUT,pixelsPerSecond);
     pixelsPerSecond = Math.min(MAX_ZOOM_IN, pixelsPerSecond);

@@ -11,15 +11,13 @@
 .control-group {
   padding: 0 10px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  margin-right: 20px;
+  margin: 0 10px;
   font-size: 1em;
 
   & + .control-group {
     border-left: 1px solid #222;
-    padding-left: 20px;
-    margin-left: 20px;
   }
 
   button {

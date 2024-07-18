@@ -19,6 +19,7 @@ export const usePianoRollUpdate = () => {
   } = useTimelineGridStore();
 
   useEffect(() =>{
+    if (isPlaying) {
       if (autoSlide) {
         if (windowStartTime > currentTime) setWindowStartTime(currentTime);
       } else {
@@ -29,7 +30,8 @@ export const usePianoRollUpdate = () => {
           // setAutoSlide(true);
         }
       }
-  }, [windowStartTime,currentTime,setWindowStartTime, autoSlide])
+    }
+  }, [windowStartTime,currentTime,setWindowStartTime, autoSlide, isPlaying])
 
   useEffect(() => {
     let animationFrameId: number;

@@ -46,9 +46,9 @@ export const useTimelinePencil = () => {
         // console.log(midiNum);
         const note: MidiNote = {
           note: midiNum,
-          start: clickTime + 0.001,
+          start: clickTime + 0.01,
           velocity: 127,
-          end: clickTime + noteDuration - 0.001,
+          end: clickTime + noteDuration - 0.01,
           selected: false
         }
         addToRecordedNotes(note);

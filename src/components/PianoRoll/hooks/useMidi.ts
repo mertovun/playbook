@@ -8,7 +8,7 @@ export const useMidi = () => {
   const contextRef = useRef<AudioContext | null>(null);
   const pianoRef = useRef<SplendidGrandPiano | null>(null);
   
-  const { noteOn, noteOff, recordNote, undo, redo } = useMidiStore();
+  const { noteOn, noteOff, recordNote } = useMidiStore();
   const { currentTime, isRecording } = useTimelineGridStore();
   const { volume, isMuted } = useControlBarStore();
 
